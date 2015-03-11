@@ -1,8 +1,33 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
-	<script type="text/javascript" src="JsCoverageQC.js"></script>
+	<meta charset="utf-8">
+	<title>JsCoverageQC Report</title>
+	<link rel="stylesheet" type="text/css" href="style.css">
 </head>
 <body>
-	
+	<div id="page-wrapper">
+		<h1>JsCoverageQC Report</h1>
+		<div>
+			Select a vcf file:
+			<input type="file" id="vcfFile">
+		</div>
+		<div>
+			Select an exon bed file
+			<input type="file" id="exonFile">
+		</div>
+		<div>
+			Select an amplicon bed file
+			<input type="file" id="ampliconFile">
+		</div>
+		<div>
+			Select a DoNotCallFile (optional)
+			<input type="file" id="doNotCallFile">
+		</div>
+		<div>
+			<input type="submit" id="Process" value="Process">
+		</div>
+		<pre id="fileDisplayArea"></pre>
+	<script type="text/javascript" src="JsCoverageQC.js"></script>
 </body>
 </html>
