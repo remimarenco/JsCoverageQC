@@ -8,6 +8,8 @@
 	- doNotCallFile à traiter plus tard
  */
 
+"use strict";
+
 function getFile(htmlIdName){
 	var fileInput = document.getElementById(htmlIdName);
 	//var fileDisplayArea = document.getElementById('fileDisplayArea');
@@ -45,6 +47,10 @@ function getParameters(){
 	parameters.readerVariantTsv = readerVariantTsv;
 
 	return parameters;
+}
+
+function generateReport(){
+
 }
 
 window.onload = function(){
