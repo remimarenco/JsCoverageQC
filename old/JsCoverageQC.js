@@ -68,6 +68,7 @@ window.onload = function(){
 			}
 			else
 			{
+				// TODO: Find a better way to show messages to the user
 				alert("One of the necessaries files (VCF, Exon ou Aplicon) are not yet loaded. Please load them first before process.");
 			}
 		});
