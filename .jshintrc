@@ -20,6 +20,7 @@
   "smarttabs": true,
   "white": true,
   "newcap": false,
+  "devel": true,
   "globals": {
     "React": true
   }
