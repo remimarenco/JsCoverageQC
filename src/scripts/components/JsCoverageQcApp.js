@@ -20,45 +20,6 @@ var imageURL = require('../../images/yeoman.png');
 	- doNotCallFile à traiter plus tard
  */
 
-function getFile(htmlIdName){
-	var fileInput = document.getElementById(htmlIdName);
-	//var fileDisplayArea = document.getElementById('fileDisplayArea');
-
-	var reader = new FileReader();
-
-	fileInput.addEventListener('change', function(e){
-		var file = fileInput.files[0];
-
-		// When the file is loaded
-		reader.onload = function(e){
-			//fileDisplayArea.innerText = reader.result;
-			//alert("File loaded!");
-		};
-
-		reader.readAsText(file);
-	});
-
-	return reader;
-}
-
-function getParameters(){
-	var readerVcfFile = getFile("vcfFile");
-	var readerExonFile = getFile("exonFile");
-	var readerAmpliconFile = getFile("ampliconFile");
-	var readerDoNotCallFile = getFile("doNotCallFile");
-	var readerVariantTsv = getFile("variantTsv");
-
-	var parameters = [];
-
-	parameters.vcf = readerVcfFile;
-	parameters.exon = readerExonFile;
-	parameters.amplicon = readerAmpliconFile;
-	parameters.doNotCallFile = readerDoNotCallFile;
-	parameters.readerVariantTsv = readerVariantTsv;
-
-	return parameters;
-}
-
 function generateReport(){
 
 }
@@ -74,11 +35,49 @@ var SubmitInputFiles = React.createClass({
 });
 
 var InputFilesForm = React.createClass({
+	getFile: function(ReactRefName){
+		//var fileInput = document.getElementById(htmlIdName);
+		var fileInput = React.findDOMNode(ReactRefName);
+		//var fileDisplayArea = document.getElementById('fileDisplayArea');
+
+		var reader = new FileReader();
+
+		fileInput.addEventListener('change', function(e){
+			var file = fileInput.files[0];
+
+			// When the file is loaded
+			reader.onload = function(e){
+				//fileDisplayArea.innerText = reader.result;
+				//alert("File loaded!");
+			};
+
+			reader.readAsText(file);
+		});
+
+		return reader;
+	},
+	getParameters: function(){
+		var readerVcfFile = this.getFile(this.refs.vcfFile);
+		var readerExonFile = this.getFile(this.refs.exonFile);
+		var readerAmpliconFile = this.getFile(this.refs.ampliconFile);
+		var readerDoNotCallFile = this.getFile(this.refs.doNotCallFile);
+		var readerVariantTsv = this.getFile(this.refs.variantTsv);
+
+		var parameters = [];
+
+		parameters.vcf = readerVcfFile;
+		parameters.exon = readerExonFile;
+		parameters.amplicon = readerAmpliconFile;
+		parameters.doNotCallFile = readerDoNotCallFile;
+		parameters.readerVariantTsv = readerVariantTsv;
+
+		return parameters;
+	},
 	handleSubmit: function(e){
 		e.preventDefault();
 
 		// We can set a boolean to true when ok for processing files
-		var parameters = getParameters();
+		var parameters = this.getParameters();
 
 		// To process, we first need to check we have all the files
 		if((parameters.vcf && parameters.exon && parameters.amplicon) &&
@@ -100,23 +99,23 @@ var InputFilesForm = React.createClass({
 				<form className="formElem" onSubmit={ this.handleSubmit }>
 					<div>
 						Select a vcf file:
-						<input type="file" id="vcfFile"/>
+						<input type="file" id="vcfFile" ref="vcfFile"/>
 					</div>
 					<div>
 						Select an exon bed file
-						<input type="file" id="exonFile"/>
+						<input type="file" id="exonFile" ref="exonFile"/>
 					</div>
 					<div>
 						Select an amplicon bed file
-						<input type="file" id="ampliconFile"/>
+						<input type="file" id="ampliconFile" ref="ampliconFile"/>
 					</div>
 					<div>
 						Select a DoNotCallFile (optional)
-						<input type="file" id="doNotCallFile"/>
+						<input type="file" id="doNotCallFile" ref="doNotCallFile"/>
 					</div>
 					<div>
 						Select a TSV variant file (optional)
-						<input type="file" id="variantTsv"/>
+						<input type="file" id="variantTsv" ref="variantTsv"/>
 					</div>
 					<SubmitInputFiles/>
 					<pre id="fileDisplayArea"></pre>
