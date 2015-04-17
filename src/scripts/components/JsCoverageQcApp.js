@@ -32,23 +32,23 @@ var InputFile = React.createClass({
 	},
 	handleFile: function(e){
 		var self = this;
-		var reader = new FileReader();
 		var file = e.target.files[0];
 
-		console.log(this.props.identifier);
 		// When the file is loaded
-		reader.onload = function(upload){
+		this.state.reader.onload = function(upload){
 			//alert(self.props.ref);
+			self.props.onLoadEnd({identifier: self.props.identifier,
+				reader: self.state.reader});
 		};
 
-		reader.readAsText(file);
+		this.state.reader.readAsText(file);
 	},
 	render: function(){
 		return(
 			<input type="file"
 				id="{this.props.identifier}"
 				ref="{this.props.identifier}"
-				onChange={this.handleFile} />
+				onChange={this.handleFile}/>
 		);
 	}
 });
@@ -64,8 +64,13 @@ var SubmitInputFiles = React.createClass({
 });
 
 var InputFilesForm = React.createClass({
+	//TODO: Add a list of param names for InputFile 
+	// which will be used as name throughout the InputFilesForm
 	getInitialState: function(){
 		return{
+			// Parameters is a associative array to
+			// store all the input FileReader
+			parametersFileReader: []
 		};
 	},
 	getFile: function(ReactRefName){
@@ -104,15 +109,20 @@ var InputFilesForm = React.createClass({
 
 		return parameters;
 	},
+	fileUploaded: function(file){
+		this.state.parametersFileReader[file.identifier] = file.reader;
+	},
 	handleSubmit: function(e){
 		e.preventDefault();
 
 		// We can set a boolean to true when ok for processing files
-		var parameters = this.getParameters();
+		var parameters = this.state.parametersFileReader;
 
 		// To process, we first need to check we have all the files
-		if((parameters.vcf && parameters.exon && parameters.amplicon) &&
-		 (parameters.vcf.readyState === 2 && parameters.exon.readyState === 2 && parameters.amplicon.readyState === 2))
+		if((parameters.vcfFile && parameters.exonFile && parameters.ampliconFile) &&
+		 (parameters.vcfFile.readyState === 2 &&
+		 	parameters.exonFile.readyState === 2 &&
+		 	parameters.ampliconFile.readyState === 2))
 		{
 			console.log("C'est good!");
 			generateReport();
@@ -130,23 +140,23 @@ var InputFilesForm = React.createClass({
 				<form className="formElem" onSubmit={ this.handleSubmit }>
 					<div>
 						Select a vcf file:
-						<InputFile identifier="vcfFile"/>
+						<InputFile identifier="vcfFile" onLoadEnd={this.fileUploaded}/>
 					</div>
 					<div>
 						Select an exon bed file
-						<InputFile identifier="exonFile"/>
+						<InputFile identifier="exonFile" onLoadEnd={this.fileUploaded}/>
 					</div>
 					<div>
 						Select an amplicon bed file
-						<InputFile identifier="ampliconFile"/>
+						<InputFile identifier="ampliconFile" onLoadEnd={this.fileUploaded}/>
 					</div>
 					<div>
 						Select a DoNotCallFile (optional)
-						<InputFile identifier="doNotCallFile"/>
+						<InputFile identifier="doNotCallFile" onLoadEnd={this.fileUploaded}/>
 					</div>
 					<div>
 						Select a TSV variant file (optional)
-						<InputFile identifier="variantTsv"/>
+						<InputFile identifier="variantTsv" onLoadEnd={this.fileUploaded}/>
 					</div>
 					<SubmitInputFiles/>
 					<pre id="fileDisplayArea"></pre>
