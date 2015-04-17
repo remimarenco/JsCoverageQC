@@ -24,6 +24,35 @@ function generateReport(){
 
 }
 
+var InputFile = React.createClass({
+	getInitialState: function(){
+		return{
+			reader: new FileReader()
+		};
+	},
+	handleFile: function(e){
+		var self = this;
+		var reader = new FileReader();
+		var file = e.target.files[0];
+
+		console.log(this.props.identifier);
+		// When the file is loaded
+		reader.onload = function(upload){
+			//alert(self.props.ref);
+		};
+
+		reader.readAsText(file);
+	},
+	render: function(){
+		return(
+			<input type="file"
+				id="{this.props.identifier}"
+				ref="{this.props.identifier}"
+				onChange={this.handleFile} />
+		);
+	}
+});
+
 var SubmitInputFiles = React.createClass({
 	render: function(){
 		return(
@@ -35,13 +64,20 @@ var SubmitInputFiles = React.createClass({
 });
 
 var InputFilesForm = React.createClass({
+	getInitialState: function(){
+		return{
+		};
+	},
 	getFile: function(ReactRefName){
 		//var fileInput = document.getElementById(htmlIdName);
 		var fileInput = React.findDOMNode(ReactRefName);
 		//var fileDisplayArea = document.getElementById('fileDisplayArea');
-
 		var reader = new FileReader();
-
+		if(fileInput.files.length !== 0){
+			var file = fileInput.files[0];
+			reader.readAsText(file);
+		}
+		/*
 		fileInput.addEventListener('change', function(e){
 			var file = fileInput.files[0];
 
@@ -53,23 +89,18 @@ var InputFilesForm = React.createClass({
 
 			reader.readAsText(file);
 		});
+		*/
 
 		return reader;
 	},
 	getParameters: function(){
-		var readerVcfFile = this.getFile(this.refs.vcfFile);
-		var readerExonFile = this.getFile(this.refs.exonFile);
-		var readerAmpliconFile = this.getFile(this.refs.ampliconFile);
-		var readerDoNotCallFile = this.getFile(this.refs.doNotCallFile);
-		var readerVariantTsv = this.getFile(this.refs.variantTsv);
-
 		var parameters = [];
 
-		parameters.vcf = readerVcfFile;
-		parameters.exon = readerExonFile;
-		parameters.amplicon = readerAmpliconFile;
-		parameters.doNotCallFile = readerDoNotCallFile;
-		parameters.readerVariantTsv = readerVariantTsv;
+		parameters.vcf = this.props.readerVcfFile;
+		parameters.exon = this.props.readerExonFile;
+		parameters.amplicon = this.props.readerAmpliconFile;
+		parameters.doNotCallFile = this.props.readerDoNotCallFile;
+		parameters.readerVariantTsv = this.props.readerVariantTsv;
 
 		return parameters;
 	},
@@ -89,7 +120,7 @@ var InputFilesForm = React.createClass({
 		else
 		{
 			// TODO: Find a better way to show messages to the user
-			alert("One of the necessaries files (VCF, Exon ou Aplicon) are not yet loaded. Please load them first before process.");
+			alert("One of the necessaries files (VCF, Exon or Amplicon) is not yet loaded. Please load them first before process.");
 		}
 	},
 	render: function(){
@@ -99,23 +130,23 @@ var InputFilesForm = React.createClass({
 				<form className="formElem" onSubmit={ this.handleSubmit }>
 					<div>
 						Select a vcf file:
-						<input type="file" id="vcfFile" ref="vcfFile"/>
+						<InputFile identifier="vcfFile"/>
 					</div>
 					<div>
 						Select an exon bed file
-						<input type="file" id="exonFile" ref="exonFile"/>
+						<InputFile identifier="exonFile"/>
 					</div>
 					<div>
 						Select an amplicon bed file
-						<input type="file" id="ampliconFile" ref="ampliconFile"/>
+						<InputFile identifier="ampliconFile"/>
 					</div>
 					<div>
 						Select a DoNotCallFile (optional)
-						<input type="file" id="doNotCallFile" ref="doNotCallFile"/>
+						<InputFile identifier="doNotCallFile"/>
 					</div>
 					<div>
 						Select a TSV variant file (optional)
-						<input type="file" id="variantTsv" ref="variantTsv"/>
+						<InputFile identifier="variantTsv"/>
 					</div>
 					<SubmitInputFiles/>
 					<pre id="fileDisplayArea"></pre>
