@@ -7,6 +7,8 @@ var ReactTransitionGroup = React.addons.TransitionGroup;
 require('../../styles/normalize.css');
 require('../../styles/main.css');
 
+var Test = require('./test');
+
 var imageURL = require('../../images/yeoman.png');
 
 
@@ -138,6 +140,7 @@ var JsCoverageQcApp = React.createClass({
           <img src={imageURL} />
         </ReactTransitionGroup>
         <InputFilesForm/>
+        <Test/>
       </div>
     );
   }
