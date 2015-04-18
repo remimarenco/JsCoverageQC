@@ -36,7 +36,6 @@ var InputFile = React.createClass({
 
 		// When the file is loaded
 		this.state.reader.onload = function(upload){
-			//alert(self.props.ref);
 			self.props.onLoadEnd({identifier: self.props.identifier,
 				reader: self.state.reader});
 		};
@@ -64,8 +63,6 @@ var SubmitInputFiles = React.createClass({
 });
 
 var InputFilesForm = React.createClass({
-	//TODO: Add a list of param names for InputFile 
-	// which will be used as name throughout the InputFilesForm
 	getInitialState: function(){
 		return{
 			// Parameters is a associative array to
@@ -73,42 +70,8 @@ var InputFilesForm = React.createClass({
 			parametersFileReader: []
 		};
 	},
-	getFile: function(ReactRefName){
-		//var fileInput = document.getElementById(htmlIdName);
-		var fileInput = React.findDOMNode(ReactRefName);
-		//var fileDisplayArea = document.getElementById('fileDisplayArea');
-		var reader = new FileReader();
-		if(fileInput.files.length !== 0){
-			var file = fileInput.files[0];
-			reader.readAsText(file);
-		}
-		/*
-		fileInput.addEventListener('change', function(e){
-			var file = fileInput.files[0];
-
-			// When the file is loaded
-			reader.onload = function(e){
-				//fileDisplayArea.innerText = reader.result;
-				//alert("File loaded!");
-			};
-
-			reader.readAsText(file);
-		});
-		*/
-
-		return reader;
-	},
-	getParameters: function(){
-		var parameters = [];
-
-		parameters.vcf = this.props.readerVcfFile;
-		parameters.exon = this.props.readerExonFile;
-		parameters.amplicon = this.props.readerAmpliconFile;
-		parameters.doNotCallFile = this.props.readerDoNotCallFile;
-		parameters.readerVariantTsv = this.props.readerVariantTsv;
-
-		return parameters;
-	},
+	// Each time a file is uploaded, we add his FileReader in the
+	// parametersFileReader
 	fileUploaded: function(file){
 		this.state.parametersFileReader[file.identifier] = file.reader;
 	},
@@ -124,12 +87,13 @@ var InputFilesForm = React.createClass({
 		 	parameters.exonFile.readyState === 2 &&
 		 	parameters.ampliconFile.readyState === 2))
 		{
-			console.log("C'est good!");
+			console.log("It's good!");
 			generateReport();
 		}
 		else
 		{
 			// TODO: Find a better way to show messages to the user
+			// to deactivate devel: true in jshintrc
 			alert("One of the necessaries files (VCF, Exon or Amplicon) is not yet loaded. Please load them first before process.");
 		}
 	},
@@ -137,7 +101,7 @@ var InputFilesForm = React.createClass({
 		return (
 			<div id="page-wrapper">
 				<h1>JsCoverageQC Report</h1>
-				<form className="formElem" onSubmit={ this.handleSubmit }>
+				<form className="formElem" onSubmit={this.handleSubmit}>
 					<div>
 						Select a vcf file:
 						<InputFile identifier="vcfFile" onLoadEnd={this.fileUploaded}/>
