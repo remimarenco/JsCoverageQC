@@ -1,6 +1,5 @@
 'use strict';
 
-//var Amplicon =
 function Amplicon(bedLine){
 	// TODO:
 	// - See how to implement the comparable java like in javascript => implements Comparable<Object>
@@ -44,4 +43,4 @@ Amplicon.prototype = {
 	}
 };
 
-//module.exports = Amplicon;
+module.exports = Amplicon;

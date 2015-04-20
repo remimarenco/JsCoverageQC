@@ -8,7 +8,8 @@ require('../../styles/normalize.css');
 require('../../styles/main.css');
 
 // Models
-require('../models/Amplicon');
+var ampliconModel = require('../models/Amplicon');
+var binModel = require('../models/Bin');
 
 var imageURL = require('../../images/yeoman.png');
 
