@@ -23,7 +23,6 @@ var imageURL = require('../../images/yeoman.png');
 
 	- doNotCallFile à traiter plus tard
  */
-
 function generateReport(){
 
 }

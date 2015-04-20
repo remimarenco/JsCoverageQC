@@ -4,6 +4,7 @@ function Amplicon(bedLine){
 	// TODO:
 	// - See how to implement the comparable java like in javascript => implements Comparable<Object>
 	// - More protections on the bedLine received (check there are 4 tabs)
+	// - Do not forget to see if the class prototype is compatible with XSL/XMLAnnotation
 
 	// Variable declaration
 	this.chr = "";
@@ -23,7 +24,7 @@ function Amplicon(bedLine){
 }
 
 Amplicon.prototype = {
-	compareTo(otherAmplicon){
+	compareTo: function(otherAmplicon){
 		// If the chromosome is different, we return the comparison
 		// Else we return the startPos comparison
 		if(this.chr.localCompare(otherAmplicon.chr) !== 0){
