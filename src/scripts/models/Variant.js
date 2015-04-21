@@ -8,6 +8,21 @@ function populateHeadings(headings, headingsArray){
 	});
 }
 
+function parsingOutRefSeqIDs(dataArrayResult, valueToFill){
+	var temp_HGVSc = dataArrayResult;
+	if(temp_HGVSc !== null){
+		//Pattern pattern = Pattern.compile(".*:(.*)");
+		var re = /.*:(.*)/;
+		var found = temp_HGVSc.match(re);
+		if(found){
+			valueToFill = found[1];
+		}
+		else{
+			valueToFill = temp_HGVSc;
+		}
+	}
+}
+
 /**
  * Get the dataArray value of the headings value of the headings headingName's key
  * @param  {Array} dataArray                tsv \t split
@@ -165,9 +180,8 @@ function Variant(tsvHeadingLine, tsvDataLine, doNotCalls){
 	}
 
 	// Original note: parsing out RefSeq IDs
-	if(getDataArrayFromHeadings(dataArray, headings, "HGVSc") !== null){
-		//Pattern pattern = Pattern.compile(".*:(.*)");
-	}
+	parsingOutRefSeqIDs(getDataArrayFromHeadings(dataArray, headings, "HGVSc"), this.hgvsc);
+	parsingOutRefSeqIDs(getDataArrayFromHeadings(dataArray, headings, "HGVSp"), this.hgvsp);
 }
 
 
