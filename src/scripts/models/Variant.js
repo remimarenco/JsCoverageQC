@@ -1,5 +1,13 @@
 'use strict';
 
+var cDict = require("collections/dict");
+
+function populateHeadings(headings, headingsArray){
+	headingsArray.forEach(function(heading, counter){
+		headings.add(heading.substring(0, heading.indexOf("_")), counter);
+	});
+}
+
 /**
  * [Variant description]
  * @param {string} tsvHeadingLine [description]
@@ -31,6 +39,19 @@ function Variant(tsvHeadingLine, tsvDataLine, doNotCalls){
 	this.onTheDoNotCallList = false;
 	this.typeOfDoNotCall = '';
 	this.transcript = '';
+
+	var headingsArray = tsvHeadingLine.split("\t");
+	var headings = new cDict();
+	populateHeadings(headings, headingsArray);
+
+	var dataArray = tsvDataLine.split("\t");
+	this.gene = dataArray[headings.get("Gene")];
+	this.variant = dataArray[headings.get("Variant")];
+	//variant.chr = Integer.valueOf(dataArray[headings.get("Chr").intValue()] != null && 
+	//!dataArray[headings.get("Chr").intValue()].isEmpty() ? 
+	//dataArray[headings.get("Chr").intValue()] : null);
+	this.chr = dataArray[headings.get("chr", null)];
+	
 }
 
 /**
