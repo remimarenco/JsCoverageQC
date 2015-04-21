@@ -9,16 +9,16 @@ function populateHeadings(headings, headingsArray){
 }
 
 function parsingOutRefSeqIDs(dataArrayResult, valueToFill){
-	var temp_HGVSc = dataArrayResult;
-	if(temp_HGVSc !== null){
+	var temp = dataArrayResult;
+	if(temp !== null){
 		//Pattern pattern = Pattern.compile(".*:(.*)");
 		var re = /.*:(.*)/;
-		var found = temp_HGVSc.match(re);
+		var found = temp.match(re);
 		if(found){
 			valueToFill = found[1];
 		}
 		else{
-			valueToFill = temp_HGVSc;
+			valueToFill = temp;
 		}
 	}
 }
@@ -182,6 +182,25 @@ function Variant(tsvHeadingLine, tsvDataLine, doNotCalls){
 	// Original note: parsing out RefSeq IDs
 	parsingOutRefSeqIDs(getDataArrayFromHeadings(dataArray, headings, "HGVSc"), this.hgvsc);
 	parsingOutRefSeqIDs(getDataArrayFromHeadings(dataArray, headings, "HGVSp"), this.hgvsp);
+
+	var temp_dbSNP_ID = getDataArrayFromHeadings(dataArray, headings, "dbSNP ID");
+	if(temp_dbSNP_ID !== null){
+		//Pattern pattern = Pattern.compile(".*:(.*)");
+		var re = /([A-Za-z]*)([0-9]*)/;
+		var found = temp_dbSNP_ID.match(re);
+		if(found){
+			this.dbSnpIdPrefix = found[1];
+			this.dbSnpIdSuffix = found[2];
+		}
+		else{
+			this.dbSnpIdPrefix = temp_dbSNP_ID;
+		}
+	}
+
+	this.alleleFreqGlobalMinor = parseFloat(getDataArrayFromHeadings(dataArray, headings, "Allele Freq Global Minor", null));
+	this.geneMutation = this.gene;
+	this.geneMutation += " ";
+	this.geneMutation += this.hgvsc;
 }
 
 
