@@ -9,60 +9,20 @@ function populateHeadings(headings, headingsArray){
 }
 
 /**
- * [Variant description]
- * @param {string} tsvHeadingLine [description]
- * @param {string} tsvDataLine    [description]
- * @param {Array} doNotCalls     [description]
+ * Get the dataArray value of the headings value of the headings headingName's key
+ * @param  {Array} dataArray                tsv \t split
+ * @param  {cDict} headings                 [description]
+ * @param  {string} headingName              [description]
+ * @param  {any} optionalDefaultParameter Default parameter that could be used the headingNames's key is not found
+ * @return {string}                          dataArray value of the headings value of the headings headingName's key
  */
-function Variant(tsvHeadingLine, tsvDataLine, doNotCalls){
-	this.gene = '';
-	this.variant = '';
-	this.chr = -1;
-	this.coordinate = -1;
-	this.type = '';
-	this.genotype = '';
-	this.altVariantFreq = 0.00;
-	this.readDepth = 0;
-	this.altReadDepth = 0;
-	this.consequence = '';
-	this.cosmicId = '';
-	this.hgvsc = '';
-	this.hgvsp = '';
-	this.dbSnpIdPrefix = '';
-	this.dbSnpIdSuffix = '';
-	this.filters = '';
-	this.alleleFreqGlobalMinor = 0.00;
-	this.geneMutation = '';
-	this.hgvscComplete = '';
-	this.hgvspComplete = '';
-	this.ensp = '';
-	this.onTheDoNotCallList = false;
-	this.typeOfDoNotCall = '';
-	this.transcript = '';
-
-	var headingsArray = tsvHeadingLine.split("\t");
-	var headings = new cDict();
-	populateHeadings(headings, headingsArray);
-
-	var dataArray = tsvDataLine.split("\t");
-	this.gene = dataArray[headings.get("Gene")];
-	this.variant = dataArray[headings.get("Variant")];
-	this.chr = dataArray[headings.get("chr", null)];
-	// Original note : subtracting zero (0)
-	this.coordinate = dataArray[headings.get("Coordinate", null)] - 0;
-	this.type = dataArray[headings.get("Type")];
-	this.genotype = dataArray[headings.get("Genotype")];
-	this.altVariantFreq = dataArray[headings.get("Alt Variant Freq", null)];
-	this.readDepth = dataArray[headings.get("Read Depth", null)];
-	this.altReadDepth = dataArray[headings.get("Alt Read Depth", null)];
-	this.consequence = dataArray[headings.get("Consequence")];
-	this.cosmicId = dataArray[headings.get("COSMIC ID")];
-	this.filters = dataArray[headings.get("Filters")];
-	// Original note: this gets Transcript_27 instead of Transcript HGNC_25 because
-	// the way substring works it gets string to left of first underscore and
-	// in Transcript HGNC_25 case this is Transcript HGNC
-	this.transcript = dataArray[headings.get("Transcript")];
-
+function getDataArrayFromHeadings(dataArray, headings, headingName, optionalDefaultParameter){
+	if(typeof optionalDefaultParameter === 'undefined'){
+		return dataArray[headings.get(headingName)];
+	}
+	else{
+		return dataArray[headings.get(headingName, optionalDefaultParameter)];
+	}
 }
 
 /**
@@ -71,7 +31,7 @@ function Variant(tsvHeadingLine, tsvDataLine, doNotCalls){
  * @param  {Array} doNotCalls [description]
  * @return {Variant}            [description]
  */
-Variant.checkIfOnDoNOTCallList = function(variant2, doNotCalls){
+function checkIfOnDoNOTCallList(variant2, doNotCalls){
 	variant2.onTheDoNotCallList = false;
 	variant2.typeOfDoNotCall = "Not on lab list /Potentially Valid";
 	//TODO: Fix the "Definatively" error
@@ -121,7 +81,96 @@ Variant.checkIfOnDoNOTCallList = function(variant2, doNotCalls){
 	}
 
 	return variant2;
-};
+}
+
+/**
+ * [Variant description]
+ * @param {string} tsvHeadingLine [description]
+ * @param {string} tsvDataLine    [description]
+ * @param {Array} doNotCalls     [description]
+ */
+function Variant(tsvHeadingLine, tsvDataLine, doNotCalls){
+	this.gene = '';
+	this.variant = '';
+	this.chr = -1;
+	this.coordinate = -1;
+	this.type = '';
+	this.genotype = '';
+	this.altVariantFreq = 0.00;
+	this.readDepth = 0;
+	this.altReadDepth = 0;
+	this.consequence = '';
+	this.cosmicId = '';
+	this.hgvsc = '';
+	this.hgvsp = '';
+	this.dbSnpIdPrefix = '';
+	this.dbSnpIdSuffix = '';
+	this.filters = '';
+	this.alleleFreqGlobalMinor = 0.00;
+	this.geneMutation = '';
+	this.hgvscComplete = '';
+	this.hgvspComplete = '';
+	this.ensp = '';
+	this.onTheDoNotCallList = false;
+	this.typeOfDoNotCall = '';
+	this.transcript = '';
+
+	var headingsArray = tsvHeadingLine.split("\t");
+	var headings = new cDict();
+	populateHeadings(headings, headingsArray);
+
+	var dataArray = tsvDataLine.split("\t");
+
+	// TODO: Manage the parseInt on null return from getDataArrayFromHeadings => NaN
+	this.gene = parseInt(getDataArrayFromHeadings(dataArray, headings, "Gene"));
+	this.variant = parseInt(getDataArrayFromHeadings(dataArray, headings, "Variant"));
+	this.chr = parseInt(getDataArrayFromHeadings(dataArray, headings, "Variant", null));
+	// Original note : subtracting zero (0)
+	this.coordinate = parseInt(getDataArrayFromHeadings(dataArray, headings, "Coordinate", null)) - 0;
+	this.type = parseInt(getDataArrayFromHeadings(dataArray, headings, "Type"));
+	this.genotype = parseInt(getDataArrayFromHeadings(dataArray, headings, "Genotype", null));
+	this.altVariantFreq = parseFloat(getDataArrayFromHeadings(dataArray, headings, "Alt Variant Freq", null));
+	this.readDepth = parseInt(getDataArrayFromHeadings(dataArray, headings, "Read Depth", null));
+	this.altReadDepth = parseInt(getDataArrayFromHeadings(dataArray, headings, "Alt Read Depth", null));
+	this.consequence = parseInt(getDataArrayFromHeadings(dataArray, headings, "Consequence"));
+	this.cosmicId = parseInt(getDataArrayFromHeadings(dataArray, headings, "COSMIC ID"));
+	this.filters = parseInt(getDataArrayFromHeadings(dataArray, headings, "Filters"));
+	// Original note: this gets Transcript_27 instead of Transcript HGNC_25 because
+	// the way substring works it gets string to left of first underscore and
+	// in Transcript HGNC_25 case this is Transcript HGNC
+	this.transcript = parseInt(getDataArrayFromHeadings(dataArray, headings, "Transcript"));
+
+	var temp_hgvsc = parseInt(getDataArrayFromHeadings(dataArray, headings, "HGVSc"));
+	if(temp_hgvsc !== null){
+		this.hgvscComplete = temp_hgvsc;
+	}
+
+	var temp_hgvsp = parseInt(getDataArrayFromHeadings(dataArray, headings, "HGVSp"));
+	if(temp_hgvsp !== null){
+		this.hgvspComplete = temp_hgvsp;
+	}
+
+	var temp_ensp = parseInt(getDataArrayFromHeadings(dataArray, headings, "ENSP"));
+	if(temp_ensp !== null){
+		this.ensp = temp_ensp;
+	}
+
+	if(doNotCalls !== null){
+		// TODO: Check if this is properly modified
+		checkIfOnDoNOTCallList(this, doNotCalls);
+	}
+	else{
+		this.onTheDoNotCallList = false;
+		this.typeOfDoNotCall = "Not on lab list/Potentially Valid";
+	}
+
+	// Original note: parsing out RefSeq IDs
+	if(getDataArrayFromHeadings(dataArray, headings, "HGVSc") !== null){
+		//Pattern pattern = Pattern.compile(".*:(.*)");
+	}
+}
+
+
 
 Variant.prototype = {
 
