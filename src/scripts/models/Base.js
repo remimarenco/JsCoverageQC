@@ -1,13 +1,13 @@
 'use strict';
 
 // SimpleSets to manage HashSet used in the Java version
-var sets = require('simplesets');
+var cSet = require('collections/set');
 
 function Base(vcfLine, bases){
 	this.chr = '';
 	this.pos = -1;
 	// readDepths is a map of Long
-	this.readDepths = new sets.Set();
+	this.readDepths = new cSet();
 
 	this.variant = '';
 	this.variantText = '';
@@ -74,7 +74,7 @@ Base.prototype = {
 	},
     getTotalReadDepth: function(){
     	var totalReadDepth = 0;
-    	this.readDepths.array().forEach(function(readDepth){
+    	this.readDepths.forEach(function(readDepth){
     		if(readDepth > totalReadDepth){
     			totalReadDepth = readDepth;
     		}

@@ -39,6 +39,6 @@
     "grunt-contrib-clean": "~0.6.0",
     "less-loader": "^2.0.0",
     "react-hot-loader": "^1.0.7",
-    "simplesets": "~1.2.0"
+    "collections": "~1.2.2"
   }
 }
