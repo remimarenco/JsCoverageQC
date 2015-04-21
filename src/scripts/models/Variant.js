@@ -47,11 +47,22 @@ function Variant(tsvHeadingLine, tsvDataLine, doNotCalls){
 	var dataArray = tsvDataLine.split("\t");
 	this.gene = dataArray[headings.get("Gene")];
 	this.variant = dataArray[headings.get("Variant")];
-	//variant.chr = Integer.valueOf(dataArray[headings.get("Chr").intValue()] != null && 
-	//!dataArray[headings.get("Chr").intValue()].isEmpty() ? 
-	//dataArray[headings.get("Chr").intValue()] : null);
 	this.chr = dataArray[headings.get("chr", null)];
-	
+	// Original note : subtracting zero (0)
+	this.coordinate = dataArray[headings.get("Coordinate", null)] - 0;
+	this.type = dataArray[headings.get("Type")];
+	this.genotype = dataArray[headings.get("Genotype")];
+	this.altVariantFreq = dataArray[headings.get("Alt Variant Freq", null)];
+	this.readDepth = dataArray[headings.get("Read Depth", null)];
+	this.altReadDepth = dataArray[headings.get("Alt Read Depth", null)];
+	this.consequence = dataArray[headings.get("Consequence")];
+	this.cosmicId = dataArray[headings.get("COSMIC ID")];
+	this.filters = dataArray[headings.get("Filters")];
+	// Original note: this gets Transcript_27 instead of Transcript HGNC_25 because
+	// the way substring works it gets string to left of first underscore and
+	// in Transcript HGNC_25 case this is Transcript HGNC
+	this.transcript = dataArray[headings.get("Transcript")];
+
 }
 
 /**
