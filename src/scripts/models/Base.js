@@ -3,19 +3,36 @@
 // SimpleSets to manage HashSet used in the Java version
 var cSet = require('collections/set');
 
+/**
+ * [Base description]
+ * @param {string} vcfLine [description]
+ * @param {SortedMap} bases   [description]
+ */
 function Base(vcfLine, bases){
 	this.chr = '';
 	this.pos = -1;
-	// readDepths is a map of Long
+
+	/** @type {cSet} readDepths is a map of Long */
 	this.readDepths = new cSet();
 
-	this.variant = '';
-	this.variantText = '';
+	this.variant = ''; // e.g., "A>G"
+	this.variantText = ''; // e.g., "A>G (804>34 reads)"
 	this.quality = '';
 	this.filter = '';
 
 	var fields = vcfLine.split("\t");
 	var chr = fields[0];
+
+	/**
+	 * VCF is base 1, BED is base 0, Geoffrey is using base 1
+	 * special handling for read depth:
+	 * [1] truncate "DP=" prefix
+	 * [2] maintaining set of read depths in Base class, since the same
+	 * position can appear multiple time in the genomic VCF file;
+	 * at this point Geoffrey is taking the unique read depths for each
+	 * position and maxing it - this might be risky
+	 * @type {Integer}
+	 */
 	var pos = parseInt(fields[1]);
 	var readDepth = parseInt(fields[7].substring(3));
 	var variant = null;
@@ -24,7 +41,7 @@ function Base(vcfLine, bases){
 	}
 	// TODO: Check if a treemap exists in Javascript, else find a way to modify it in this prototype,
 	// in the main JsCoverageQcApp and in the Vcf Model
-	// TODO: Find a clone function to copy bases.get(...) into this
+	// @TODO: Find a clone function to copy bases.get(...) into this
 	var newBase = bases.get(chr + "|" + pos.toString());
 	if(newBase === null){
 		newBase.chr = chr;
@@ -72,6 +89,10 @@ Base.prototype = {
 			return 1;
 		}
 	},
+	/**
+	 * [getTotalReadDepth description]
+	 * @return {int} The read depth that will be used for this position.
+	 */
     getTotalReadDepth: function(){
     	var totalReadDepth = 0;
     	this.readDepths.forEach(function(readDepth){
@@ -79,6 +100,7 @@ Base.prototype = {
     			totalReadDepth = readDepth;
     		}
     	});
+    	return totalReadDepth;
     }
 };
 
