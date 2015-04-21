@@ -17,12 +17,30 @@ function Vcf(){
 }
 
 Vcf.prototype = {
-	baseCount: function(){
-		return this.bases.size();
+	getBaseCount: function(){
+		return this.bases.length;
 	},
 	getFilteredAnnotatedVariantCount: function(){
-		//var getFilteredAnnotatedVariantCount = 0;
-
+		var filteredAnnotatedVariantCount = 0;
+		this.geneExons.forEach(function(geneExon){
+			filteredAnnotatedVariantCount += geneExon.variants.length;
+		});
+		return filteredAnnotatedVariantCount;
+	},
+	getAmpliconCount: function(){
+		var amplicons = new cSortedSet();
+		this.geneExons.forEach(function(geneExon){
+			geneExon.amplicons.forEach(function(amplicon){
+				amplicons.add(amplicon);
+			});
+		});
+		return amplicons.length;
+	},
+	getReadDepthCount: function(){
+		var readDepthCount = 0;
+		this.bases.values().forEach(function(base){
+			readDepthCount += base.readDepths.length;
+		});
 	},
 };
 
