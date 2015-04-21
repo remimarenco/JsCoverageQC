@@ -1,5 +1,9 @@
 'use strict';
 
+var cSortedSet = require("collections/sorted-set");
+var cList = require("collections/list");
+var cSortedMap = require("collections/sorted-map");
+
 function Vcf(){
 	this.fileName = '';
 	this.doNotCallFile = '';
@@ -7,9 +11,9 @@ function Vcf(){
 	this.variantTsvFileName = '';
 	this.variantTsvFileLineCount = 0;
 	this.runDate = new Date();
-	this.geneExons = ''; // TreeSet<GeneExon>
-	this.bedBamVcfFileUrls = [];
-	this.bases = ''; // TreeMap<String, Base>
+	this.geneExons = new cSortedSet(); // TreeSet<GeneExon>
+	this.bedBamVcfFileUrls = new cList();
+	this.bases = new cSortedMap(); // TreeMap<String, Base>
 }
 
 Vcf.prototype = {
