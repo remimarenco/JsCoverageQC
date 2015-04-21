@@ -82,6 +82,10 @@ Vcf.prototype = {
 			}
 		});
 		return matchedGeneExons;
+	},
+	getBedBamVcfFileUrlAsString: function(){
+		//TODO: Check how this function should work as we are now in Browser / Upload File system
+		// This function also seems never used in the Java Program
 	}
 };
 
