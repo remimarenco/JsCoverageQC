@@ -55,6 +55,34 @@ Vcf.prototype = {
 			readDepthCount += base.readDepths.length;
 		});
 	},
+	/**
+	 * [findGeneExonsForChrPos description]
+	 * @param  {string} chr [description]
+	 * @param  {int} pos [description]
+	 * @return {cSortedSet}     The set of exons that contain the coordinate
+	 */
+	findGeneExonsForChrPos: function(chr, pos){
+		return this.findGeneExonsForChrRange(chr, pos, pos);
+	},
+	/**
+	 * [findGeneExonsForChrRange description]
+	 * @param  {string} chr      [description]
+	 * @param  {int} startPos [description]
+	 * @param  {int} endPos   [description]
+	 * @return {cSortedSet}          The set of exons that contain any part of the region
+	 */
+	findGeneExonsForChrRange: function(chr, startPos, endPos){
+		var matchedGeneExons = new cSortedSet();
+		// TODO: Check how the equals function is supported in Javascript and
+		// with the compareTo implemented
+		this.geneExons.forEach(function(geneExon){
+			if(geneExon.chr.equals(chr) &&
+				(geneExon.startPos <= endPos && geneExon.endPos >= startPos)){
+				matchedGeneExons.add(geneExon);
+			}
+		});
+		return matchedGeneExons;
+	}
 };
 
 module.exports = Vcf;
