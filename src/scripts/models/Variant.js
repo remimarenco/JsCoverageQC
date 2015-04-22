@@ -11,7 +11,6 @@ function populateHeadings(headings, headingsArray){
 function parsingOutRefSeqIDs(dataArrayResult, valueToFill){
 	var temp = dataArrayResult;
 	if(temp !== null){
-		//Pattern pattern = Pattern.compile(".*:(.*)");
 		var re = /.*:(.*)/;
 		var found = temp.match(re);
 		if(found){
