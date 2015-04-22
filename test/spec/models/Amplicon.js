@@ -20,6 +20,25 @@ describe('Amplicon', function () {
   */
 
   var Amplicon = require('models/Amplicon.js');
+  var ampliconsBedFile = "http://localhost:8080/base/test/data/cancer_panel_26.20140311.amplicons.bed";
+  var ampliconsBedText = '';
+  var ampliconBedLine = '';
+
+  beforeEach(function(done){
+    var req = new XMLHttpRequest();
+    req.open("GET", ampliconsBedFile, true);
+    req.responseType = "text";
+
+    req.onreadystatechange = function (oEvent) {
+      if (req.readyState === 4 && (req.status === 200 || req.status === 0)) {
+        ampliconsBedText = req.responseText; // Note: not oReq.responseText
+        ampliconBedLine = ampliconsBedText.split('\n')[1];
+        done();
+      }
+    };
+
+    req.send(null);
+  });
 
   it('should create an instance with a string parameter', function(){
     var amplicon = new Amplicon("");
@@ -33,8 +52,10 @@ describe('Amplicon', function () {
   });
 
   // Test the construction of the Amplicon with a given file
-  it('', function(){
-    return true;
+  it('should still create an amplicon object with a given file', function(){
+    //var ampliconFile = require('file!../../data/cancer_panel_26.20140311.amplicons.bed');
+    var amplicon = new Amplicon(ampliconBedLine);
+    expect(amplicon.chr).toEqual('chr14');
   });
 
   // Test the comparison of the Amplicon with an other amplicon

@@ -68,8 +68,7 @@ var SubmitInputFiles = React.createClass({
 var InputFilesForm = React.createClass({
 	getInitialState: function(){
 		return{
-			// Parameters is a associative array to
-			// store all the input FileReader
+			/** @type {Array} Parameters is a associative array to store all the input FileReader */
 			parametersFileReader: []
 		};
 	},

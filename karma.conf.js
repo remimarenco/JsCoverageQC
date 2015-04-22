@@ -9,7 +9,14 @@ module.exports = function (config) {
     files: [
       'test/helpers/**/*.js',
       'test/spec/components/**/*.js',
-      'test/spec/models/**/*.js'
+      'test/spec/models/**/*.js',
+
+      {
+        pattern: 'test/data/*',
+        watched: true,
+        included: false,
+        served: true
+      }
     ],
     preprocessors: {
       'test/spec/components/**/*.js': ['webpack'],
