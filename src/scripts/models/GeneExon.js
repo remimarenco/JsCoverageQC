@@ -89,7 +89,70 @@ function GeneExon(bedLine){
 }
 
 GeneExon.prototype = {
-
+	/**
+	 * Function to compare two GeneExons
+	 * TODO: Check what are *ForCompare variables and where they are used
+	 * @param  {[type]} otherGeneExon [description]
+	 * @return {[type]}               [description]
+	 */
+	compareTo: function(otherGeneExon){
+		var nameForCompareComparison = this.nameForCompare.compareTo(otherGeneExon.nameForCompare);
+		var exonNumberForCompareComparison = this.exonNumberForCompare.compareTo(otherGeneExon.exonNumberForCompare);
+		if(nameForCompareComparison !== 0){
+			return nameForCompareComparison;
+		}
+		else if(exonNumberForCompareComparison !== 0){
+			return exonNumberForCompareComparison;
+		}
+		else if(this.suffixForCompare !== null){
+			return this.suffixForCompare.compareTo(otherGeneExon.suffixForCompare);
+		}
+		return 0;
+	},
+	/**
+	 * List of bases, primarily for JAXB XML generation
+	 * @return {Array} Array of Base
+	 */
+	getBasesAsList: function(){
+		return this.bases.values();
+	},
+	/**
+	 * True if a variant was called in this exon
+	 * @return {boolean} [description]
+	 */
+	getVariantCalled: function(){
+		this.bases.values().forEach(function(base){
+			if(base.variant !== null){
+				return true;
+			}
+		});
+		if(this.variants.length > 0){
+			return true;
+		}
+		return false;
+	},
+	/**
+	 * True if a variant was annotated in this exon.
+	 * @return {boolean} [description]
+	 */
+	getVariantAnnotated: function(){
+		if(this.variants.length > 0){
+			return true;
+		}
+		return false;
+	},
+	/**
+	 * True if variantlist is the same size as donotcalllist, hence it only contains do not calls; also must be annotated to be true
+	 * @return {boolean} [description]
+	 */
+	getOnlyContainsDoNotCallAlways: function(){
+		if(this.variants.length === this.doNotCallVariantsAlways.length && this.variants.length > 0){
+			return true;
+		}
+		else{
+			return false;
+		}
+	}
 };
 
 module.exports = GeneExon;
