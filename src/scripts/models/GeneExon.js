@@ -3,6 +3,7 @@
 var cSortedMap = require("collections/sorted-map");
 
 var ampliconModel = require("Amplicon");
+var binModel = require("Bin");
 
 function GeneExon(){
 	this.chr = '';
@@ -23,7 +24,14 @@ function GeneExon(){
 	this.variants = []; // Original ArrayList<Variant>
 	this.doNotCallVariantsAlways = []; // Original ArrayList<Variant>
 
-	
+	this.nameForCompare = '';
+	this.exonNumberForCompare = 0;
+	this.suffixForCompare = '';
+
+	this.bins.push(new binModel.Bin(0, 99, "0-99"));
+	this.bins.push(new binModel.Bin(100, 499, "100-499"));
+	this.bins.push(new binModel.Bin(500, 999, "500-999"));
+	this.bins.push(new binModel.Bin(1000, 9999999, "&ge;1000"));
 }
 
 GeneExon.prototype = {
