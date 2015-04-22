@@ -184,7 +184,6 @@ function Variant(tsvHeadingLine, tsvDataLine, doNotCalls){
 
 	var temp_dbSNP_ID = getDataArrayFromHeadings(dataArray, headings, "dbSNP ID");
 	if(temp_dbSNP_ID !== null){
-		//Pattern pattern = Pattern.compile(".*:(.*)");
 		var re = /([A-Za-z]*)([0-9]*)/;
 		var found = temp_dbSNP_ID.match(re);
 		if(found){
