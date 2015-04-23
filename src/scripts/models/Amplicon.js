@@ -27,9 +27,28 @@ Amplicon.prototype = {
 	compareTo: function(otherAmplicon){
 		// If the chromosome is different, we return the comparison
 		// Else we return the startPos comparison
-		var localCompareChr = this.chr.localCompare(otherAmplicon.chr);
-		if(localCompareChr !== 0){
-			return localCompareChr;
+		var localeCompareChr = this.chr.localeCompare(otherAmplicon.chr);
+		if(localeCompareChr !== 0){
+			// Get the int part on the chromosomes
+			var re = /(\d+)/;
+			var foundThisChr = this.chr.match(re);
+			var foundOtherChr = otherAmplicon.chr.match(re);
+
+			var intThisChr = parseInt(foundThisChr[1]);
+			var intOtherChr = parseInt(foundOtherChr[1]);
+
+			// Compare the two ints
+			if(intThisChr < intOtherChr){
+				return -1;
+			}
+			else if(intThisChr === intOtherChr){
+				return 0;
+			}
+			else{
+				return 1;
+			}
+
+			return localeCompareChr;
 		}
 		else{
 			if(this.startPos < otherAmplicon.startPos){
