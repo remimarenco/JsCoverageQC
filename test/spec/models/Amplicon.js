@@ -19,10 +19,11 @@ describe('Amplicon', function () {
   });
   */
 
-  var Amplicon = require('models/Amplicon.js');
-  var ampliconsBedFile = "http://localhost:8080/base/test/data/cancer_panel_26.20140311.amplicons.bed";
-  var ampliconsBedText = '';
-  var ampliconBedLine = '';
+  var Amplicon;
+
+  beforeEach(function(){
+    Amplicon = require('models/Amplicon.js');
+  });
 
   it('should create an instance with a string parameter', function(){
     var amplicon = new Amplicon("");
@@ -36,7 +37,13 @@ describe('Amplicon', function () {
   });
 
   describe('Amplicon file management', function(){
+    var ampliconsBedFile;
+    var ampliconsBedText = '';
+    var ampliconBedLine = '';
+
     beforeEach(function(done){
+      ampliconsBedFile = "http://localhost:8080/base/test/data/cancer_panel_26.20140311.amplicons.bed";
+
       var req = new XMLHttpRequest();
       req.open("GET", ampliconsBedFile, true);
       req.responseType = "text";
