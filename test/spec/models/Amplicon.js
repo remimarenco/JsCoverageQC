@@ -3,10 +3,16 @@
 describe('Amplicon', function () {
   var Amplicon;
 
+  ////////////////
+  // BeforeEach //
+  ////////////////
   beforeEach(function(){
     Amplicon = require('models/Amplicon.js');
   });
 
+  ////////
+  // It //
+  ////////
   it('should create an instance with a string parameter', function(){
     var amplicon = new Amplicon("");
     expect(amplicon).toEqual(jasmine.any(Amplicon));
@@ -18,6 +24,9 @@ describe('Amplicon', function () {
     expect(amplicon.compareTo).toBeDefined();
   });
 
+  //////////////////////////////
+  // Describe File Management //
+  //////////////////////////////
   describe('File management', function(){
     var ampliconsBedFile;
     var ampliconsBedText = '';
