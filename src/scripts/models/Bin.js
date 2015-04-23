@@ -19,16 +19,17 @@ Bin.prototype = {
 	processPct: function(geneExonEndPos, geneExonCodingRegionEndPos,
 		geneExonStartPos, geneExonCodingRegionStartPos){
 		var multiplyBy100_And_ChangeToFloat = (100 * this.count).toFixed(2);
+
 		var getTheMinimum_GeneExonEndPos = Math.min(geneExonEndPos, geneExonCodingRegionEndPos);
-		var getTheMaximum_GenexExonStartPos = Math.max(geneExonStartPos, geneExonCodingRegionEndPos);
+		var getTheMaximum_GenexExonStartPos = Math.max(geneExonStartPos, geneExonCodingRegionStartPos);
 
 		var getTheDifferenceBetween_EndResult_And_StartResult = getTheMinimum_GeneExonEndPos - getTheMaximum_GenexExonStartPos + 1;
-
 		var getTheDivisionBetween_Multiply_And_Difference = multiplyBy100_And_ChangeToFloat / getTheDifferenceBetween_EndResult_And_StartResult;
 
 		var roundAllTheProcess = Math.round(getTheDivisionBetween_Multiply_And_Difference);
-
 		this.pct = roundAllTheProcess;
+
+		return this.pct;
 	}
 };
 
