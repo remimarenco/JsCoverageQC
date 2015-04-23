@@ -36,7 +36,7 @@ describe('Amplicon', function () {
     expect(amplicon.compareTo).toBeDefined();
   });
 
-  describe('Amplicon file management', function(){
+  describe('File management', function(){
     var ampliconsBedFile;
     var ampliconsBedText = '';
     var ampliconBedLine = '';
@@ -65,7 +65,33 @@ describe('Amplicon', function () {
       var amplicon = new Amplicon(ampliconBedLine);
       expect(amplicon.chr).toEqual('chr14');
     });
-  });
 
-  // Test the comparison of the Amplicon with an other amplicon
+    // Test the comparison of the Amplicon with an other amplicon
+    it('should be equals to an other Amplicon having the same input', function(){
+      var first_amplicon = new Amplicon(ampliconBedLine);
+      var second_amplicon = new Amplicon(ampliconBedLine);
+
+      expect(first_amplicon.compareTo(second_amplicon)).toEqual(0);
+    });
+
+    // Test the comparison of the Amplicon with an other amplicon
+    it('should be inferior to an other Amplicon having an input with a superior chromosome position', function(){
+      var first_amplicon = new Amplicon(ampliconBedLine);
+
+      var ampliconBedLineChr16 = ampliconsBedText.split('\n')[6];
+      var second_amplicon = new Amplicon(ampliconBedLineChr16);
+
+      expect(first_amplicon.compareTo(second_amplicon)).toEqual(-1);
+    });
+
+    // Test the comparison of the Amplicon with an other amplicon
+    it('should be superior to an other Amplicon having an input with a inferior chromosome position', function(){
+      var first_amplicon = new Amplicon(ampliconBedLine);
+
+      var ampliconBedLineChr2 = ampliconsBedText.split('\n')[2];
+      var second_amplicon = new Amplicon(ampliconBedLineChr2);
+
+      expect(first_amplicon.compareTo(second_amplicon)).toEqual(1);
+    });
+  });
 });
