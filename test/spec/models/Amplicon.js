@@ -1,24 +1,6 @@
 'use strict';
 
 describe('Amplicon', function () {
-  /*
-  var React = require('react/addons');
-  var JsCoverageQcApp, component;
-
-  beforeEach(function () {
-    var container = document.createElement('div');
-    container.id = 'content';
-    document.body.appendChild(container);
-
-    JsCoverageQcApp = require('components/JsCoverageQcApp.js');
-    component = React.createElement(JsCoverageQcApp);
-  });
-
-  it('should create a new instance of JsCoverageQcApp', function () {
-    expect(component).toBeDefined();
-  });
-  */
-
   var Amplicon;
 
   beforeEach(function(){
@@ -90,6 +72,16 @@ describe('Amplicon', function () {
 
       var ampliconBedLineChr2 = ampliconsBedText.split('\n')[2];
       var second_amplicon = new Amplicon(ampliconBedLineChr2);
+
+      expect(first_amplicon.compareTo(second_amplicon)).toEqual(1);
+    });
+
+    // Test the comparison of the Amplicon with an other amplicon
+    it('should be superior to an other Amplicon having an input with a inferior start position', function(){
+      var first_amplicon = new Amplicon(ampliconBedLine);
+
+      var ampliconBedLineChr5 = ampliconsBedText.split('\n')[83];
+      var second_amplicon = new Amplicon(ampliconBedLineChr5);
 
       expect(first_amplicon.compareTo(second_amplicon)).toEqual(1);
     });
