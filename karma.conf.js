@@ -74,6 +74,9 @@ module.exports = function (config) {
     browsers: ['PhantomJS'],
     reporters: ['progress'],
     captureTimeout: 60000,
-    singleRun: true
+    singleRun: true,
+    client: {
+      captureConsole: true
+    }
   });
 };
