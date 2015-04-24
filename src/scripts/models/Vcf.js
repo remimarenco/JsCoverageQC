@@ -7,7 +7,8 @@ var cSortedMap = require("collections/sorted-map");
 /**
  * [Vcf description]
  */
-function Vcf(){
+function Vcf(vcfFileName, exonBedFileName, ampliconBedFileName,
+	variantTsvFileName, variantTsvFileLineCount, geneExonArray){
 	this.fileName = '';
 	this.doNotCallFile = '';
 	this.exonBedFileName = '';
@@ -19,6 +20,8 @@ function Vcf(){
 	this.bedBamVcfFileUrls = new cList();
 	/** @type {cSortedMap} key is chr|pos (e.g., "chr9|320001") */
 	this.bases = new cSortedMap(); // TreeMap<String, Base>
+
+	//this.fileName = 
 }
 
 Vcf.prototype = {
