@@ -49,12 +49,21 @@ describe('Base', function(){
 	});
 
 	describe('and its function', function(){
-		describe('compareTo',function(){
+		var base;
 
+		beforeEach(function(){
+			base = new Base();
+		});
+		describe('compareTo',function(){
+			it('should be defined', function(){
+				expect(base.compareTo).toBeDefined();
+			});
 		});
 
 		describe('getTotalReadDepth', function(){
-
+			it('should be defined', function(){
+				expect(base.getTotalReadDepth).toBeDefined();
+			});
 		});
 	});
 });
