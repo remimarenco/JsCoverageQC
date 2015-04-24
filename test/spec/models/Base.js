@@ -48,15 +48,29 @@ describe('Base', function(){
 		expect(base.filter).toEqual('');
 	});
 
+	//TODO: Check with a bases object, need Vcf and GeneExon first
+
 	describe('and its function', function(){
 		var base;
+		var otherBaseEqual;
+		var otherBase;
 
 		beforeEach(function(){
 			base = new Base();
+			otherBaseEqual = new Base();
+			otherBase = new Base(vcfLines[787], new cSortedMap());
 		});
 		describe('compareTo',function(){
 			it('should be defined', function(){
 				expect(base.compareTo).toBeDefined();
+			});
+
+			it('should be 0 with two identical objects', function(){
+				expect(base.compareTo(otherBaseEqual)).toEqual(0);
+			});
+
+			it('should be not 0 with two different objects', function(){
+				expect(base.compareTo(otherBase)).not.toEqual(0);
 			});
 		});
 
@@ -64,6 +78,16 @@ describe('Base', function(){
 			it('should be defined', function(){
 				expect(base.getTotalReadDepth).toBeDefined();
 			});
+
+			it('should return 0 on an empty base object', function(){
+				expect(base.getTotalReadDepth()).toEqual(0);
+			});
+
+			it('should return the only readDepth of the vcfLine on an Base with vcfLine and no bases', function(){
+				expect(otherBase.getTotalReadDepth()).toEqual(1175);
+			});
+
+			// TODO: Create an object with bases to get some readDepth
 		});
 	});
 });
