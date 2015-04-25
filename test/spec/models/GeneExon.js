@@ -79,26 +79,66 @@ describe('GeneExon', function(){
 
 				var sameExonBedLine = exonBedLines[4];
 				var otherBut_sameName_sameExonNumber_differentSuffixForCompare_geneExon = new GeneExon(sameExonBedLine);
-				console.log("GeneExon: " + geneExon.nameForCompare + ", " + geneExon.exonNumberForCompare + ", " + geneExon.suffixForCompare);
-				console.log("otherButSameExonNumberGeneExon: " + otherBut_sameName_sameExonNumber_differentSuffixForCompare_geneExon.nameForCompare + ", " + otherBut_sameName_sameExonNumber_differentSuffixForCompare_geneExon.exonNumberForCompare + ", " + otherBut_sameName_sameExonNumber_differentSuffixForCompare_geneExon.suffixForCompare);
 				expect(geneExon.compareTo(otherBut_sameName_sameExonNumber_differentSuffixForCompare_geneExon)).toEqual(-1);
 			});
 		});
 
 		describe(('getBasesAsList'), function(){
+			beforeEach(function(){
+				var randomInteger_0_85 = Math.floor((Math.random() * 85) + 1);
+				var exonBedLine = exonBedLines[randomInteger_0_85];
+				geneExon = new GeneExon(exonBedLine);
+			});
 
+			it('should be defined', function(){
+				expect(geneExon.getBasesAsList).toBeDefined();
+			});
+
+			it('should return a list when called', function(){
+				expect(geneExon.getBasesAsList()).toEqual(jasmine.any(Array));
+			});
+
+			//TODO: Pass a bases object with some bases inside
 		});
 
 		describe(('getVariantCalled'), function(){
+			it('should be defined', function(){
+				expect(geneExon.getVariantCalled).toBeDefined();
+			});
 
+			it('should return a Boolean', function(){
+				expect(geneExon.getVariantCalled()).toEqual(jasmine.any(Boolean));
+			});
+
+			it('should return false when called with a newly construct geneExon', function(){
+				expect(geneExon.getVariantCalled()).toEqual(false);
+			});
+
+			// TODO: Pass a bases object with one base minimum with a variant (0/1 or 1/1)
 		});
 
 		describe(('getVariantAnnotated'), function(){
+			it('should be defined', function(){
+				expect(geneExon.getVariantAnnotated).toBeDefined();
+			});
 
+			it('should return false if no variants in the GeneExon object', function(){
+				expect(geneExon.getVariantAnnotated()).toEqual(false);
+			});
+
+			// TODO: Add some variants and test if the function return true
 		});
 
 		describe(('getOnlyContainsDoNotCallAlways'), function(){
+			it('should be defined', function(){
+				expect(geneExon.getOnlyContainsDoNotCallAlways).toBeDefined();
+			});
 
+			it('should return false if no variants and doNotCall in the GeneExon object', function(){
+				expect(geneExon.getOnlyContainsDoNotCallAlways()).toEqual(false);
+			});
+
+			// TODO: Manage a doNotCall + variants for the true return
 		});
 	});
 });
