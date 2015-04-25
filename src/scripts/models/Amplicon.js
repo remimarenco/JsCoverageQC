@@ -13,14 +13,16 @@ function Amplicon(bedLine){
 	this.name = "";
 
 	// populate in the java file Amplicon.java
-	var fields = bedLine.split("\t");
-	this.chr = fields[0];
+	if(bedLine !== null && typeof bedLine !== 'undefined'){
+		var fields = bedLine.split("\t");
+		this.chr = fields[0];
 
-	// Using the radix to simulate Long
-	// (based on this : http://stackoverflow.com/questions/5450012/how-to-convert-a-string-to-long-in-javascript)
-	this.startPos = parseInt(fields[1], 10) + 1;
-	this.endPos = parseInt(fields[2], 10) + 0;
-	this.name = fields[3];
+		// Using the radix to simulate Long
+		// (based on this : http://stackoverflow.com/questions/5450012/how-to-convert-a-string-to-long-in-javascript)
+		this.startPos = parseInt(fields[1], 10) + 1;
+		this.endPos = parseInt(fields[2], 10) + 0;
+		this.name = fields[3];
+	}
 }
 
 Amplicon.prototype = {

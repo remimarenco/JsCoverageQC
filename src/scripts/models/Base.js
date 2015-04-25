@@ -83,7 +83,7 @@ function Base(vcfLine, bases){
 		}
 
 		//this.readDepths = newBase.readDepths.clone();
-		//
+
 		this.quality = newBase.quality;
 		this.filter = newBase.filter;
 	}

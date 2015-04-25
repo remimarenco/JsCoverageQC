@@ -28,7 +28,7 @@ describe('Base', function(){
 		req.send(null);
 	});
 
-	it('should construct properly with good parameters, without S13-25877-A to 0/1', function(){
+	it('should construct properly with good parameters passed, without S13-25877-A to 0/1', function(){
 		var base = new Base(vcfLines[35], new cSortedMap());
 		expect(base.chr).toEqual('chr1');
 		expect(base.pos).toEqual(115251148);
@@ -38,7 +38,7 @@ describe('Base', function(){
 		expect(base.filter).toEqual('');
 	});
 
-	it('should construct properly with good parameters, with S13-25877-A to 0/1', function(){
+	it('should construct properly with good parameters passed, with S13-25877-A to 0/1', function(){
 		var base = new Base(vcfLines[787], new cSortedMap());
 		expect(base.chr).toEqual('chr2');
 		expect(base.pos).toEqual(48030639);

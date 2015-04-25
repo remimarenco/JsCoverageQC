@@ -18,7 +18,7 @@ describe('Bin', function(){
 	  bin = new Bin(startCount, endCount, name);
 	});
 
-	it('should construct properly with good parameters', function(){
+	it('should construct properly with good parameters passed', function(){
 		expect(bin.startCount).toEqual(startCount);
 		expect(bin.endCount).toEqual(endCount);
 		expect(bin.name).toEqual(name);

@@ -14,7 +14,7 @@ describe('Vcf', function(){
 		vcf = new Vcf();
 	});
 
-	it('should construct properly with good parameters', function(){
+	it('should construct properly with good parameters passed', function(){
 		expect(vcf.fileName).toEqual(jasmine.any(String));
 		expect(vcf.doNotCallFile).toEqual(jasmine.any(String));
 		expect(vcf.exonBedFileName).toEqual(jasmine.any(String));
