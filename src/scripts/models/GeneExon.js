@@ -96,16 +96,28 @@ GeneExon.prototype = {
 	 * @return {[type]}               [description]
 	 */
 	compareTo: function(otherGeneExon){
-		var nameForCompareComparison = this.nameForCompare.compareTo(otherGeneExon.nameForCompare);
-		var exonNumberForCompareComparison = this.exonNumberForCompare.compareTo(otherGeneExon.exonNumberForCompare);
+		var nameForCompareComparison = this.nameForCompare.localeCompare(otherGeneExon.nameForCompare);
+		// Compare Integer
+		var exonNumberForCompareComparison;
+		if(this.exonNumberForCompare === otherGeneExon.exonNumberForCompare){
+			exonNumberForCompareComparison = 0;
+		}
+		else if(this.exonNumberForCompare < otherGeneExon.exonNumberForCompare){
+			exonNumberForCompareComparison = -1;
+		}
+		else{
+			exonNumberForCompareComparison = 1;
+		}
+
+		// Compare the different parts of the name
 		if(nameForCompareComparison !== 0){
 			return nameForCompareComparison;
 		}
 		else if(exonNumberForCompareComparison !== 0){
 			return exonNumberForCompareComparison;
 		}
-		else if(this.suffixForCompare !== null){
-			return this.suffixForCompare.compareTo(otherGeneExon.suffixForCompare);
+		else if(this.suffixForCompare !== null  && typeof this.suffixForCompare !== 'undefined'){
+			return this.suffixForCompare.localeCompare(otherGeneExon.suffixForCompare);
 		}
 		return 0;
 	},

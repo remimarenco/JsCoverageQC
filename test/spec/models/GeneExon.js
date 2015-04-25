@@ -47,4 +47,58 @@ describe('GeneExon', function(){
 		expect(geneExon.exonNumberForCompare).toEqual(3);
 		expect(geneExon.suffixForCompare).toEqual('');
 	});
+
+	describe('and its function', function(){
+		describe(('compareTo'), function(){
+			it('should be defined', function(){
+				expect(geneExon.compareTo).toBeDefined();
+			});
+
+			it('should return 0 when two identical objects are tested (same nameForCompare)', function(){
+				var exonBedLine = exonBedLines[1];
+				geneExon = new GeneExon(exonBedLine);
+
+				var sameExonBedLine = exonBedLines[1];
+				var otherButSameGeneExon = new GeneExon(sameExonBedLine);
+
+				expect(geneExon.compareTo(otherButSameGeneExon)).toEqual(0);
+			});
+
+			it('should return -1 when two objects with the same name and differnt exonNumber are tested', function(){
+				var exonBedLine = exonBedLines[7];
+				geneExon = new GeneExon(exonBedLine);
+
+				var sameExonBedLine = exonBedLines[8];
+				var otherBut_sameName_and_differentExonNumber_geneExon = new GeneExon(sameExonBedLine);
+				expect(geneExon.compareTo(otherBut_sameName_and_differentExonNumber_geneExon)).toEqual(-1);
+			});
+
+			it('should return 0 when two objects with the same name and same exonNumber and different suffixForCompare are tested', function(){
+				var exonBedLine = exonBedLines[3];
+				geneExon = new GeneExon(exonBedLine);
+
+				var sameExonBedLine = exonBedLines[4];
+				var otherBut_sameName_sameExonNumber_differentSuffixForCompare_geneExon = new GeneExon(sameExonBedLine);
+				console.log("GeneExon: " + geneExon.nameForCompare + ", " + geneExon.exonNumberForCompare + ", " + geneExon.suffixForCompare);
+				console.log("otherButSameExonNumberGeneExon: " + otherBut_sameName_sameExonNumber_differentSuffixForCompare_geneExon.nameForCompare + ", " + otherBut_sameName_sameExonNumber_differentSuffixForCompare_geneExon.exonNumberForCompare + ", " + otherBut_sameName_sameExonNumber_differentSuffixForCompare_geneExon.suffixForCompare);
+				expect(geneExon.compareTo(otherBut_sameName_sameExonNumber_differentSuffixForCompare_geneExon)).toEqual(-1);
+			});
+		});
+
+		describe(('getBasesAsList'), function(){
+
+		});
+
+		describe(('getVariantCalled'), function(){
+
+		});
+
+		describe(('getVariantAnnotated'), function(){
+
+		});
+
+		describe(('getOnlyContainsDoNotCallAlways'), function(){
+
+		});
+	});
 });
