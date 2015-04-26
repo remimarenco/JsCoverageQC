@@ -170,7 +170,7 @@ function Variant(tsvHeadingLine, tsvDataLine, doNotCalls){
 		this.ensp = temp_ensp;
 	}
 
-	if(doNotCalls !== null || typeof doNotCalls !== 'undefined'){
+	if(doNotCalls !== null && typeof doNotCalls !== 'undefined'){
 		// TODO: Check if this is properly modified
 		checkIfOnDoNOTCallList(this, doNotCalls);
 	}
