@@ -132,7 +132,7 @@ function Variant(tsvHeadingLine, tsvDataLine, doNotCalls){
 	var headingsArray = tsvHeadingLine.split("\t");
 	var headings = new cDict();
 	populateHeadings(headings, headingsArray);
-
+	console.log("Plante après populateHeadings");
 	var dataArray = tsvDataLine.split("\t");
 
 	// TODO: Manage the parseInt on null return from getDataArrayFromHeadings => NaN

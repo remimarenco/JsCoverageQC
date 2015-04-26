@@ -12,7 +12,7 @@ describe('Variant', function(){
 	var done_emitted;
 
 	function tsv_Upload(done){
-		var tsvFile = "http://localhost:8080/base/test/data/cancer_panel_26.20140719.exons.bed";
+		var tsvFile = "http://localhost:8080/base/test/data/sample.variant.tsv";
 
 		var reqTsv = new XMLHttpRequest();
 		reqTsv.open("GET", tsvFile, true);
@@ -31,11 +31,14 @@ describe('Variant', function(){
 
 				// We also check if the DoNotCall has been fully uploaded
 				// If yes, we can begin all the tests
+				/*
 				if(reqDoNotCall_readyState === 4 && (reqDoNotCall_status === 200 || reqDoNotCall_status === 0) && !done_emitted)
 				{
 					done();
 					done_emitted = true;
 				}
+				*/
+				done();
 			}
 		};
 
@@ -89,11 +92,44 @@ describe('Variant', function(){
 		done_emitted = false;
 
 		tsv_Upload(done);
-		doNotCall_Upload(done);
+		//doNotCall_Upload(done);
 	});
 
 	it('should load beforeEach properly', function(){
 		expect(tsvHeadingLine).not.toEqual('');
 		expect(tsvDataLines.length).not.toEqual(0);
+	});
+
+	it('should construct properly with only tsv parameters', function(){
+		var randomInteger_0_7 = Math.floor((Math.random() * 7) + 1);
+		console.log(randomInteger_0_7);
+		console.log("tsvHeadingLine: "+ tsvHeadingLine);
+		var variant = new Variant(tsvHeadingLine, tsvDataLines[randomInteger_0_7]);
+		/*
+		this.gene = '';
+		this.variant = '';
+		this.chr = -1;
+		this.coordinate = -1;
+		this.type = '';
+		this.genotype = '';
+		this.altVariantFreq = 0.00;
+		this.readDepth = 0;
+		this.altReadDepth = 0;
+		this.consequence = '';
+		this.cosmicId = '';
+		this.hgvsc = '';
+		this.hgvsp = '';
+		this.dbSnpIdPrefix = '';
+		this.dbSnpIdSuffix = '';
+		this.filters = '';
+		this.alleleFreqGlobalMinor = 0.00;
+		this.geneMutation = '';
+		this.hgvscComplete = '';
+		this.hgvspComplete = '';
+		this.ensp = '';
+		this.onTheDoNotCallList = false;
+		this.typeOfDoNotCall = '';
+		this.transcript = '';
+		*/
 	});
 });
