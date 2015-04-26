@@ -103,7 +103,6 @@ describe('Variant', function(){
 	it('should construct properly with only tsv parameters', function(){
 		var randomInteger_0_7 = Math.floor((Math.random() * 7) + 1);
 		console.log(randomInteger_0_7);
-		console.log("tsvHeadingLine: "+ tsvHeadingLine);
 		var variant = new Variant(tsvHeadingLine, tsvDataLines[randomInteger_0_7]);
 		/*
 		this.gene = '';
