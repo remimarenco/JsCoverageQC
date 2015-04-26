@@ -15,10 +15,10 @@ function parsingOutRefSeqIDs(dataArrayResult, valueToFill){
 		var re = /.*:(.*)/;
 		var found = temp.match(re);
 		if(found){
-			valueToFill = found[1];
+			return found[1];
 		}
 		else{
-			valueToFill = temp;
+			return temp;
 		}
 	}
 }
@@ -137,35 +137,38 @@ function Variant(tsvHeadingLine, tsvDataLine, doNotCalls){
 	var dataArray = tsvDataLine.split("\t");
 
 	// TODO: Manage the parseInt on null return from getDataArrayFromHeadings => NaN
-	this.gene = parseInt(getDataArrayFromHeadings(dataArray, headings, "Gene"));
-	this.variant = parseInt(getDataArrayFromHeadings(dataArray, headings, "Variant"));
-	this.chr = parseInt(getDataArrayFromHeadings(dataArray, headings, "Variant", null));
+	this.gene = getDataArrayFromHeadings(dataArray, headings, "Gene");
+	this.variant = getDataArrayFromHeadings(dataArray, headings, "Variant");
+	this.chr = parseInt(getDataArrayFromHeadings(dataArray, headings, "Chr", null));
 	// Original note : subtracting zero (0)
 	this.coordinate = parseInt(getDataArrayFromHeadings(dataArray, headings, "Coordinate", null)) - 0;
-	this.type = parseInt(getDataArrayFromHeadings(dataArray, headings, "Type"));
-	this.genotype = parseInt(getDataArrayFromHeadings(dataArray, headings, "Genotype", null));
+	this.type = getDataArrayFromHeadings(dataArray, headings, "Type");
+	this.genotype = getDataArrayFromHeadings(dataArray, headings, "Genotype", null);
 	this.altVariantFreq = parseFloat(getDataArrayFromHeadings(dataArray, headings, "Alt Variant Freq", null));
 	this.readDepth = parseInt(getDataArrayFromHeadings(dataArray, headings, "Read Depth", null));
 	this.altReadDepth = parseInt(getDataArrayFromHeadings(dataArray, headings, "Alt Read Depth", null));
-	this.consequence = parseInt(getDataArrayFromHeadings(dataArray, headings, "Consequence"));
-	this.cosmicId = parseInt(getDataArrayFromHeadings(dataArray, headings, "COSMIC ID"));
-	this.filters = parseInt(getDataArrayFromHeadings(dataArray, headings, "Filters"));
+	this.consequence = getDataArrayFromHeadings(dataArray, headings, "Consequence");
+	this.cosmicId = getDataArrayFromHeadings(dataArray, headings, "COSMIC ID");
+	this.filters = getDataArrayFromHeadings(dataArray, headings, "Filters");
 	// Original note: this gets Transcript_27 instead of Transcript HGNC_25 because
 	// the way substring works it gets string to left of first underscore and
 	// in Transcript HGNC_25 case this is Transcript HGNC
 	this.transcript = parseInt(getDataArrayFromHeadings(dataArray, headings, "Transcript"));
 
-	var temp_hgvsc = parseInt(getDataArrayFromHeadings(dataArray, headings, "HGVSc"));
+	var temp_hgvsc = getDataArrayFromHeadings(dataArray, headings, "HGVSc");
+	console.log('temp_hgvsc: '+temp_hgvsc);
 	if(temp_hgvsc !== null){
 		this.hgvscComplete = temp_hgvsc;
 	}
 
-	var temp_hgvsp = parseInt(getDataArrayFromHeadings(dataArray, headings, "HGVSp"));
+	var temp_hgvsp = getDataArrayFromHeadings(dataArray, headings, "HGVSp");
+	console.log('temp_hgvsp: '+temp_hgvsp);
 	if(temp_hgvsp !== null){
 		this.hgvspComplete = temp_hgvsp;
 	}
 
-	var temp_ensp = parseInt(getDataArrayFromHeadings(dataArray, headings, "ENSP"));
+	var temp_ensp = getDataArrayFromHeadings(dataArray, headings, "ENSP");
+	console.log('temp_ensp: '+temp_ensp);
 	if(temp_ensp !== null){
 		this.ensp = temp_ensp;
 	}
@@ -180,8 +183,8 @@ function Variant(tsvHeadingLine, tsvDataLine, doNotCalls){
 	}
 
 	// Original note: parsing out RefSeq IDs
-	parsingOutRefSeqIDs(getDataArrayFromHeadings(dataArray, headings, "HGVSc"), this.hgvsc);
-	parsingOutRefSeqIDs(getDataArrayFromHeadings(dataArray, headings, "HGVSp"), this.hgvsp);
+	this.hgvsc = parsingOutRefSeqIDs(getDataArrayFromHeadings(dataArray, headings, "HGVSc"));
+	this.hgvsp = parsingOutRefSeqIDs(getDataArrayFromHeadings(dataArray, headings, "HGVSp"));
 
 	var temp_dbSNP_ID = getDataArrayFromHeadings(dataArray, headings, "dbSNP ID");
 	if(temp_dbSNP_ID !== null){

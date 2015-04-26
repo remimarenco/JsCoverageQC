@@ -108,4 +108,33 @@ describe('Variant', function(){
 		expect(variant).not.toEqual('undefined');
 		expect(variant).toEqual(jasmine.any(Variant));
 	});
+
+	it('should correspond to the tsv file given', function(){
+		var variant = new Variant(tsvHeadingLine, tsvDataLines[0]);
+
+		expect(variant.gene).toEqual('APC');
+		expect(variant.variant).toEqual('G>A/A');
+		expect(variant.chr).toEqual(5);
+		expect(variant.coordinate).toEqual(112175770);
+		expect(variant.type).toEqual('snv');
+		expect(variant.genotype).toEqual('hom');
+		expect(variant.altVariantFreq).toEqual(99.64);
+		expect(variant.readDepth).toEqual(2224);
+		expect(variant.altReadDepth).toEqual(2216);
+		expect(variant.consequence).toEqual("synonymous_variant");
+		expect(variant.cosmicId).toEqual('');
+		expect(variant.hgvsc).toEqual('c.4479G>A');
+		expect(variant.hgvsp).toEqual('c.4479G>A(p.=)');
+		expect(variant.dbSnpIdPrefix).toEqual('rs');
+		expect(variant.dbSnpIdSuffix).toEqual('41115');
+		expect(variant.filters).toEqual('PASS');
+		expect(variant.alleleFreqGlobalMinor).toEqual(33.84);
+		expect(variant.geneMutation).toEqual('APC c.4479G>A');
+		expect(variant.hgvscComplete).toEqual('NM_000038.5:c.4479G>A');
+		expect(variant.hgvspComplete).toEqual('NM_000038.5:c.4479G>A(p.=)');
+		expect(variant.ensp).toEqual('NP_000029.2');
+		expect(variant.onTheDoNotCallList).toBeTruthy();
+		expect(variant.typeOfDoNotCall).toEqual("Don't call, always");
+		expect(variant.transcript).toEqual('NM_000038.5');
+	});
 });
