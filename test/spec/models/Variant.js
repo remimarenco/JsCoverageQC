@@ -102,33 +102,10 @@ describe('Variant', function(){
 
 	it('should construct properly with only tsv parameters', function(){
 		var randomInteger_0_7 = Math.floor((Math.random() * 7) + 1);
-		console.log(randomInteger_0_7);
 		var variant = new Variant(tsvHeadingLine, tsvDataLines[randomInteger_0_7]);
-		/*
-		this.gene = '';
-		this.variant = '';
-		this.chr = -1;
-		this.coordinate = -1;
-		this.type = '';
-		this.genotype = '';
-		this.altVariantFreq = 0.00;
-		this.readDepth = 0;
-		this.altReadDepth = 0;
-		this.consequence = '';
-		this.cosmicId = '';
-		this.hgvsc = '';
-		this.hgvsp = '';
-		this.dbSnpIdPrefix = '';
-		this.dbSnpIdSuffix = '';
-		this.filters = '';
-		this.alleleFreqGlobalMinor = 0.00;
-		this.geneMutation = '';
-		this.hgvscComplete = '';
-		this.hgvspComplete = '';
-		this.ensp = '';
-		this.onTheDoNotCallList = false;
-		this.typeOfDoNotCall = '';
-		this.transcript = '';
-		*/
+
+		expect(variant).not.toBe(null);
+		expect(variant).not.toEqual('undefined');
+		expect(variant).toEqual(jasmine.any(Variant));
 	});
 });
