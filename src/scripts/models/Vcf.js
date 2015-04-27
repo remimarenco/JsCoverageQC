@@ -59,7 +59,7 @@ function Vcf(vcfFileUrl, exonBedFileUrl, exonBedLines, ampliconBedFileUrl,
 			this.geneExons.add(new GeneExon(exonBedLine));
 		});
 	}
-	console.log(this.geneExons.length + " regions read from exon BED file");
+	// console.log(this.geneExons.length + " regions read from exon BED file");
 }
 
 Vcf.prototype = {
@@ -82,6 +82,7 @@ Vcf.prototype = {
 		return filteredAnnotatedVariantCount;
 	},
 	getAmpliconCount: function(){
+		// TODO: Optimize this function to avoid process the entire geneExons Set / amplicons Array
 		var amplicons = new cSortedSet();
 		this.geneExons.forEach(function(geneExon){
 			geneExon.amplicons.forEach(function(amplicon){
@@ -95,6 +96,7 @@ Vcf.prototype = {
 		this.bases.values().forEach(function(base){
 			readDepthCount += base.readDepths.length;
 		});
+		return readDepthCount;
 	},
 	/**
 	 * [findGeneExonsForChrPos description]
