@@ -14,14 +14,13 @@ var binModel = require('../models/Bin');
 var imageURL = require('../../images/yeoman.png');
 
 
-/* TODO:
-	- Récupérer des fichiers en js client only
-	- Faire le découpage en classe comme coverageQC + Faire algo main Java -> Javascript
-	- Etablir une sortie pour vérifier que les données sont ok comme Java
-	- Faire le html qui correspond
-	- Utiliser les libs identiques pour faire le boulot
+/* TODO: Récupérer des fichiers en js client only
+	TODO: Faire le découpage en classe comme coverageQC + Faire algo main Java -> Javascript
+	TODO: Etablir une sortie pour vérifier que les données sont ok comme Java
+	TODO: Faire le html qui correspond
+	TODO: Utiliser les libs identiques pour faire le boulot
 
-	- doNotCallFile à traiter plus tard
+	TODO: doNotCallFile à traiter plus tard
  */
 function generateReport(){
 
