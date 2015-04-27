@@ -153,22 +153,19 @@ function Variant(tsvHeadingLine, tsvDataLine, doNotCalls){
 	// Original note: this gets Transcript_27 instead of Transcript HGNC_25 because
 	// the way substring works it gets string to left of first underscore and
 	// in Transcript HGNC_25 case this is Transcript HGNC
-	this.transcript = parseInt(getDataArrayFromHeadings(dataArray, headings, "Transcript"));
+	this.transcript = getDataArrayFromHeadings(dataArray, headings, "Transcript");
 
 	var temp_hgvsc = getDataArrayFromHeadings(dataArray, headings, "HGVSc");
-	console.log('temp_hgvsc: '+temp_hgvsc);
 	if(temp_hgvsc !== null){
 		this.hgvscComplete = temp_hgvsc;
 	}
 
 	var temp_hgvsp = getDataArrayFromHeadings(dataArray, headings, "HGVSp");
-	console.log('temp_hgvsp: '+temp_hgvsp);
 	if(temp_hgvsp !== null){
 		this.hgvspComplete = temp_hgvsp;
 	}
 
 	var temp_ensp = getDataArrayFromHeadings(dataArray, headings, "ENSP");
-	console.log('temp_ensp: '+temp_ensp);
 	if(temp_ensp !== null){
 		this.ensp = temp_ensp;
 	}

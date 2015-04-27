@@ -133,8 +133,8 @@ describe('Variant', function(){
 		expect(variant.hgvscComplete).toEqual('NM_000038.5:c.4479G>A');
 		expect(variant.hgvspComplete).toEqual('NM_000038.5:c.4479G>A(p.=)');
 		expect(variant.ensp).toEqual('NP_000029.2');
-		expect(variant.onTheDoNotCallList).toBeTruthy();
-		expect(variant.typeOfDoNotCall).toEqual("Don't call, always");
+		expect(variant.onTheDoNotCallList).not.toBeTruthy();
+		expect(variant.typeOfDoNotCall).toEqual("Not on lab list/Potentially Valid");
 		expect(variant.transcript).toEqual('NM_000038.5');
 	});
 
