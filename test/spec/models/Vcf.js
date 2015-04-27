@@ -14,12 +14,12 @@ describe('Vcf', function(){
 		vcf = new Vcf();
 	});
 
-	it('should construct properly with good parameters passed', function(){
-		expect(vcf.fileName).toEqual(jasmine.any(String));
-		expect(vcf.doNotCallFile).toEqual(jasmine.any(String));
-		expect(vcf.exonBedFileName).toEqual(jasmine.any(String));
-		expect(vcf.variantTsvFileName).toEqual(jasmine.any(String));
-		expect(vcf.variantTsvFileLineCount).toEqual(jasmine.any(Number));
+	it('should construct properly with no parameters passed', function(){
+		expect(vcf.fileUrl).toBeUndefined();
+		expect(vcf.doNotCallFileUrl).toEqual("NO DO NOT CALL FILE USED!");
+		expect(vcf.exonBedFileUrl).toBeUndefined();
+		expect(vcf.variantTsvFileUrl).toBeUndefined();
+		expect(vcf.variantTsvFileLineCount).toBeUndefined();
 		expect(vcf.runDate).toEqual(jasmine.any(Date));
 		expect(vcf.geneExons).toEqual(jasmine.any(cSortedSet));
 		expect(vcf.bedBamVcfFileUrls).toEqual(jasmine.any(cList));

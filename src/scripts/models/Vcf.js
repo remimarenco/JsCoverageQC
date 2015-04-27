@@ -20,7 +20,6 @@ var GeneExon = require("./GeneExon.js");
 function Vcf(vcfFileUrl, exonBedFileUrl, exonBedLines, ampliconBedFileUrl,
 	variantTsvFileUrl, variantTsvFileLineCount, bedBamFilesURL, doNotCallFileUrl){
 	this.fileUrl = ''; // Was fileName in original Java program
-	this.doNotCallFileUrl = ''; // Was doNotCallFile in original Java program
 	this.exonBedFileUrl = ''; // Was exonBedFileName in original Java program
 	this.ampliconBedFileUrl = '';
 	this.variantTsvFileUrl = ''; // Was variantTsvFileName in original Java program
@@ -33,7 +32,9 @@ function Vcf(vcfFileUrl, exonBedFileUrl, exonBedLines, ampliconBedFileUrl,
 	this.bases = new cSortedMap(); // TreeMap<String, Base>
 
 	this.fileUrl = vcfFileUrl;
-	this.exonBedFileName = exonBedFileUrl;
+	this.exonBedFileUrl = exonBedFileUrl;
+
+	// Was doNotCallFile in original Java program
 	if(this.doNotCallFileUrl !== null && typeof this.doNotCallFileUrl !== 'undefined'){
 		this.doNotCallFileUrl = doNotCallFileUrl;
 	}
@@ -45,14 +46,19 @@ function Vcf(vcfFileUrl, exonBedFileUrl, exonBedLines, ampliconBedFileUrl,
 	this.variantTsvFileUrl = variantTsvFileUrl;
 	this.variantTsvFileLineCount = variantTsvFileLineCount;
 
-	this.bedBamFilesURL.forEach(function(bedBamFileURL){
-		this.bedBamVcfFileUrls.push(bedBamFileURL);
-	});
-	this.bedBamFilesURL.push(ampliconBedFileUrl);
+	if(bedBamFilesURL !== null && typeof bedBamFilesURL !== 'undefined'){
+		this.bedBamFilesURL.forEach(function(bedBamFileURL){
+			this.bedBamVcfFileUrls.push(bedBamFileURL);
+		});
+	}
 
-	exonBedLines.forEach(function(exonBedLine){
-		this.geneExons.add(new GeneExon(exonBedLine));
-	});
+	this.bedBamVcfFileUrls.push(ampliconBedFileUrl);
+
+	if(bedBamFilesURL !== null && typeof bedBamFilesURL !== 'undefined'){
+		exonBedLines.forEach(function(exonBedLine){
+			this.geneExons.add(new GeneExon(exonBedLine));
+		});
+	}
 	console.log(this.geneExons.length + " regions read from exon BED file");
 }
 
