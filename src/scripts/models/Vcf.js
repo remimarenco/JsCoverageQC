@@ -7,12 +7,13 @@ var cSortedMap = require("collections/sorted-map");
 /**
  * [Vcf description]
  */
-function Vcf(vcfFileName, exonBedFileName, ampliconBedFileName,
-	variantTsvFileName, variantTsvFileLineCount, geneExonArray){
-	this.fileName = '';
-	this.doNotCallFile = '';
-	this.exonBedFileName = '';
-	this.variantTsvFileName = '';
+function Vcf(vcfFileUrl, exonBedFileUrl, ampliconBedFileUrl,
+	variantTsvFileUrl, variantTsvFileLineCount, geneExonArray, doNotCallFileUrl){
+	this.fileUrl = ''; // Was fileName in original Java program
+	this.doNotCallFileUrl = ''; // Was doNotCallFile in original Java program
+	this.exonBedFileUrl = ''; // Was exonBedFileName in original Java program
+	this.ampliconBedFileUrl = '';
+	this.variantTsvFileUrl = ''; // Was variantTsvFileName in original Java program
 	this.variantTsvFileLineCount = 0;
 	this.runDate = new Date();
 	this.geneExons = new cSortedSet(); // TreeSet<GeneExon>
@@ -21,7 +22,18 @@ function Vcf(vcfFileName, exonBedFileName, ampliconBedFileName,
 	/** @type {cSortedMap} key is chr|pos (e.g., "chr9|320001") */
 	this.bases = new cSortedMap(); // TreeMap<String, Base>
 
-	//this.fileName = 
+	this.fileUrl = vcfFileUrl;
+	this.exonBedFileName = exonBedFileUrl;
+	if(this.doNotCallFileUrl !== null && typeof this.doNotCallFileUrl !== 'undefined'){
+		this.doNotCallFileUrl = doNotCallFileUrl;
+	}
+	else{
+		// TODO: Change this way of checking if a doNotCall is used or not in VCF (this.doNotCallFileUsed => Boolean?)
+		this.doNotCallFileUrl = "NO DO NOT CALL FILE USED!";
+	}
+	this.ampliconBedFileUrl = ampliconBedFileUrl;
+	this.variantTsvFileUrl = variantTsvFileUrl;
+	this.variantTsvFileLineCount = variantTsvFileLineCount;
 }
 
 Vcf.prototype = {
