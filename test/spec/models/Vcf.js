@@ -68,15 +68,16 @@ describe('Vcf', function(){
 		var vcf = new Vcf(vcfFileUrl, exonBedFileUrl, exonBedText, ampliconBedFileName,
 	variantFileUrl, variantFileLineCount);
 
-		expect(vcf.fileUrl).toBeUndefined();
+		expect(vcf.fileUrl).toEqual(vcfFileUrl);
 		expect(vcf.doNotCallFileUrl).toEqual("NO DO NOT CALL FILE USED!");
-		expect(vcf.exonBedFileUrl).toBeUndefined();
-		expect(vcf.variantTsvFileUrl).toBeUndefined();
-		expect(vcf.variantTsvFileLineCount).toBeUndefined();
+		expect(vcf.exonBedFileUrl).toEqual(exonBedFileUrl);
+		expect(vcf.variantTsvFileUrl).toEqual(variantFileUrl);
+		expect(vcf.variantTsvFileLineCount).toEqual(variantFileLineCount);
 		expect(vcf.runDate).toEqual(jasmine.any(Date));
-		expect(vcf.geneExons).toEqual(jasmine.any(cSortedSet));
-		expect(vcf.bedBamVcfFileUrls).toEqual(jasmine.any(cList));
-		expect(vcf.bases).toEqual(jasmine.any(cSortedMap));
+		expect(vcf.geneExons.length).toEqual(0);
+		expect(vcf.bedBamVcfFileUrls.length).toEqual(1);
+		expect(vcf.bedBamVcfFileUrls.has(ampliconBedFileName)).toBeTruthy();
+		expect(vcf.bases.length).toEqual(0);
 
 		//TODO: Missing the test of the values
 	});
