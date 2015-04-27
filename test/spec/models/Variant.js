@@ -137,4 +137,6 @@ describe('Variant', function(){
 		expect(variant.typeOfDoNotCall).toEqual("Don't call, always");
 		expect(variant.transcript).toEqual('NM_000038.5');
 	});
+
+	// TODO: Test the Variant prototype with a doNotCallFile
 });
