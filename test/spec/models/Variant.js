@@ -12,6 +12,7 @@ describe('Variant', function(){
 	var done_emitted;
 
 	function tsv_Upload(done){
+		var firstToLaunch_done = false;
 		var tsvFile = "http://localhost:8080/base/test/data/sample.variant.tsv";
 
 		var reqTsv = new XMLHttpRequest();
@@ -22,7 +23,7 @@ describe('Variant', function(){
 			reqTsv_readyState = reqTsv.readyState;
 			reqTsv_status = reqTsv.status;
 
-			if (reqTsv_readyState === 4 && (reqTsv_status === 200 || reqTsv_status === 0) && !done_emitted) {
+			if (reqTsv_readyState === 4 && (reqTsv_status === 200 || reqTsv_status === 0)) {
 				var tsvText = reqTsv.responseText; // Note: not oReq.responseText
 				var tsvLines = tsvText.split('\n');
 				tsvHeadingLine = tsvLines[0];
@@ -31,14 +32,24 @@ describe('Variant', function(){
 
 				// We also check if the DoNotCall has been fully uploaded
 				// If yes, we can begin all the tests
-				/*
-				if(reqDoNotCall_readyState === 4 && (reqDoNotCall_status === 200 || reqDoNotCall_status === 0) && !done_emitted)
-				{
+				// console.log("-------BEGINNING TSV--------");
+				// console.log("done_emitted tsv_upload:"+done_emitted);
+				if(done_emitted && !firstToLaunch_done){
+					// console.log("On balande le done depuis le done_emitted (tsv)!");
 					done();
-					done_emitted = true;
 				}
-				*/
-				done();
+				else if(!done_emitted){
+					// console.log("reqDoNotCall_readyState: "+reqDoNotCall_readyState);
+					// console.log("reqDoNotCall_status: "+reqDoNotCall_status);
+					if(reqDoNotCall_readyState === 4 && (reqDoNotCall_status === 200 || reqDoNotCall_status === 0))
+					{
+						// console.log("On balande le done depuis le check req (tsv)!");
+						done();
+						done_emitted = true;
+					}
+				}
+				// console.log("-------END TSV--------");
+				//done_emitted = true;
 			}
 		};
 
@@ -46,13 +57,14 @@ describe('Variant', function(){
 	}
 
 	function doNotCall_Upload(done){
+		var firstToLaunch_done = false;
 		var doNotCallFile = "http://localhost:8080/base/test/data/Do%20not%20call_26.20140716.list.xlsx";
 
 		var reqDoNotCall = new XMLHttpRequest();
 		reqDoNotCall.open("GET", doNotCallFile, true);
 		reqDoNotCall.responseType = "arraybuffer";
 
-		reqDoNotCall.onreadystatechange = function (oEvent) {
+		reqDoNotCall.onload = function (oEvent) {
 			reqDoNotCall_readyState = reqDoNotCall.readyState;
 			reqDoNotCall_status = reqDoNotCall.status;
 
@@ -76,11 +88,27 @@ describe('Variant', function(){
 
 				// We also check if the tsv has been fully uploaded
 				// If yes, we can begin all the tests
-				if(reqTsv_readyState === 4 && (reqTsv_status === 200 || reqTsv_status === 0)  && !done_emitted)
+				// console.log("-------BEGINNING DONOTCALL--------");
+				// console.log("done_emitted doNotCall_upload: "+done_emitted);
+				// console.log("firstToLaunch_done tsv: "+firstToLaunch_done);
+				// console.log("reqTsv_readyState: "+reqTsv_readyState);
+				// console.log("reqTsv_status: "+reqTsv_status);
+				if(done_emitted && !firstToLaunch_done)
 				{
-					done();
-					done_emitted = true;
+					// console.log("On balande le done depuis le done_emitted (doNotCall)!");
+					// TODO: Check why if we launch the done() here, it does not work anymore
+					//done();
 				}
+				else if(!done_emitted){
+					if(reqTsv_readyState === 4 && (reqTsv_status === 200 || reqTsv_status === 0))
+					{
+						// console.log("On balande le done depuis le reqTsv (doNotCall)!");
+						done();
+						done_emitted = true;
+						firstToLaunch_done = true;
+					}
+				}
+				// console.log("-------END DONOTCALL--------");
 		};
 
 		reqDoNotCall.send(null);
@@ -92,7 +120,7 @@ describe('Variant', function(){
 		done_emitted = false;
 
 		tsv_Upload(done);
-		//doNotCall_Upload(done);
+		doNotCall_Upload(done);
 	});
 
 	it('should load beforeEach properly', function(){
