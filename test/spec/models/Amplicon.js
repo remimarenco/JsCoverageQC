@@ -21,7 +21,7 @@ describe('Amplicon', function () {
   // Test the existence of the compareTo function
   it('should have a compareTo function', function(){
     var amplicon = new Amplicon("");
-    expect(amplicon.compareTo).toBeDefined();
+    expect(amplicon.compare).toBeDefined();
   });
 
   //////////////////////////////
@@ -62,7 +62,7 @@ describe('Amplicon', function () {
       var first_amplicon = new Amplicon(ampliconBedLine);
       var second_amplicon = new Amplicon(ampliconBedLine);
 
-      expect(first_amplicon.compareTo(second_amplicon)).toEqual(0);
+      expect(first_amplicon.compare(second_amplicon)).toEqual(0);
     });
 
     // Test the comparison of the Amplicon with an other amplicon
@@ -72,7 +72,7 @@ describe('Amplicon', function () {
       var ampliconBedLineChr16 = ampliconsBedText.split('\n')[6];
       var second_amplicon = new Amplicon(ampliconBedLineChr16);
 
-      expect(first_amplicon.compareTo(second_amplicon)).toEqual(-1);
+      expect(first_amplicon.compare(second_amplicon)).toEqual(-1);
     });
 
     // Test the comparison of the Amplicon with an other amplicon
@@ -82,7 +82,7 @@ describe('Amplicon', function () {
       var ampliconBedLineChr2 = ampliconsBedText.split('\n')[2];
       var second_amplicon = new Amplicon(ampliconBedLineChr2);
 
-      expect(first_amplicon.compareTo(second_amplicon)).toEqual(1);
+      expect(first_amplicon.compare(second_amplicon)).toEqual(1);
     });
 
     // Test the comparison of the Amplicon with an other amplicon
@@ -92,7 +92,7 @@ describe('Amplicon', function () {
       var ampliconBedLineChr5 = ampliconsBedText.split('\n')[83];
       var second_amplicon = new Amplicon(ampliconBedLineChr5);
 
-      expect(first_amplicon.compareTo(second_amplicon)).toEqual(1);
+      expect(first_amplicon.compare(second_amplicon)).toEqual(1);
     });
   });
 });

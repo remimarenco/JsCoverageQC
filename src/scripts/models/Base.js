@@ -49,7 +49,7 @@ function Base(vcfLine, bases){
 			newBase = new Base();
 			this.chr = chr;
 			this.pos = pos;
-			bases.add(chr + "|" + pos.toString(), this);
+			bases.set(chr + "|" + pos.toString(), this);
 		}
 		else{
 			this.chr = newBase.chr;
@@ -81,7 +81,6 @@ function Base(vcfLine, bases){
 			this.variant = newBase.variant;
 			this.variantText = newBase.variantText;
 		}
-
 		//this.readDepths = newBase.readDepths.clone();
 
 		this.quality = newBase.quality;
@@ -90,7 +89,13 @@ function Base(vcfLine, bases){
 }
 
 Base.prototype = {
-	compareTo: function(otherBase){
+	equals: function(otherBase){
+		if(this.compare(otherBase) === 0){
+			return true;
+		}
+		return false;
+	},
+	compare: function(otherBase){
 		if(this.pos < otherBase.pos){
 			return -1;
 		}

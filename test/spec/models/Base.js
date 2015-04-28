@@ -60,17 +60,17 @@ describe('Base', function(){
 			otherBaseEqual = new Base();
 			otherBase = new Base(vcfLines[787], new cSortedMap());
 		});
-		describe('compareTo',function(){
+		describe('compare',function(){
 			it('should be defined', function(){
-				expect(base.compareTo).toBeDefined();
+				expect(base.compare).toBeDefined();
 			});
 
 			it('should be 0 with two identical objects', function(){
-				expect(base.compareTo(otherBaseEqual)).toEqual(0);
+				expect(base.compare(otherBaseEqual)).toEqual(0);
 			});
 
 			it('should be not 0 with two different objects', function(){
-				expect(base.compareTo(otherBase)).not.toEqual(0);
+				expect(base.compare(otherBase)).not.toEqual(0);
 			});
 		});
 

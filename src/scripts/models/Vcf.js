@@ -6,6 +6,7 @@ var cSortedMap = require("collections/sorted-map");
 
 var GeneExon = require("./GeneExon.js");
 var Amplicon = require("./Amplicon.js");
+var Base = require("./Base.js");
 
 /**
  * VCF stands for Variant Call Format, and this file format is used by the 1000 Genomes project to encode SNPs and other structural genetic variants.  The format is further described on the 1000 Genomes project Web site.  VCF calls are available at EBI / NCBI.
@@ -18,10 +19,11 @@ var Amplicon = require("./Amplicon.js");
  * @param {String} bedBamFilesURL          Urls of the bed bam files
  * @param {String} doNotCallFileUrl        Url of the doNotCallFile
  */
-function Vcf(vcfFileUrl, exonBedFileUrl, exonBedLines, ampliconBedFileUrl,
-	ampliconBedLines, variantTsvFileUrl, variantTsvFileLineCount, bedBamFilesURL,
+function Vcf(vcfFileUrl, vcfNotCutLines, exonBedFileUrl, exonBedNotCutLines, ampliconBedFileUrl,
+	ampliconBedNotCutLines, variantTsvFileUrl, variantTsvFileLineCount, bedBamFilesURL,
 	doNotCallFileUrl){
 	this.fileUrl = ''; // Was fileName in original Java program
+	this.vcfLines = '';
 	this.exonBedFileUrl = ''; // Was exonBedFileName in original Java program
 	this.exonBedLines = '';
 	this.ampliconBedFileUrl = '';
@@ -46,9 +48,10 @@ function Vcf(vcfFileUrl, exonBedFileUrl, exonBedLines, ampliconBedFileUrl,
 		// TODO: Change this way of checking if a doNotCall is used or not in VCF (this.doNotCallFileUsed => Boolean?)
 		this.doNotCallFileUrl = "NO DO NOT CALL FILE USED!";
 	}
-	this.exonBedLines = exonBedLines;
+	this.vcfLines = vcfNotCutLines;
+	this.exonBedLines = exonBedNotCutLines;
 	this.ampliconBedFileUrl = ampliconBedFileUrl;
-	this.ampliconBedLines = ampliconBedLines;
+	this.ampliconBedLines = ampliconBedNotCutLines;
 	this.variantTsvFileUrl = variantTsvFileUrl;
 	this.variantTsvFileLineCount = variantTsvFileLineCount;
 
@@ -82,6 +85,7 @@ function Vcf(vcfFileUrl, exonBedFileUrl, exonBedLines, ampliconBedFileUrl,
 	//////////////////////////
 	// Amplicon population //
 	//////////////////////////
+	console.log("Début Amplicon population");
 	if(this.ampliconBedLines !== null && typeof this.ampliconBedLines !== 'undefined'){
 		var arrayAmpliconBedLines = this.ampliconBedLines.split("\n");
 		arrayAmpliconBedLines.forEach(function(ampliconBedLine){
@@ -116,7 +120,66 @@ function Vcf(vcfFileUrl, exonBedFileUrl, exonBedLines, ampliconBedFileUrl,
 			}
 		});
 	}
+	console.log("Fin Amplicon population");
 
+	//////////////////////
+	// Base population //
+	//////////////////////
+	console.log("Début Base population");
+	if(this.vcfLines !== null && typeof this.vcfLines !== 'undefined'){
+		var arrayVcfLines = this.vcfLines.split("\n");
+		arrayVcfLines.forEach(function(vcfLine){
+			if (vcfLine.search("#") !== 0) {
+				var base = new Base(vcfLine, self.bases);
+				var foundGeneExon = false;
+
+				self.findGeneExonsForChrPos(base.chr, base.pos).forEach(function(geneExon){
+					foundGeneExon = true;
+					geneExon.bases.set(base.pos, base);
+				});
+
+				if (!foundGeneExon) {
+				    //console.log("the following base does not correspond to an exon region: " + vcfLine);
+				}
+			}
+		});
+	}
+
+	this.geneExons.forEach(function(geneExon){
+		// If a position is absent, create it with read depth 0
+		for(var pos = geneExon.startPos; pos <= geneExon.endPos; pos++){
+			var base = new Base(null, self.bases);
+			base.pos = pos;
+			base.readDepths.add(0);
+			self.bases.set(geneExon.chr + "|" + pos, base);
+			if(geneExon.bases.has(pos)){
+				geneExon.bases.set(pos, self.bases.get(geneExon.chr + "|" + pos));
+			}
+		}
+		// Perform binning operation
+		geneExon.bases.forEach(function(base){
+			// Don't count a base if it is outside of the coding region
+			if (!((base.pos < geneExon.codingRegion.startPos) || (base.pos > geneExon.codingRegion.endPos))) {
+			    geneExon.bins.forEach(function(bin){
+			    	if (base.getTotalReadDepth() >= bin.startCount &&
+			    		base.getTotalReadDepth() <= bin.endCount) {
+			    	    bin.addCount();
+			    	    bin.processPct();
+			    	}
+			    });
+			}
+		});
+
+		// Assign QC value
+		if (geneExon.bins.get(0).count > 0 || geneExon.bins.get(1).count > 0) {
+		    geneExon.qc = "fail";
+		} else if (geneExon.bins.get(2).count > 0) {
+		    geneExon.qc = "warn";
+		} else if (geneExon.bins.get(3).count > 0) {
+		    geneExon.qc = "pass";
+		}
+	});
+	console.log("Fin Base population");
 	// console.log(this.geneExons.length + " regions read from exon BED file");
 }
 
@@ -144,7 +207,8 @@ Vcf.prototype = {
 		var amplicons = new cSortedSet();
 		this.geneExons.forEach(function(geneExon){
 			geneExon.amplicons.forEach(function(amplicon){
-				amplicons.add(amplicon);
+				console.log("ajout de l'amplicon: "+amplicon);
+				amplicons.push(amplicon);
 			});
 		});
 		return amplicons.length;
@@ -179,7 +243,7 @@ Vcf.prototype = {
 		this.geneExons.forEach(function(geneExon){
 			if(geneExon.chr.localeCompare(chr) === 0 &&
 				(geneExon.startPos <= endPos && geneExon.endPos >= startPos)){
-				matchedGeneExons.add(geneExon);
+				matchedGeneExons.push(geneExon);
 			}
 		});
 		return matchedGeneExons;

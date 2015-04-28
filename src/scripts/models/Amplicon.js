@@ -26,7 +26,13 @@ function Amplicon(bedLine){
 }
 
 Amplicon.prototype = {
-	compareTo: function(otherAmplicon){
+	equals: function(otherAmplicon){
+		if(this.compare(otherAmplicon) === 0){
+			return true;
+		}
+		return false;
+	},
+	compare: function(otherAmplicon){
 		// If the chromosome is different, we return the comparison
 		// Else we return the startPos comparison
 		var localeCompareChr = this.chr.localeCompare(otherAmplicon.chr);
