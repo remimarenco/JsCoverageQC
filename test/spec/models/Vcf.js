@@ -65,10 +65,11 @@ describe('Vcf', function(){
 		// variantTsvFileUrl => sample.variant.tsv
 		// variantTsvFileLineCount => Process it (9)
 		// vcf.geneExons.length => 85
+		// vcf.bases.length => 14882
 		var vcf = new Vcf(vcfFileUrl, vcfText, exonBedFileUrl, exonBedText, ampliconBedFileName,
 	ampliconBedText, variantFileUrl, variantFileLineCount);
 
-		/*expect(vcf.fileUrl).toEqual(vcfFileUrl);
+		expect(vcf.fileUrl).toEqual(vcfFileUrl);
 		expect(vcf.vcfLines).toEqual(vcfText);
 		expect(vcf.doNotCallFileUrl).toEqual("NO DO NOT CALL FILE USED!");
 		expect(vcf.exonBedFileUrl).toEqual(exonBedFileUrl);
@@ -80,23 +81,23 @@ describe('Vcf', function(){
 		expect(vcf.geneExons.length).toEqual(85);
 		expect(vcf.bedBamVcfFileUrls.length).toEqual(1);
 		expect(vcf.bedBamVcfFileUrls.has(ampliconBedFileName)).toBeTruthy();
-		expect(vcf.bases.length).toEqual(0);*/
+		expect(vcf.bases.length).toEqual(14882);
 	});
 
 	describe('and its function', function(){
 		var vcf;
 		beforeEach(function(){
-			//vcf = new Vcf(vcfFileUrl, vcfText, exonBedFileUrl, exonBedText, ampliconBedFileName,
-			//ampliconBedText, variantFileUrl, variantFileLineCount);
+			vcf = new Vcf(vcfFileUrl, vcfText, exonBedFileUrl, exonBedText, ampliconBedFileName,
+				ampliconBedText, variantFileUrl, variantFileLineCount);
 		});
 
 		describe('getBaseCount', function(){
 			it('should be defined', function(){
-				//expect(vcf.getBaseCount).toBeDefined();
+				// expect(vcf.getBaseCount).toBeDefined();
 			});
 
 			it('should return 0 when no bases in Vcf object', function(){
-				//expect(vcf.getBaseCount()).toEqual(0);
+				// expect(vcf.getBaseCount()).toEqual(0);
 			});
 		});
 
@@ -125,11 +126,10 @@ describe('Vcf', function(){
 				//expect(vcf.getFilteredAnnotatedVariantCount()).toEqual(0);
 			});
 
-			/* TODO: Add GeneExons
+			// TODO: Add GeneExons
 			it('should not return 0 when geneExons in Vcf object', function(){
-				expect(vcf.getAmpliconCount()).not.toEqual(0);
+				// expect(vcf.getAmpliconCount()).not.toEqual(0);
 			});
-			*/
 		});
 
 		describe('getReadDepthCount', function(){
@@ -141,11 +141,10 @@ describe('Vcf', function(){
 				//expect(vcf.getReadDepthCount()).toEqual(0);
 			});
 
-			/* TODO: Add GeneExons
+			// TODO: Add GeneExons
 			it('should not return 0 when bases in Vcf object', function(){
-				expect(vcf.getReadDepthCount()).not.toEqual(0);
+				//expect(vcf.getReadDepthCount()).not.toEqual(0);
 			});
-			*/
 		});
 
 		describe('findGeneExonsForChrPos', function(){
@@ -158,11 +157,10 @@ describe('Vcf', function(){
 				//expect(vcf.findGeneExonsForChrPos().length).toEqual(0);
 			});
 
-			/* TODO: Add GeneExons
+			// TODO: Add GeneExons
 			it('should return a SortedSet with not a 0 length when no geneExons in Vcf object', function(){
-				expect(vcf.findGeneExonsForChrPos().length).not.toEqual(0);
+				// expect(vcf.findGeneExonsForChrPos().length).not.toEqual(0);
 			});
-			*/
 		});
 
 		describe('findGeneExonsForChrRange', function(){
@@ -185,11 +183,10 @@ describe('Vcf', function(){
 				//expect(vcf.findGeneExonsForChrRange('chr40', 105246400 + 1, 105246800 + 0).length).toEqual(0);
 			});
 
-			/* TODO: Add GeneExons
+			// TODO: Add GeneExons
 			it('should return a SortedSet with not a 0 length when no geneExons in Vcf object', function(){
 				expect(vcf.findGeneExonsForChrPos('chr14', 105246419 + 1, 105246558 + 0).length).not.toEqual(0);
 			});
-			*/
 		});
 
 		describe('getBedBamVcfFileUrlAsString', function(){

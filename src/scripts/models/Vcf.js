@@ -85,7 +85,6 @@ function Vcf(vcfFileUrl, vcfNotCutLines, exonBedFileUrl, exonBedNotCutLines, amp
 	//////////////////////////
 	// Amplicon population //
 	//////////////////////////
-	console.log("Début Amplicon population");
 	if(this.ampliconBedLines !== null && typeof this.ampliconBedLines !== 'undefined'){
 		var arrayAmpliconBedLines = this.ampliconBedLines.split("\n");
 		arrayAmpliconBedLines.forEach(function(ampliconBedLine){
@@ -111,7 +110,6 @@ function Vcf(vcfFileUrl, vcfNotCutLines, exonBedFileUrl, exonBedNotCutLines, amp
 						}
 					});
 				}
-
 				/*
 				if (!foundGeneExon) {
 				    console.log("the following amplicon does not correspond to an exon region: " + ampliconBedLine);
@@ -120,12 +118,11 @@ function Vcf(vcfFileUrl, vcfNotCutLines, exonBedFileUrl, exonBedNotCutLines, amp
 			}
 		});
 	}
-	console.log("Fin Amplicon population");
+
 
 	//////////////////////
 	// Base population //
 	//////////////////////
-	console.log("Début Base population");
 	if(this.vcfLines !== null && typeof this.vcfLines !== 'undefined'){
 		var arrayVcfLines = this.vcfLines.split("\n");
 		arrayVcfLines.forEach(function(vcfLine){
@@ -179,7 +176,6 @@ function Vcf(vcfFileUrl, vcfNotCutLines, exonBedFileUrl, exonBedNotCutLines, amp
 		    geneExon.qc = "pass";
 		}
 	});
-	console.log("Fin Base population");
 	// console.log(this.geneExons.length + " regions read from exon BED file");
 }
 
