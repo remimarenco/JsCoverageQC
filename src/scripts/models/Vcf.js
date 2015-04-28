@@ -57,6 +57,8 @@ function Vcf(vcfFileUrl, vcfNotCutLines, exonBedFileUrl, exonBedNotCutLines, amp
 
 	var self = this;
 
+	// TODO: Cut the different parts of the object construction into functions
+
 	/////////////////////////////
 	// BedBamFiles Population //
 	/////////////////////////////

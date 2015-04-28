@@ -23,7 +23,7 @@ var imageURL = require('../../images/yeoman.png');
 	TODO: doNotCallFile à traiter plus tard
  */
 function generateReport(){
-
+	
 }
 
 var InputFile = React.createClass({

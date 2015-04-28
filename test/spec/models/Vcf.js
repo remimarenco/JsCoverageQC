@@ -87,8 +87,8 @@ describe('Vcf', function(){
 	describe('and its function', function(){
 		var vcf;
 		beforeEach(function(){
-			vcf = new Vcf(vcfFileUrl, vcfText, exonBedFileUrl, exonBedText, ampliconBedFileName,
-				ampliconBedText, variantFileUrl, variantFileLineCount);
+			// vcf = new Vcf(vcfFileUrl, vcfText, exonBedFileUrl, exonBedText, ampliconBedFileName,
+				// ampliconBedText, variantFileUrl, variantFileLineCount);
 		});
 
 		describe('getBaseCount', function(){
