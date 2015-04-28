@@ -66,15 +66,17 @@ describe('Vcf', function(){
 		// variantTsvFileLineCount => Process it (9)
 		// vcf.geneExons.length => 85
 		var vcf = new Vcf(vcfFileUrl, exonBedFileUrl, exonBedText, ampliconBedFileName,
-	variantFileUrl, variantFileLineCount);
+	ampliconBedText, variantFileUrl, variantFileLineCount);
 
 		expect(vcf.fileUrl).toEqual(vcfFileUrl);
 		expect(vcf.doNotCallFileUrl).toEqual("NO DO NOT CALL FILE USED!");
 		expect(vcf.exonBedFileUrl).toEqual(exonBedFileUrl);
+		expect(vcf.ampliconBedFileUrl).toEqual(ampliconBedFileName);
+		expect(vcf.ampliconBedLines).toEqual(ampliconBedText);
 		expect(vcf.variantTsvFileUrl).toEqual(variantFileUrl);
 		expect(vcf.variantTsvFileLineCount).toEqual(variantFileLineCount);
 		expect(vcf.runDate).toEqual(jasmine.any(Date));
-		expect(vcf.geneExons.length).toEqual(0);
+		expect(vcf.geneExons.length).toEqual(85);
 		expect(vcf.bedBamVcfFileUrls.length).toEqual(1);
 		expect(vcf.bedBamVcfFileUrls.has(ampliconBedFileName)).toBeTruthy();
 		expect(vcf.bases.length).toEqual(0);
@@ -84,7 +86,7 @@ describe('Vcf', function(){
 		var vcf;
 		beforeEach(function(){
 				vcf = new Vcf(vcfFileUrl, exonBedFileUrl, exonBedText, ampliconBedFileName,
-			variantFileUrl, variantFileLineCount);
+			ampliconBedText, variantFileUrl, variantFileLineCount);
 		});
 
 		describe('getBaseCount', function(){
@@ -150,7 +152,7 @@ describe('Vcf', function(){
 				expect(vcf.findGeneExonsForChrPos).toBeDefined();
 			});
 
-			it('should return a SortedSet with a 0 length when no geneExons in Vcf object', function(){
+			it('should return a SortedSet with a 0 length when 85 geneExons in Vcf object but no parameters', function(){
 				expect(vcf.findGeneExonsForChrPos()).toEqual(jasmine.any(cSortedSet));
 				expect(vcf.findGeneExonsForChrPos().length).toEqual(0);
 			});
@@ -167,14 +169,19 @@ describe('Vcf', function(){
 				expect(vcf.findGeneExonsForChrRange).toBeDefined();
 			});
 
-			it('should return a SortedSet with a 0 length when no geneExons in Vcf object, and no parameters', function(){
+			it('should return a SortedSet with a 0 length when 85 geneExons in Vcf object, and no parameters', function(){
 				expect(vcf.findGeneExonsForChrRange()).toEqual(jasmine.any(cSortedSet));
 				expect(vcf.findGeneExonsForChrRange().length).toEqual(0);
 			});
 
-			it('should return a SortedSet with a 0 length when no geneExons in Vcf object, and good parameters', function(){
+			it('should return a SortedSet with a 1 length when 85 geneExons in Vcf object, and good parameters', function(){
 				expect(vcf.findGeneExonsForChrRange('chr14', 105246419 + 1, 105246558 + 0)).toEqual(jasmine.any(cSortedSet));
-				expect(vcf.findGeneExonsForChrRange('chr14', 105246419 + 1, 105246558 + 0).length).toEqual(0);
+				expect(vcf.findGeneExonsForChrRange('chr14', 105246419 + 1, 105246558 + 0).length).toEqual(1);
+			});
+
+			it('should return a SortedSet with a 0 length when 85 geneExons in Vcf object, and bad parameters', function(){
+				expect(vcf.findGeneExonsForChrRange('chr40', 105246400 + 1, 105246800 + 0)).toEqual(jasmine.any(cSortedSet));
+				expect(vcf.findGeneExonsForChrRange('chr40', 105246400 + 1, 105246800 + 0).length).toEqual(0);
 			});
 
 			/* TODO: Add GeneExons

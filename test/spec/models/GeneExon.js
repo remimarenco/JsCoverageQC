@@ -49,9 +49,9 @@ describe('GeneExon', function(){
 	});
 
 	describe('and its function', function(){
-		describe(('compareTo'), function(){
+		describe(('compare'), function(){
 			it('should be defined', function(){
-				expect(geneExon.compareTo).toBeDefined();
+				expect(geneExon.compare).toBeDefined();
 			});
 
 			it('should return 0 when two identical objects are tested (same nameForCompare)', function(){
@@ -61,7 +61,7 @@ describe('GeneExon', function(){
 				var sameExonBedLine = exonBedLines[1];
 				var otherButSameGeneExon = new GeneExon(sameExonBedLine);
 
-				expect(geneExon.compareTo(otherButSameGeneExon)).toEqual(0);
+				expect(geneExon.compare(otherButSameGeneExon)).toEqual(0);
 			});
 
 			it('should return -1 when two objects with the same name and differnt exonNumber are tested', function(){
@@ -70,7 +70,7 @@ describe('GeneExon', function(){
 
 				var sameExonBedLine = exonBedLines[8];
 				var otherBut_sameName_and_differentExonNumber_geneExon = new GeneExon(sameExonBedLine);
-				expect(geneExon.compareTo(otherBut_sameName_and_differentExonNumber_geneExon)).toEqual(-1);
+				expect(geneExon.compare(otherBut_sameName_and_differentExonNumber_geneExon)).toEqual(-1);
 			});
 
 			it('should return 0 when two objects with the same name and same exonNumber and different suffixForCompare are tested', function(){
@@ -79,7 +79,7 @@ describe('GeneExon', function(){
 
 				var sameExonBedLine = exonBedLines[4];
 				var otherBut_sameName_sameExonNumber_differentSuffixForCompare_geneExon = new GeneExon(sameExonBedLine);
-				expect(geneExon.compareTo(otherBut_sameName_sameExonNumber_differentSuffixForCompare_geneExon)).toEqual(-1);
+				expect(geneExon.compare(otherBut_sameName_sameExonNumber_differentSuffixForCompare_geneExon)).toEqual(-1);
 			});
 		});
 

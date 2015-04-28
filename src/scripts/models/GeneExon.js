@@ -95,7 +95,7 @@ GeneExon.prototype = {
 	 * @param  {[type]} otherGeneExon [description]
 	 * @return {[type]}               [description]
 	 */
-	compareTo: function(otherGeneExon){
+	compare: function(otherGeneExon){
 		var nameForCompareComparison = this.nameForCompare.localeCompare(otherGeneExon.nameForCompare);
 		// Compare Integer
 		var exonNumberForCompareComparison;
