@@ -11,7 +11,9 @@
   "mainOutput": "main",
   "dependencies": {
     "react-router": "^0.13.2",
-    "react": "~0.13.1"
+    "react": "~0.13.1",
+    "collections": "~1.2.2",
+    "xlsx": "~0.8.0"
   },
   "devDependencies": {
     "grunt": "~0.4.5",
@@ -38,7 +40,6 @@
     "grunt-contrib-copy": "~0.5.0",
     "grunt-contrib-clean": "~0.6.0",
     "less-loader": "^2.0.0",
-    "react-hot-loader": "^1.0.7",
-    "collections": "~1.2.2"
+    "react-hot-loader": "^1.0.7"
   }
 }

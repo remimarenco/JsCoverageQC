@@ -11,6 +11,7 @@ require('../../styles/main.css');
 var Amplicon = require('../models/Amplicon');
 var Bin = require('../models/Bin');
 var Vcf = require('../models/Vcf');
+var XLSX = require('xlsx');
 
 var imageURL = require('../../images/yeoman.png');
 
@@ -36,10 +37,15 @@ function generateReport(parameters){
 	variantText = getResponseText(variantFileUrl);
 	variantFileLineCount = variantText.split("\n").length;
 	*/
-	debugger;
-	var vcf = new Vcf("", parameters.vcfFile.result, "", parameters.exonFile.result,
-		"", parameters.ampliconFile.result, "", parameters.variantTsv.result.split("\n").length);
-	console.log(vcf);
+	//debugger;
+	//var vcf = new Vcf("", parameters.vcfFile.result, "", parameters.exonFile.result,
+	//	"", parameters.ampliconFile.result, "", parameters.variantTsv.result.split("\n").length);
+	//console.log(vcf);
+
+	var workbookcopy;
+	if(parameters.variantTsv !== null || typeof parameters.variantTsv !== 'undefined'){
+		//XLSX.write(workbookcopy, 'TSV copy');
+	}
 }
 
 var InputFile = React.createClass({
