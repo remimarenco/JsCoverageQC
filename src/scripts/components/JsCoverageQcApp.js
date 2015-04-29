@@ -1,3 +1,5 @@
+/*jshint bitwise: false*/
+
 'use strict';
 
 var React = require('react/addons');
@@ -12,9 +14,26 @@ var Amplicon = require('../models/Amplicon');
 var Bin = require('../models/Bin');
 var Vcf = require('../models/Vcf');
 var XLSX = require('xlsx');
+var saveAs = require('browser-filesaver');
 
 var imageURL = require('../../images/yeoman.png');
 
+function s2ab(s) {
+  var buf = new ArrayBuffer(s.length);
+  var view = new Uint8Array(buf);
+  for (var i=0; i!==s.length; ++i){
+  	view[i] = s.charCodeAt(i) & 0xFF;
+  }
+  return buf;
+}
+
+function Workbook(){
+	if(!(this instanceof Workbook)){
+		return new Workbook();
+	}
+	this.SheetNames = [];
+	this.Sheets = {};
+}
 
 /* TODO: Récupérer des fichiers en js client only
 	TODO: Faire le découpage en classe comme coverageQC + Faire algo main Java -> Javascript
@@ -41,10 +60,16 @@ function generateReport(parameters){
 	//var vcf = new Vcf("", parameters.vcfFile.result, "", parameters.exonFile.result,
 	//	"", parameters.ampliconFile.result, "", parameters.variantTsv.result.split("\n").length);
 	//console.log(vcf);
-
-	var workbookcopy;
+	debugger;
+	var workbookcopy = new Workbook();
 	if(parameters.variantTsv !== null || typeof parameters.variantTsv !== 'undefined'){
-		XLSX.write(workbookcopy, 'TSV copy');
+		/* bookType can be 'xlsx' or 'xlsm' or 'xlsb' */
+		var wopts = { bookType:'xlsx', bookSST:false, type:'binary' };
+
+		var wbout = XLSX.write(workbookcopy,wopts);
+
+		/* the saveAs call downloads a file on the local machine */
+		saveAs(new Blob([s2ab(wbout)],{type:""}), "TSV_copy.xlsx");
 	}
 }
 

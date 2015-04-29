@@ -13,7 +13,8 @@
     "react-router": "^0.13.2",
     "react": "~0.13.1",
     "collections": "~1.2.2",
-    "xlsx": "~0.8.0"
+    "xlsx": "~0.8.0",
+    "browser-filesaver": "~1.0.0"
   },
   "devDependencies": {
     "grunt": "~0.4.5",
