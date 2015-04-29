@@ -10,11 +10,13 @@ require('../../styles/normalize.css');
 require('../../styles/main.css');
 
 // Models
-var Amplicon = require('../models/Amplicon');
-var Bin = require('../models/Bin');
-var Vcf = require('../models/Vcf');
+var Amplicon = require('models/Amplicon');
+var Bin = require('models/Bin');
+var Vcf = require('models/Vcf');
 var XLSX = require('xlsx');
 var saveAs = require('browser-filesaver');
+var Jsonix = require('jsonix');
+var VCFDescription = require('../../vcfDescription.js');
 
 var imageURL = require('../../images/yeoman.png');
 
@@ -57,20 +59,57 @@ function generateReport(parameters){
 	variantFileLineCount = variantText.split("\n").length;
 	*/
 	//debugger;
-	//var vcf = new Vcf("", parameters.vcfFile.result, "", parameters.exonFile.result,
-	//	"", parameters.ampliconFile.result, "", parameters.variantTsv.result.split("\n").length);
+	var vcf = new Vcf("", parameters.vcfFile.result, "", parameters.exonFile.result,
+		"", parameters.ampliconFile.result, "", parameters.variantTsv.result.split("\n").length);
 	//console.log(vcf);
-	debugger;
+	//debugger;
+
 	var workbookcopy = new Workbook();
 	if(parameters.variantTsv !== null || typeof parameters.variantTsv !== 'undefined'){
+		var tsvResultSplitted = parameters.variantTsv.result.split("\n");
+		var variantTsvHeadingLine = tsvResultSplitted[0];
+
+		var sn_tsvCopy = "TSV copy";
+		workbookcopy.SheetsNames.push(sn_tsvCopy);
+		workbookcopy.Sheets[sn_tsvCopy] = ""; // TODO: Put formatted row
+
 		/* bookType can be 'xlsx' or 'xlsm' or 'xlsb' */
 		var wopts = { bookType:'xlsx', bookSST:false, type:'binary' };
 
-		var wbout = XLSX.write(workbookcopy,wopts);
+		var wbout = XLSX.write(workbookcopy, wopts);
+
+		//TODO: if (variantTsvFile != null) {
+            // String variantTsvDataLine;
+            // String variantTsvHeadingLine = variantTsvBufferedReader.readLine();
 
 		/* the saveAs call downloads a file on the local machine */
-		saveAs(new Blob([s2ab(wbout)],{type:""}), "TSV_copy.xlsx");
+		//saveAs(new Blob([s2ab(wbout)],{type:""}), "TSV_copy.xlsx");
 	}
+
+	// Create Jsonix context
+	var context = new Jsonix.Context([VCFDescription]);
+	var marshaller = context.createMarshaller();
+	var doc = marshaller.marshalDocument(vcf);
+	/*
+	// Write to XML
+        File xmlTempFile = new File(vcfFile.getCanonicalPath() + ".coverage_qc.xml");
+        OutputStream xmlOutputStream = new FileOutputStream(xmlTempFile);
+        JAXBContext jc = JAXBContext.newInstance("coverageqc.data");
+        Marshaller m = jc.createMarshaller();
+        m.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, new Boolean(true));
+        m.marshal(vcf, xmlOutputStream);
+        xmlOutputStream.close();
+        LOGGER.info(xmlTempFile.getCanonicalPath() + " created");
+	 */
+
+	// Write to xlsx
+	/*
+	File xslxTempFile = new File(variantTsvFile.getCanonicalPath() + ".coverage_qc.xlsx");
+	OutputStream xslxOutputStream = new FileOutputStream(xslxTempFile);
+	workbookcopy.write(xslxOutputStream);
+	xslxOutputStream.close();
+	LOGGER.info(xslxTempFile.getCanonicalPath() + " created");
+	*/
 }
 
 var InputFile = React.createClass({

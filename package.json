@@ -14,7 +14,8 @@
     "react": "~0.13.1",
     "collections": "~1.2.2",
     "xlsx": "~0.8.0",
-    "browser-filesaver": "~1.0.0"
+    "browser-filesaver": "~1.0.0",
+    "jsonix": "~2.2.1"
   },
   "devDependencies": {
     "grunt": "~0.4.5",
