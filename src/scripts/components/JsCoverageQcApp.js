@@ -15,7 +15,7 @@ var Bin = require('models/Bin');
 var Vcf = require('models/Vcf');
 var XLSX = require('xlsx');
 var saveAs = require('browser-filesaver');
-var Jsonix = require('jsonix');
+var jx = require('jsonix');
 var VCFDescription = require('../../vcfDescription.js');
 
 var imageURL = require('../../images/yeoman.png');
@@ -70,7 +70,7 @@ function generateReport(parameters){
 		var variantTsvHeadingLine = tsvResultSplitted[0];
 
 		var sn_tsvCopy = "TSV copy";
-		workbookcopy.SheetsNames.push(sn_tsvCopy);
+		workbookcopy.SheetNames.push(sn_tsvCopy);
 		workbookcopy.Sheets[sn_tsvCopy] = ""; // TODO: Put formatted row
 
 		/* bookType can be 'xlsx' or 'xlsm' or 'xlsb' */
@@ -85,11 +85,12 @@ function generateReport(parameters){
 		/* the saveAs call downloads a file on the local machine */
 		//saveAs(new Blob([s2ab(wbout)],{type:""}), "TSV_copy.xlsx");
 	}
-
+	debugger;
 	// Create Jsonix context
-	var context = new Jsonix.Context([VCFDescription]);
+	var context = new jx.Jsonix.Context([VCFDescription]);
 	var marshaller = context.createMarshaller();
 	var doc = marshaller.marshalDocument(vcf);
+	console.log("Voici le doc: "+doc);
 	/*
 	// Write to XML
         File xmlTempFile = new File(vcfFile.getCanonicalPath() + ".coverage_qc.xml");
