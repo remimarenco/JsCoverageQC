@@ -44,7 +44,7 @@ function generateReport(parameters){
 
 	var workbookcopy;
 	if(parameters.variantTsv !== null || typeof parameters.variantTsv !== 'undefined'){
-		//XLSX.write(workbookcopy, 'TSV copy');
+		XLSX.write(workbookcopy, 'TSV copy');
 	}
 }
 
