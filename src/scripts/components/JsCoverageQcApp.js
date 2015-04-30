@@ -90,6 +90,13 @@ function generateReport(parameters){
 	var context = new jx.Jsonix.Context([VCFDescription]);
 	var marshaller = context.createMarshaller();
 
+	// We process all the auto-triggered by JAXB
+	vcf.baseCount = vcf.getBaseCount();
+	vcf.filteredAnnotatedVariantCount = vcf.getFilteredAnnotatedVariantCount();
+	vcf.ampliconCount = vcf.getAmpliconCount();
+	vcf.readDepthCount = vcf.getReadDepthCount();
+	// TODO: Delete this and replace it by watchers on these variables to updated them by themselves
+
 	// We wrap the vcf object into a marshallable jsonix object
 	var vcfMarshallable = {
 		name: {
