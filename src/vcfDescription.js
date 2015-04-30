@@ -23,8 +23,17 @@ var vcfDescription = {
 			name: 'variantTsvFileUrl',
 			attributeName: 'variantTsvFileUrl',
 			typeInfo: 'String'
+		}, {
+			type: 'attribute',
+			name: 'variantTsvFileLineCount',
+			attributeName: 'variantTsvFileLineCount',
+			typeInfo: 'Int'
 		}]
-	}]
+	}],
+	elementInfos: [{
+        elementName: 'vcf',
+        typeInfo: 'VCF.VCFType'
+    }]
 };
 
 module.exports = vcfDescription;
