@@ -89,7 +89,15 @@ function generateReport(parameters){
 	// Create Jsonix context
 	var context = new jx.Jsonix.Context([VCFDescription]);
 	var marshaller = context.createMarshaller();
-	var doc = marshaller.marshalString(vcf);
+
+	// We wrap the vcf object into a marshallable jsonix object
+	var vcfMarshallable = {
+		name: {
+			localPart: 'vcf'
+		},
+		value: vcf
+	};
+	var doc = marshaller.marshalString(vcfMarshallable);
 	console.log("Voici le doc: "+doc);
 	/*
 	// Write to XML
