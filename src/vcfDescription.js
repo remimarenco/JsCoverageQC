@@ -1,18 +1,13 @@
-var VCF = {
+var vcfDescription = {
 	name: 'VCF',
 	typeInfos: [{
-		type: 'classeInfo',
+		type: 'classInfo',
 		localName: 'VCFType',
 		propertyInfos: [{
 			type: 'attribute',
 			name: 'fileUrl',
 			attributeName: 'fileUrl',
 			typeInfo: 'String',
-		}, {
-			type: 'attribute',
-			name: 'exonBedFileUrl',
-			attributeName: 'exonBedFileUrl',
-			typeInfo: 'String'
 		}, {
 			type: 'attribute',
 			name: 'exonBedFileUrl',
@@ -31,3 +26,5 @@ var VCF = {
 		}]
 	}]
 };
+
+module.exports = vcfDescription;

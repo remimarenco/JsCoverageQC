@@ -89,7 +89,7 @@ function generateReport(parameters){
 	// Create Jsonix context
 	var context = new jx.Jsonix.Context([VCFDescription]);
 	var marshaller = context.createMarshaller();
-	var doc = marshaller.marshalDocument(vcf);
+	var doc = marshaller.marshalString(vcf);
 	console.log("Voici le doc: "+doc);
 	/*
 	// Write to XML
