@@ -1,3 +1,21 @@
+var geneExonDescription = {
+	name: 'GeneExon',
+	typeInfos: [{
+		type: 'classInfo',
+		localName: 'geneExonType',
+		propertyInfos: [{
+			type: 'attribute',
+			name: 'chr',
+			'attributeName': 'chr',
+			typeInfo: 'String'
+		}]
+	}],
+	elementInfos: [{
+		elementName: 'geneExon',
+		typeInfo: 'geneExonType'
+	}]
+};
+
 var vcfDescription = {
 	name: 'VCF',
 	typeInfos: [{
@@ -53,7 +71,26 @@ var vcfDescription = {
 			name: 'readDepthCount',
 			attributeName: 'readDepthCount',
 			typeInfo: 'Int'
+		}, {
+			type: 'element',
+			name: 'geneExons',
+			elementName: 'geneExons',
+			typeInfo: 'VCF.GeneExons'
 		}]
+	}, {
+		type: 'classInfo',
+		localName: 'GeneExons',
+		propertyInfos: [{
+			type: 'element',
+			name: 'geneExon',
+			collection: 'true',
+			elementName: 'geneExon',
+			typeInfo: 'VCF.GeneExon'
+		}]
+	}, {
+		type: 'classInfo',
+		localName: 'GeneExon',
+		propertyInfos: geneExonDescription.typeInfos.propertyInfos
 	}],
 	elementInfos: [{
         elementName: 'vcf',

@@ -215,7 +215,6 @@ Vcf.prototype = {
 		var amplicons = new cSortedSet();
 		this.geneExons.forEach(function(geneExon){
 			geneExon.amplicons.forEach(function(amplicon){
-				console.log("ajout de l'amplicon: "+amplicon);
 				amplicons.push(amplicon);
 			});
 		});

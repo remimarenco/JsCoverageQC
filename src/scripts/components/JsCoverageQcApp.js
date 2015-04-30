@@ -94,6 +94,7 @@ function generateReport(parameters){
 	vcf.baseCount = vcf.getBaseCount();
 	vcf.filteredAnnotatedVariantCount = vcf.getFilteredAnnotatedVariantCount();
 	vcf.ampliconCount = vcf.getAmpliconCount();
+	// TODO: Check why there is a +1 in Java xml
 	vcf.readDepthCount = vcf.getReadDepthCount();
 	// TODO: Delete this and replace it by watchers on these variables to updated them by themselves
 
