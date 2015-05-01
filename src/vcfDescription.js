@@ -68,8 +68,8 @@ var vcfDescription = {
 			typeInfo: 'Int'
 		}, {
 			type: 'attribute',
-			name: 'readDepthCount',
-			attributeName: 'readDepthCount',
+			name: '__proto__.getReadDepthCount()',
+			attributeName: '__proto__.getReadDepthCount()',
 			typeInfo: 'Int'
 		}, {
 			type: 'element',
