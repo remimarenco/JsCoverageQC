@@ -13,7 +13,16 @@ var Table = React.createClass({
 					<td>:</td>
 					<td id="version"></td>
 				</tr>
-				<tr></tr>
+				<tr>
+					<td>report run date</td>
+					<td>:</td>
+					<td id="runDate"></td>
+				</tr>
+				<tr>
+					<td>gVCF file</td>
+					<td>:</td>
+					<td id="fileName"></td>
+				</tr>
 			</table>
 		);
 	}
