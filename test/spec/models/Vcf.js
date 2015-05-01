@@ -14,45 +14,47 @@ function getResponseText(fromUrl){
 
 describe('Vcf', function(){
 	var Vcf;
-	var vcfFileUrl;
+	var vcfFileName;
 	var vcfText;
 
-	var exonBedFileUrl;
+	var exonBedFileName;
 	var exonBedText;
 
 	var ampliconBedFileName;
 	var ampliconBedText;
 
-	var variantFileUrl;
+	var variantFileName;
 	var variantText;
 	var variantFileLineCount;
 
 	beforeEach(function(){
 		Vcf = require('models/Vcf');
 
-		vcfFileUrl = "http://localhost:8080/base/test/data/sample.genome.vcf";
-		vcfText = getResponseText(vcfFileUrl);
-		exonBedFileUrl = "http://localhost:8080/base/test/data/cancer_panel_26.20140719.exons.bed";
-		exonBedText = getResponseText(exonBedFileUrl);
+		var dataAccessUrl = "http://localhost:8080/base/test/data/";
+
+		vcfFileName = "sample.genome.vcf";
+		vcfText = getResponseText(dataAccessUrl + vcfFileName);
+		exonBedFileName = "cancer_panel_26.20140719.exons.bed";
+		exonBedText = getResponseText(dataAccessUrl + exonBedFileName);
 		ampliconBedFileName = "cancer_panel_26.20140717.amplicons.bed";
-		ampliconBedText = getResponseText("http://localhost:8080/base/test/data/"+ampliconBedFileName);
-		variantFileUrl = "http://localhost:8080/base/test/data/sample.variant.tsv";
-		variantText = getResponseText(variantFileUrl);
+		ampliconBedText = getResponseText(dataAccessUrl + ampliconBedFileName);
+		variantFileName = "sample.variant.tsv";
+		variantText = getResponseText(dataAccessUrl + variantFileName);
 		variantFileLineCount = variantText.split("\n").length;
 	});
 
 	it('should construct properly with no parameters passed', function(){
 		var vcf = new Vcf();
 
-		expect(vcf.fileUrl).toBeUndefined();
-		expect(vcf.doNotCallFileUrl).toEqual("NO DO NOT CALL FILE USED!");
-		expect(vcf.exonBedFileUrl).toBeUndefined();
+		expect(vcf.fileName).toBeUndefined();
+		expect(vcf.doNotCallFileName).toEqual("NO DO NOT CALL FILE USED!");
+		expect(vcf.exonBedFileName).toBeUndefined();
 		expect(vcf.ampliconBedFileName).toBeUndefined();
-		expect(vcf.variantTsvFileUrl).toBeUndefined();
+		expect(vcf.variantTsvFileName).toBeUndefined();
 		expect(vcf.variantTsvFileLineCount).toBeUndefined();
 		expect(vcf.runDate).toEqual(jasmine.any(Date));
 		expect(vcf.geneExons).toEqual(jasmine.any(cSortedSet));
-		expect(vcf.bedBamVcfFileUrls).toEqual(jasmine.any(cList));
+		expect(vcf.bedBamVcfFileNames).toEqual(jasmine.any(cList));
 		expect(vcf.bases).toEqual(jasmine.any(cSortedMap));
 	});
 
@@ -66,21 +68,21 @@ describe('Vcf', function(){
 		// variantTsvFileLineCount => Process it (9)
 		// vcf.geneExons.length => 85
 		// vcf.bases.length => 14882
-		var vcf = new Vcf(vcfFileUrl, vcfText, exonBedFileUrl, exonBedText, ampliconBedFileName,
-	ampliconBedText, variantFileUrl, variantFileLineCount);
+		var vcf = new Vcf(vcfFileName, vcfText, exonBedFileName, exonBedText, ampliconBedFileName,
+	ampliconBedText, variantFileName, variantFileLineCount);
 
-		expect(vcf.fileUrl).toEqual(vcfFileUrl);
+		expect(vcf.fileName).toEqual(vcfFileName);
 		expect(vcf.vcfLines).toEqual(vcfText);
-		expect(vcf.doNotCallFileUrl).toEqual("NO DO NOT CALL FILE USED!");
-		expect(vcf.exonBedFileUrl).toEqual(exonBedFileUrl);
-		expect(vcf.ampliconBedFileUrl).toEqual(ampliconBedFileName);
+		expect(vcf.doNotCallFileName).toEqual("NO DO NOT CALL FILE USED!");
+		expect(vcf.exonBedFileName).toEqual(exonBedFileName);
+		expect(vcf.ampliconBedFileName).toEqual(ampliconBedFileName);
 		expect(vcf.ampliconBedLines).toEqual(ampliconBedText);
-		expect(vcf.variantTsvFileUrl).toEqual(variantFileUrl);
+		expect(vcf.variantTsvFileName).toEqual(variantFileName);
 		expect(vcf.variantTsvFileLineCount).toEqual(variantFileLineCount);
 		expect(vcf.runDate).toEqual(jasmine.any(Date));
 		expect(vcf.geneExons.length).toEqual(85);
-		expect(vcf.bedBamVcfFileUrls.length).toEqual(1);
-		expect(vcf.bedBamVcfFileUrls.has(ampliconBedFileName)).toBeTruthy();
+		expect(vcf.bedBamVcfFileNames.length).toEqual(1);
+		expect(vcf.bedBamVcfFileNames.has(ampliconBedFileName)).toBeTruthy();
 		expect(vcf.bases.length).toEqual(14882);
 	});
 

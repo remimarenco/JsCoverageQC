@@ -19,41 +19,41 @@ var Base = require("./Base.js");
  * @param {String} bedBamFilesURL          Urls of the bed bam files
  * @param {String} doNotCallFileUrl        Url of the doNotCallFile
  */
-function Vcf(vcfFileUrl, vcfNotCutLines, exonBedFileUrl, exonBedNotCutLines, ampliconBedFileUrl,
-	ampliconBedNotCutLines, variantTsvFileUrl, variantTsvFileLineCount, bedBamFilesURL,
-	doNotCallFileUrl){
+function Vcf(vcfFileName, vcfNotCutLines, exonBedFileName, exonBedNotCutLines, ampliconBedFileName,
+	ampliconBedNotCutLines, variantTsvFileName, variantTsvFileLineCount, bedBamFilesNames,
+	doNotCallFileName){
 	// TODO: Manage the variantTsv file
-	this.fileUrl = ''; // Was fileName in original Java program
+	this.fileName = ''; // Was fileName in original Java program
 	this.vcfLines = '';
-	this.exonBedFileUrl = ''; // Was exonBedFileName in original Java program
+	this.exonBedFileName = ''; // Was exonBedFileName in original Java program
 	this.exonBedLines = '';
-	this.ampliconBedFileUrl = '';
+	this.ampliconBedFileName = '';
 	this.ampliconBedLines = '';
-	this.variantTsvFileUrl = ''; // Was variantTsvFileName in original Java program
+	this.variantTsvFileName = ''; // Was variantTsvFileName in original Java program
 	this.variantTsvFileLineCount = 0;
 	this.runDate = new Date();
 	this.geneExons = new cSortedSet(); // TreeSet<GeneExon>
 	/** @type {cList} These are used to construct an IGV link */
-	this.bedBamVcfFileUrls = new cList();
+	this.bedBamVcfFileNames = new cList();
 	/** @type {cSortedMap} key is chr|pos (e.g., "chr9|320001") */
 	this.bases = new cSortedMap(); // TreeMap<String, Base>
 
-	this.fileUrl = vcfFileUrl;
-	this.exonBedFileUrl = exonBedFileUrl;
+	this.fileName = vcfFileName;
+	this.exonBedFileName = exonBedFileName;
 
 	// Was doNotCallFile in original Java program
-	if(this.doNotCallFileUrl !== null && typeof this.doNotCallFileUrl !== 'undefined'){
-		this.doNotCallFileUrl = doNotCallFileUrl;
+	if(this.doNotCallFileName !== null && typeof this.doNotCallFileName !== 'undefined'){
+		this.doNotCallFileName = doNotCallFileName;
 	}
 	else{
 		// TODO: Change this way of checking if a doNotCall is used or not in VCF (this.doNotCallFileUsed => Boolean?)
-		this.doNotCallFileUrl = "NO DO NOT CALL FILE USED!";
+		this.doNotCallFileName = "NO DO NOT CALL FILE USED!";
 	}
 	this.vcfLines = vcfNotCutLines;
 	this.exonBedLines = exonBedNotCutLines;
-	this.ampliconBedFileUrl = ampliconBedFileUrl;
+	this.ampliconBedFileName = ampliconBedFileName;
 	this.ampliconBedLines = ampliconBedNotCutLines;
-	this.variantTsvFileUrl = variantTsvFileUrl;
+	this.variantTsvFileName = variantTsvFileName;
 	this.variantTsvFileLineCount = variantTsvFileLineCount;
 
 	// Added variables functions
@@ -72,13 +72,13 @@ function Vcf(vcfFileUrl, vcfNotCutLines, exonBedFileUrl, exonBedNotCutLines, amp
 	/////////////////////////////
 	// BedBamFiles Population //
 	/////////////////////////////
-	if(bedBamFilesURL !== null && typeof bedBamFilesURL !== 'undefined'){
-		this.bedBamFilesURL.forEach(function(bedBamFileURL){
-			self.bedBamVcfFileUrls.push(bedBamFileURL);
+	if(bedBamFilesNames !== null && typeof bedBamFilesNames !== 'undefined'){
+		this.bedBamFilesNames.forEach(function(bedBamFileName){
+			self.bedBamVcfFileNames.push(bedBamFileName);
 		});
 	}
 
-	this.bedBamVcfFileUrls.push(ampliconBedFileUrl);
+	this.bedBamVcfFileNames.push(ampliconBedFileName);
 
 	//////////////////////////
 	// GeneExon Population //
