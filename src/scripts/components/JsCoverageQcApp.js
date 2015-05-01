@@ -9,14 +9,16 @@ var ReactTransitionGroup = React.addons.TransitionGroup;
 require('../../styles/normalize.css');
 require('../../styles/main.css');
 
+// Report
+var Report = require('./report');
+
 // Models
 var Amplicon = require('models/Amplicon');
 var Bin = require('models/Bin');
 var Vcf = require('models/Vcf');
+//TODO: Is XLSX still needed ?
 var XLSX = require('xlsx');
 var saveAs = require('browser-filesaver');
-var jx = require('jsonix');
-var VCFDescription = require('../../vcfDescription.js');
 
 var imageURL = require('../../images/yeoman.png');
 
@@ -93,6 +95,7 @@ var InputFile = React.createClass({
 	}
 });
 
+// TODO: Add a modification of the text (Processing) as long as the VCF is not generated
 var SubmitInputFiles = React.createClass({
 	render: function(){
 		return(
@@ -141,7 +144,7 @@ var InputFilesForm = React.createClass({
 	render: function(){
 		return (
 			<div id="page-wrapper">
-				<h1>JsCoverageQC Report</h1>
+				<h1>JsCoverageQC</h1>
 				<form className="formElem" onSubmit={this.handleSubmit}>
 					<div>
 						Select a vcf file:
@@ -175,10 +178,8 @@ var JsCoverageQcApp = React.createClass({
   render: function() {
     return (
       <div className='main'>
-        <ReactTransitionGroup transitionName="fade">
-          <img src={imageURL} />
-        </ReactTransitionGroup>
         <InputFilesForm/>
+		<Report/>
       </div>
     );
   }
