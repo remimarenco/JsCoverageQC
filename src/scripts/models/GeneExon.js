@@ -76,7 +76,7 @@ function GeneExon(bedLine){
 	this.bins.push(new Bin(0, 99, "0-99"));
 	this.bins.push(new Bin(100, 499, "100-499"));
 	this.bins.push(new Bin(500, 999, "500-999"));
-	this.bins.push(new Bin(1000, 9999999, "&ge;1000"));
+	this.bins.push(new Bin(1000, 9999999, ">=1000"));
 
 	var fields = bedLine.split("\t");
 	this.chr = fields[0];
