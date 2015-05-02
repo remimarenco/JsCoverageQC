@@ -167,6 +167,8 @@ var GeneExonParent = React.createClass({
 
 		var ensemblID = "http://www.ensembl.org/id/" + geneExonProps.ensemblTranscriptId;
 		var refSeqAccessionNo = "http://www.ncbi.nlm.nih.gov/nuccore/" + geneExonProps.refSeqAccNo;
+		// TODO: locus url to add
+		var locus = "";
 		return(
 			<span>
 				<tr className={trClasses}>
@@ -185,6 +187,12 @@ var GeneExonParent = React.createClass({
 							<a href="{refSeqAccessionNo}">{refSeqAccessionNo}</a>
 							<br/>vendor ID: {geneExonProps.vendorGeneExonName}
 						</span>
+					</td>
+					<td className="exonReported">{geneExonProps.pctOfExon}</td>
+					<td data-export-label="locus">
+						<a href="#">
+							{geneExonProps.chr}:{geneExonProps.startPos}-{geneExonProps.endPos}
+						</a>
 					</td>
 				</tr>
 			</span>

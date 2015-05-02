@@ -134,15 +134,17 @@ GeneExon.prototype = {
 	 * @return {boolean} [description]
 	 */
 	getVariantCalled: function(){
-		this.bases.values().forEach(function(base){
-			if(base.variant !== null){
+		var variantCalled = false;
+		this.bases.values().some(function(base){
+			if(base.variant !== null && typeof base.variant !== 'undefined' && base.variant !== ''){
+				variantCalled = true;
 				return true;
 			}
 		});
 		if(this.variants.length > 0){
-			return true;
+			variantCalled = true;
 		}
-		return false;
+		return variantCalled;
 	},
 	/**
 	 * True if a variant was annotated in this exon.

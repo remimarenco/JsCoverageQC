@@ -90,3 +90,7 @@ table.footNoteTable td {
 .geneExonSmallDetails{
 	font-size: x-small;
 }
+
+.exonReported{
+	text-align: right;
+}
