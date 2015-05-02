@@ -119,6 +119,8 @@ var InputFilesForm = React.createClass({
 				parameters.exonFile.name, parameters.exonFile.reader.result,
 				parameters.ampliconFile.name, parameters.ampliconFile.reader.result,
 				parameters.variantTsv.name, parameters.variantTsv.reader.result.split("\n").length);
+
+			// We notify we have our vcf object updated
 			this.props.vcfUpdated(vcf);
 		}
 		else
@@ -162,7 +164,6 @@ var InputFilesForm = React.createClass({
 });
 
 var JsCoverageQcApp = React.createClass({
-	mixins: [BindToMixin],
 	getInitialState: function(){
 		return{
 			vcf: {}

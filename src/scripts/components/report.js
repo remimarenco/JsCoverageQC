@@ -54,7 +54,7 @@ var InformationTable = React.createClass({
 					<td>report run date</td>
 					<td>:</td>
 					<td id="runDate">
-						{this.props.runDate}
+						{this.props.runDate ? this.props.runDate.toDateString() : ''}
 					</td>
 				</tr>
 				<tr>
@@ -114,8 +114,7 @@ var Report = React.createClass({
 					fileName={this.props.vcf.fileName}
 					variantTsvFileName={this.props.vcf.variantTsvFileName}
 					variantTsvFileLineCount={this.props.vcf.variantTsvFileLineCount}
-					// TODO: Add the function to process filtered
-					filteredAnnotatedVariantCount={this.filteredAnnotatedVariantCount}
+					filteredAnnotatedVariantCount={filteredAnnotatedVariantCount}
 					exonBedFileName={this.props.vcf.exonBedFileName}
 					ampliconBedFileName={this.props.vcf.ampliconBedFileName}
 					doNotCallFileName={this.props.doNotCallFileName}
