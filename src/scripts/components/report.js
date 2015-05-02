@@ -228,12 +228,40 @@ var GeneExonParent = React.createClass({
 	}
 });
 
+var GeneExonChild = React.createClass({
+	render: function(){
+		var cx = React.addons.classSet; // To manipulate class(es)
+		var geneExonPositionId = 'geneExon'+ this.props.position;
+		var geneExonPositionClass = geneExonPositionId+'_child';
+		var geneExonPositionIdDiv = geneExonPositionIdDiv + '_div';
+		var nbBinsPlusSix = this.props.geneExon.bins.length + 6;
+		var trClasses = cx({
+			'tablesorter-childRow': true,
+			'geneExon_child': true,
+			geneExonPositionClass: true
+		});
+		return(
+			<span>
+				<tr className={trClasses}>
+					<td colSpan={nbBinsPlusSix}>
+						<div id={geneExonPositionIdDiv}>Hello</div>
+					</td>
+				</tr>
+			</span>
+		);
+	}
+});
+
 var BodyReportTable = React.createClass({
 	render: function(){
 		var allGeneExonRows = [];
 		this.props.geneExons.forEach(function(geneExon, index){
+			var position = index + 1;
 			allGeneExonRows.push(
-				<GeneExonParent geneExon={geneExon} position={index+1}/>
+				<span>
+					<GeneExonParent geneExon={geneExon} position={position}/>
+					<GeneExonChild geneExon={geneExon} position={position}/>
+				</span>
 			);
 		});
 		return(
