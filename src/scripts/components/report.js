@@ -150,6 +150,16 @@ var HeadReportTable = React.createClass({
 	}
 });
 
+var ReadHistogram = React.createClass({
+	render: function(){
+		return(
+			<td className="readHistogram" data-pct={this.props.pct}>
+				{this.props.bin.count}
+			</td>
+		);
+	}
+});
+
 var GeneExonParent = React.createClass({
 	// TODO: The link to collapse or show should be on the entire TD and not only on the '+'' or '-' text for UX
 	render: function(){
@@ -175,6 +185,12 @@ var GeneExonParent = React.createClass({
 		var refSeqAccessionNo = "http://www.ncbi.nlm.nih.gov/nuccore/" + geneExonProps.refSeqAccNo;
 		// TODO: locus url to add
 		var locus = "";
+
+		var readHistogram = [];
+
+		geneExonProps.bins.forEach(function(bin){
+			readHistogram.push(<ReadHistogram bin={bin}/>);
+		});
 		return(
 			<span>
 				<tr className={trClasses}>
@@ -205,6 +221,7 @@ var GeneExonParent = React.createClass({
 						{variantAnnotated}
 						{onlyContainsDoNotCallAlways}
 					</td>
+					{readHistogram}
 				</tr>
 			</span>
 		);
