@@ -159,14 +159,20 @@ var GeneExonParent = React.createClass({
 			'geneExon_parent': true,
 			'variantCalled': geneExonProps.getVariantCalled()
 		});
-
-		var color = '';
+		var colorQcClasses = cx({
+			'qcGeneExonColor_pass': (geneExonProps.qc === 'pass'),
+			'qcGeneExonColor_warn': (geneExonProps.qc === 'warn'),
+			'qcGeneExonColor_fail': (geneExonProps.qc === 'fail')
+		});
 
 		return(
 			<span>
 				<tr className={trClasses}>
 					<td>
 						<a href='#' id={this.props.position} className="geneExonExpandCollapseButton">+</a>
+					</td>
+					<td className={colorQcClasses} data-export-label="qc">
+					    {geneExonProps.qc}
 					</td>
 				</tr>
 			</span>

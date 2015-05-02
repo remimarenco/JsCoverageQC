@@ -74,3 +74,15 @@ table.footNoteTable td {
 .variantCalled{
 	font-weight: bold;
 }
+
+.qcGeneExonColor_pass{
+	background-color: green;
+}
+
+.qcGeneExonColor_warn{
+	background-color: yellow;
+}
+
+.qcGeneExonColor_fail{
+	background-color: red;
+}

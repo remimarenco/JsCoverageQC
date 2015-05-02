@@ -170,7 +170,7 @@ function Vcf(vcfFileName, vcfNotCutLines, exonBedFileName, exonBedNotCutLines, a
 		// Perform binning operation
 		geneExon.bases.forEach(function(base){
 			// Don't count a base if it is outside of the coding region
-			if (!((base.pos < geneExon.codingRegion.startPos) || (base.pos > geneExon.codingRegion.endPos))) {
+			if (!((base.pos < geneExon.codingRegion.startPos) && (base.pos > geneExon.codingRegion.endPos))) {
 			    geneExon.bins.forEach(function(bin){
 			    	if (base.getTotalReadDepth() >= bin.startCount &&
 			    		base.getTotalReadDepth() <= bin.endCount) {
@@ -182,11 +182,11 @@ function Vcf(vcfFileName, vcfNotCutLines, exonBedFileName, exonBedNotCutLines, a
 		});
 
 		// Assign QC value
-		if (geneExon.bins[0].length > 0 || geneExon.bins[1].length > 0) {
+		if (geneExon.bins[0].count > 0 || geneExon.bins[1].count > 0) {
 		    geneExon.qc = "fail";
-		} else if (geneExon.bins[2].length > 0) {
+		} else if (geneExon.bins[2].count > 0) {
 		    geneExon.qc = "warn";
-		} else if (geneExon.bins[3].length > 0) {
+		} else if (geneExon.bins[3].count > 0) {
 		    geneExon.qc = "pass";
 		}
 	});
