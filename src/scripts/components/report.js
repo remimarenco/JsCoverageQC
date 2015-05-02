@@ -119,42 +119,52 @@ var QcRules = React.createClass({
 	}
 });
 
-var QcReportTable = React.createClass({
+var HeadReportTable = React.createClass({
 	render: function(){
 		var allReadsTh = [];
 		this.props.geneExons.one().bins.forEach(function(bin){
 			allReadsTh.push(<th>{bin.name}<br/>reads</th>);
 		});
 		return(
+			<thead>
+				<tr>
+					<th></th>
+					<th colSpan="5">gene/exon</th>
+					<th colSpan={this.props.geneExons.one().bins.length}>base count by read depth</th>
+				</tr>
+				<tr>
+					<th>
+						<a href="#" id="geneExonExpandCollapseAllButton">+</a>
+					</th>
+					<th>QC</th>
+					<th>name</th>
+					<th>%exon
+						<br>reported</br>
+						<th>locus</th>
+						<th>variant</th>
+						{allReadsTh}
+					</th>
+				</tr>
+			</thead>
+		);
+	}
+});
+
+var BodyReportTable = React.createClass({
+	render: function(){
+		return(
+			<div></div>
+		);
+	}
+});
+
+var QcReportTable = React.createClass({
+	render: function(){
+		return(
 			<span>
 				<table id="QcReportTable" className="dataTable">
-					<thead>
-						<tr>
-							<th></th>
-							<th colSpan="5">gene/exon</th>
-							<th colSpan={this.props.geneExons.one().bins.length}>base count by read depth</th>
-						</tr>
-						<tr>
-							<th>
-								<a href="#" id="geneExonExpandCollapseAllButton">+</a>
-							</th>
-							<th>QC</th>
-							<th>name</th>
-							<th>%exon
-								<br>reported</br>
-								<th>locus</th>
-								<th>variant</th>
-								{allReadsTh}
-							</th>
-						</tr>
-					</thead>
-					<tbody>
-						<tr>
-							<td>Coucou</td>
-							<td>Salut</td>
-							<td>Bonjour</td>
-						</tr>
-					</tbody>
+					<HeadReportTable />
+					<BodyReportTable />
 				</table>
 			</span>
 		);
