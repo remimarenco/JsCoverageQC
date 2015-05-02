@@ -19,8 +19,8 @@ var VariantTSV = React.createClass({
 		var renderVariantTsv;
 		if(this.props.variantTsvFileName){
 			renderVariantTsv = <span id="tsvOk">
-					<br/>variant TSV file line count (including header):
-					<br/>number of annoted variants displayed below:
+					<br/>variant TSV file line count (including header): {this.props.variantTsvFileLineCount}
+					<br/>number of annoted variants displayed below: {this.props.filteredAnnotatedVariantCount}
 				</span>;
 		}
 		else{
