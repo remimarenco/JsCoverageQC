@@ -86,3 +86,7 @@ table.footNoteTable td {
 .qcGeneExonColor_fail{
 	background-color: red;
 }
+
+.geneExonSmallDetails{
+	font-size: x-small;
+}

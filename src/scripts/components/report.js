@@ -165,6 +165,8 @@ var GeneExonParent = React.createClass({
 			'qcGeneExonColor_fail': (geneExonProps.qc === 'fail')
 		});
 
+		var ensemblID = "http://www.ensembl.org/id/" + geneExonProps.ensemblTranscriptId;
+		var refSeqAccessionNo = "http://www.ncbi.nlm.nih.gov/nuccore/" + geneExonProps.refSeqAccNo;
 		return(
 			<span>
 				<tr className={trClasses}>
@@ -173,6 +175,16 @@ var GeneExonParent = React.createClass({
 					</td>
 					<td className={colorQcClasses} data-export-label="qc">
 					    {geneExonProps.qc}
+					</td>
+					<td data-export-label="exon">
+						{geneExonProps.name}
+						<br/>
+						<span className="geneExonSmallDetails">Ensembl ID: 
+							<a href="{ensemblID}">{ensemblID}</a>
+							<br/>RefSeq accession no.: 
+							<a href="{refSeqAccessionNo}">{refSeqAccessionNo}</a>
+							<br/>vendor ID: {geneExonProps.vendorGeneExonName}
+						</span>
 					</td>
 				</tr>
 			</span>

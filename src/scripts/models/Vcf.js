@@ -153,7 +153,6 @@ function Vcf(vcfFileName, vcfNotCutLines, exonBedFileName, exonBedNotCutLines, a
 		});
 	}
 
-	debugger;
 	this.geneExons.forEach(function(geneExon){
 		// If a position is absent, create it with read depth 0
 		for(var pos = geneExon.startPos; pos <= geneExon.endPos; pos++){
