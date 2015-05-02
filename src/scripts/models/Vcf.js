@@ -124,15 +124,12 @@ function Vcf(vcfFileName, vcfNotCutLines, exonBedFileName, exonBedNotCutLines, a
 						}
 					});
 				}
-				/*
 				if (!foundGeneExon) {
-				    console.log("the following amplicon does not correspond to an exon region: " + ampliconBedLine);
+				    //console.log("the following amplicon does not correspond to an exon region: " + ampliconBedLine);
 				}
-				*/
 			}
 		});
 	}
-
 
 	//////////////////////
 	// Base population //
@@ -156,21 +153,24 @@ function Vcf(vcfFileName, vcfNotCutLines, exonBedFileName, exonBedNotCutLines, a
 		});
 	}
 
+	debugger;
 	this.geneExons.forEach(function(geneExon){
 		// If a position is absent, create it with read depth 0
 		for(var pos = geneExon.startPos; pos <= geneExon.endPos; pos++){
-			var base = new Base(null, self.bases);
-			base.pos = pos;
-			base.readDepths.add(0);
-			self.bases.set(geneExon.chr + "|" + pos, base);
-			if(geneExon.bases.has(pos)){
+			if(!self.bases.has(geneExon.chr + '|' + pos)){
+				var base = new Base(null, self.bases);
+				base.pos = pos;
+				base.readDepths.add(0);
+				self.bases.set(geneExon.chr + "|" + pos, base);
+			}
+			if(!geneExon.bases.has(pos)){
 				geneExon.bases.set(pos, self.bases.get(geneExon.chr + "|" + pos));
 			}
 		}
 		// Perform binning operation
 		geneExon.bases.forEach(function(base){
 			// Don't count a base if it is outside of the coding region
-			if (!((base.pos < geneExon.codingRegion.startPos) && (base.pos > geneExon.codingRegion.endPos))) {
+			if (!((base.pos < geneExon.codingRegion.startPos) || (base.pos > geneExon.codingRegion.endPos))) {
 			    geneExon.bins.forEach(function(bin){
 			    	if (base.getTotalReadDepth() >= bin.startCount &&
 			    		base.getTotalReadDepth() <= bin.endCount) {
