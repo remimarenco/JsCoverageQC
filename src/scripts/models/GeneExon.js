@@ -57,6 +57,7 @@ function GeneExon(bedLine){
 	this.name = '';
 	this.qc = ''; // "pass", "warn", "fail"
 	this.ensemblGeneId = ''; // parsed from exon BED custom field #5 (capture group 1): /.*\\|Ensembl-IDs: ([A-Z0-9\\.]*):([A-Z0-9\\.]*):([A-Z0-9\\.]*)\\|.*\\|.*/
+	this.ensemblTranscriptId = ''; // parsed from exon BED custom field #5 (capture group 2): /.*\\|Ensembl-IDs: ([A-Z0-9\\.]*):([A-Z0-9\\.]*):([A-Z0-9\\.]*)\\|.*\\|.*/
 	this.ensemblExonId = ''; // parsed from exon BED custom field #5 (capture group 3): /.*\\| /.*\\|Ensembl-IDs: ([A-Z0-9\\.]*):([A-Z0-9\\.]*):([A-Z0-9\\.]*)\\|.*\\|.*/
 	this.ensemblExonNumber = ''; // parsed from exon BED custom field #5: /.*\\|.*\\|Ensembl-exon-number: (.*)\\|.*/
 	this.vendorGeneExonName = ''; // parsed from exon BED custom field #5: /vendor-gene-exon-name: (.*)\\|.*\\|.*\\|.*/
