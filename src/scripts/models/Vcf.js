@@ -182,11 +182,11 @@ function Vcf(vcfFileName, vcfNotCutLines, exonBedFileName, exonBedNotCutLines, a
 		});
 
 		// Assign QC value
-		if (geneExon.bins.get(0).count > 0 || geneExon.bins.get(1).count > 0) {
+		if (geneExon.bins[0].length > 0 || geneExon.bins[1].length > 0) {
 		    geneExon.qc = "fail";
-		} else if (geneExon.bins.get(2).count > 0) {
+		} else if (geneExon.bins[2].length > 0) {
 		    geneExon.qc = "warn";
-		} else if (geneExon.bins.get(3).count > 0) {
+		} else if (geneExon.bins[3].length > 0) {
 		    geneExon.qc = "pass";
 		}
 	});
