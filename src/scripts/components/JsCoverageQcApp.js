@@ -63,7 +63,8 @@ var InputFile = React.createClass({
 		// When the file is loaded
 		this.state.reader.onload = function(upload){
 			self.props.onLoadEnd({identifier: self.props.identifier,
-				reader: self.state.reader});
+				reader: self.state.reader,
+				name: file.name});
 		};
 
 		this.state.reader.readAsText(file);
@@ -99,7 +100,7 @@ var InputFilesForm = React.createClass({
 	// Each time a file is uploaded, we add his FileReader in the
 	// parametersFileReader
 	fileUploaded: function(file){
-		this.state.parametersFileReader[file.identifier] = file.reader;
+		this.state.parametersFileReader[file.identifier] = {reader: file.reader, name: file.name};
 	},
 	handleSubmit: function(e){
 		e.preventDefault();
@@ -108,13 +109,16 @@ var InputFilesForm = React.createClass({
 		var parameters = this.state.parametersFileReader;
 
 		// To process, we first need to check we have all the files
-		if((parameters.vcfFile && parameters.exonFile && parameters.ampliconFile && parameters.variantTsv) &&
-		 (parameters.vcfFile.readyState === 2 &&
-		 	parameters.exonFile.readyState === 2 &&
-		 	parameters.ampliconFile.readyState === 2 &&
-		 	parameters.variantTsv.readyState === 2))
+		if((parameters.vcfFile.reader && parameters.exonFile.reader && parameters.ampliconFile.reader && parameters.variantTsv.reader) &&
+		 (parameters.vcfFile.reader.readyState === 2 &&
+		 	parameters.exonFile.reader.readyState === 2 &&
+		 	parameters.ampliconFile.reader.readyState === 2 &&
+		 	parameters.variantTsv.reader.readyState === 2))
 		{
-			var vcf = new Vcf("", parameters.vcfFile.result, "", parameters.exonFile.result, "", parameters.ampliconFile.result, "", parameters.variantTsv.result.split("\n").length);
+			var vcf = new Vcf(parameters.vcfFile.name, parameters.vcfFile.reader.result,
+				parameters.exonFile.name, parameters.exonFile.reader.result,
+				parameters.ampliconFile.name, parameters.ampliconFile.reader.result,
+				parameters.variantTsv.name, parameters.variantTsv.reader.result.split("\n").length);
 			this.props.vcfUpdated(vcf);
 		}
 		else
