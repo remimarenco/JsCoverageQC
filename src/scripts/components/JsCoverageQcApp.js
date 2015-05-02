@@ -166,17 +166,22 @@ var InputFilesForm = React.createClass({
 var JsCoverageQcApp = React.createClass({
 	getInitialState: function(){
 		return{
-			vcf: {}
+			vcf: {},
+			report: {}
 		};
 	},
+	setStateVcfEnded: function(){
+		var report = <Report vcf={this.state.vcf}/>;
+		this.setState({report: report});
+	},
 	handleChange: function(newVcf){
-		this.setState({vcf: newVcf});
+		this.setState({vcf: newVcf}, this.setStateVcfEnded);
 	},
 	render: function() {
 		return (
 		  <div className='main'>
 		    <InputFilesForm vcfUpdated={this.handleChange}/>
-			<Report vcf={this.state.vcf}/>
+			{this.state.report}
 		  </div>
 		);
 	}
