@@ -119,40 +119,85 @@ var QcRules = React.createClass({
 	}
 });
 
+var QcReportTable = React.createClass({
+	render: function(){
+		var allReadsTh = [];
+		this.props.geneExons.one().bins.forEach(function(bin){
+			allReadsTh.push(<th>{bin.name}<br/>reads</th>);
+		});
+		return(
+			<span>
+				<table id="QcReportTable" className="dataTable">
+					<thead>
+						<tr>
+							<th></th>
+							<th colSpan="5">gene/exon</th>
+							<th colSpan={this.props.geneExons.one().bins.length}>base count by read depth</th>
+						</tr>
+						<tr>
+							<th>
+								<a href="#" id="geneExonExpandCollapseAllButton">+</a>
+							</th>
+							<th>QC</th>
+							<th>name</th>
+							<th>%exon
+								<br>reported</br>
+								<th>locus</th>
+								<th>variant</th>
+								{allReadsTh}
+							</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td>Coucou</td>
+							<td>Salut</td>
+							<td>Bonjour</td>
+						</tr>
+					</tbody>
+				</table>
+			</span>
+		);
+	}
+});
+
 var Report = React.createClass({
 	render: function(){
+		var propsVcf = this.props.vcf;
 		var filteredAnnotatedVariantCount;
-		if(this.props.vcf && this.props.vcf.getFilteredAnnotatedVariantCount) {
-			filteredAnnotatedVariantCount = this.props.vcf.getFilteredAnnotatedVariantCount();
+		if(propsVcf && propsVcf.getFilteredAnnotatedVariantCount) {
+			filteredAnnotatedVariantCount = propsVcf.getFilteredAnnotatedVariantCount();
 		}
 
 		var pass;
 		var warn = {warn1: '', warn2: ''};
 		var fail = {fail1: '', fail2: ''};
-		if(this.props.vcf && this.props.vcf.geneExons){
-			pass = this.props.vcf.geneExons.one().bins[3].name;
-			warn.warn1 = this.props.vcf.geneExons.one().bins[1].name;
-			warn.warn2 = this.props.vcf.geneExons.one().bins[2].name;
-			fail.fail1 = this.props.vcf.geneExons.one().bins[0].name;
-			fail.fail2 = this.props.vcf.geneExons.one().bins[1].name;
+		if(propsVcf && propsVcf.geneExons){
+			pass = propsVcf.geneExons.one().bins[3].name;
+			warn.warn1 = propsVcf.geneExons.one().bins[1].name;
+			warn.warn2 = propsVcf.geneExons.one().bins[2].name;
+			fail.fail1 = propsVcf.geneExons.one().bins[0].name;
+			fail.fail2 = propsVcf.geneExons.one().bins[1].name;
 		}
+
 		return(
 			<div>
 				<Blocker/>
 				<h2>Coverage QC Report</h2>
-				<InformationsTable version={this.props.vcf.version}
-					runDate={this.props.vcf.runDate}
-					fileName={this.props.vcf.fileName}
-					variantTsvFileName={this.props.vcf.variantTsvFileName}
-					variantTsvFileLineCount={this.props.vcf.variantTsvFileLineCount}
+				<InformationsTable version={propsVcf.version}
+					runDate={propsVcf.runDate}
+					fileName={propsVcf.fileName}
+					variantTsvFileName={propsVcf.variantTsvFileName}
+					variantTsvFileLineCount={propsVcf.variantTsvFileLineCount}
 					filteredAnnotatedVariantCount={filteredAnnotatedVariantCount}
-					exonBedFileName={this.props.vcf.exonBedFileName}
-					ampliconBedFileName={this.props.vcf.ampliconBedFileName}
-					doNotCallFileName={this.props.doNotCallFileName}
+					exonBedFileName={propsVcf.exonBedFileName}
+					ampliconBedFileName={propsVcf.ampliconBedFileName}
+					doNotCallFileName={propsVcf.doNotCallFileName}
 					/>
 				<QcRules pass={pass}
 					warn={warn}
 					fail={fail}/>
+				<QcReportTable geneExons={propsVcf.geneExons}/>
 			</div>
 		);
 	}
