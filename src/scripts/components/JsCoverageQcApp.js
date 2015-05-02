@@ -20,6 +20,8 @@ var Vcf = require('models/Vcf');
 //var XLSX = require('xlsx');
 var saveAs = require('browser-filesaver');
 
+var BindToMixin = require('react-binding');
+
 var imageURL = require('../../images/yeoman.png');
 
 function s2ab(s) {
@@ -47,25 +49,6 @@ function Workbook(){
 
 	TODO: doNotCallFile à traiter plus tard
  */
-function generateReport(parameters){
-	//var vcf = new Vcf()
-	/*
-	vcfFileUrl = "http://localhost:8080/base/test/data/sample.genome.vcf";
-	vcfText = getResponseText(vcfFileUrl);
-	exonBedFileUrl = "http://localhost:8080/base/test/data/cancer_panel_26.20140719.exons.bed";
-	exonBedText = getResponseText(exonBedFileUrl);
-	ampliconBedFileName = "cancer_panel_26.20140717.amplicons.bed";
-	ampliconBedText = getResponseText("http://localhost:8080/base/test/data/"+ampliconBedFileName);
-	variantFileUrl = "http://localhost:8080/base/test/data/sample.variant.tsv";
-	variantText = getResponseText(variantFileUrl);
-	variantFileLineCount = variantText.split("\n").length;
-	*/
-	//debugger;
-	var vcf = new Vcf("", parameters.vcfFile.result, "", parameters.exonFile.result,
-		"", parameters.ampliconFile.result, "", parameters.variantTsv.result.split("\n").length);
-	//console.log(vcf);
-	//debugger;
-}
 
 var InputFile = React.createClass({
 	getInitialState: function(){
@@ -131,8 +114,10 @@ var InputFilesForm = React.createClass({
 		 	parameters.ampliconFile.readyState === 2 &&
 		 	parameters.variantTsv.readyState === 2))
 		{
-			console.log("It's good!");
-			generateReport(parameters);
+			debugger;
+			var vcf = new Vcf("", parameters.vcfFile.result, "", parameters.exonFile.result, "", parameters.ampliconFile.result, "", parameters.variantTsv.result.split("\n").length);
+			this.props.vcfUpdated(vcf);
+			debugger;
 		}
 		else
 		{
@@ -175,14 +160,24 @@ var InputFilesForm = React.createClass({
 });
 
 var JsCoverageQcApp = React.createClass({
-  render: function() {
-    return (
-      <div className='main'>
-        <InputFilesForm/>
-		<Report/>
-      </div>
-    );
-  }
+	mixins: [BindToMixin],
+	getInitialState: function(){
+		return{
+			vcf: {version: "1.15"}
+		};
+	},
+	handleChange: function(newVcf){
+		this.setState({vcf: newVcf});
+	},
+	render: function() {
+		return (
+		  <div className='main'>
+		  	<div>Etat du vcf: {this.state.vcf.version}</div>
+		    <InputFilesForm vcfUpdated={this.handleChange}/>
+			<Report vcf={this.state.vcf}/>
+		  </div>
+		);
+	}
 });
 
 module.exports = JsCoverageQcApp;

@@ -33,14 +33,16 @@ var VariantTSV = React.createClass({
 	}
 });
 
-var Table = React.createClass({
+var InformationTable = React.createClass({
 	render: function(){
 		return(
 			<table>
 				<tr>
 					<td>version</td>
 					<td>:</td>
-					<td id="version"></td>
+					<td id="version">
+						{this.props.version}
+					</td>
 				</tr>
 				<tr>
 					<td>report run date</td>
@@ -59,6 +61,22 @@ var Table = React.createClass({
 						<VariantTSV/>
 					</td>
 				</tr>
+				<tr>
+					<td>exon BED file</td>
+					<td>:</td>
+					<td id="exonBedFileName">
+					</td>
+				</tr>
+				<tr>
+					<td>amplicon BED file</td>
+					<td>:</td>
+					<td id="ampliconBedFileName"></td>
+				</tr>
+				<tr>
+					<td>Do NOT Call file</td>
+					<td>:</td>
+					<td id="doNotCallFileName"></td>
+				</tr>
 			</table>
 		);
 	}
@@ -70,7 +88,7 @@ var Report = React.createClass({
 			<div>
 				<Blocker/>
 				<h2>Coverage QC Report</h2>
-				<Table/>
+				<InformationTable version={this.props.vcf.version}/>
 			</div>
 		);
 	}

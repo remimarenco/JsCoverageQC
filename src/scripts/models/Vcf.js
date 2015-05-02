@@ -22,6 +22,8 @@ var Base = require("./Base.js");
 function Vcf(vcfFileName, vcfNotCutLines, exonBedFileName, exonBedNotCutLines, ampliconBedFileName,
 	ampliconBedNotCutLines, variantTsvFileName, variantTsvFileLineCount, bedBamFilesNames,
 	doNotCallFileName){
+	this.version = "2.00";
+
 	// TODO: Manage the variantTsv file
 	this.fileName = ''; // Was fileName in original Java program
 	this.vcfLines = '';
