@@ -155,9 +155,15 @@ var GeneExonParent = React.createClass({
 	render: function(){
 		var cx = React.addons.classSet; // To manipulate class(es)
 		var geneExonProps = this.props.geneExon;
+
+		var variantCalled = geneExonProps.getVariantCalled();
+		// TODO: Check why AKT1ex3 is not marked as variantCalled
+		var variantAnnotated = geneExonProps.getVariantAnnotated() ? '(annotated)' : '';
+		var onlyContainsText = <span><br/>Do Not Call, on lab list<br/> of definitive do-not-calls</span>;
+		var onlyContainsDoNotCallAlways = geneExonProps.getOnlyContainsDoNotCallAlways() ? onlyContainsText : '';
 		var trClasses = cx({
 			'geneExon_parent': true,
-			'variantCalled': geneExonProps.getVariantCalled()
+			'variantCalled': variantCalled
 		});
 		var colorQcClasses = cx({
 			'qcGeneExonColor_pass': (geneExonProps.qc === 'pass'),
@@ -193,6 +199,11 @@ var GeneExonParent = React.createClass({
 						<a href="#">
 							{geneExonProps.chr}:{geneExonProps.startPos}-{geneExonProps.endPos}
 						</a>
+					</td>
+					<td>
+						{variantCalled.toString()}
+						{variantAnnotated}
+						{onlyContainsDoNotCallAlways}
 					</td>
 				</tr>
 			</span>
