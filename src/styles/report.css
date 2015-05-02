@@ -71,3 +71,6 @@ table.footNoteTable td {
 }
 
 /* TODO: Import all inline style of report into this document */
+.variantCalled{
+	font-weight: bold;
+}

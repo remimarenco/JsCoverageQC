@@ -122,7 +122,7 @@ var QcRules = React.createClass({
 var HeadReportTable = React.createClass({
 	render: function(){
 		var allReadsTh = [];
-		this.props.geneExons.one().bins.forEach(function(bin){
+		this.props.bins.forEach(function(bin){
 			allReadsTh.push(<th>{bin.name}<br/>reads</th>);
 		});
 		return(
@@ -130,7 +130,7 @@ var HeadReportTable = React.createClass({
 				<tr>
 					<th></th>
 					<th colSpan="5">gene/exon</th>
-					<th colSpan={this.props.geneExons.one().bins.length}>base count by read depth</th>
+					<th colSpan={this.props.bins.length}>base count by read depth</th>
 				</tr>
 				<tr>
 					<th>
@@ -150,10 +150,42 @@ var HeadReportTable = React.createClass({
 	}
 });
 
+var GeneExonParent = React.createClass({
+	// TODO: The link to collapse or show should be on the entire TD and not only on the '+'' or '-' text for UX
+	render: function(){
+		var cx = React.addons.classSet; // To manipulate class(es)
+		var geneExonProps = this.props.geneExon;
+		var trClasses = cx({
+			'geneExon_parent': true,
+			'variantCalled': geneExonProps.getVariantCalled()
+		});
+
+		var color = '';
+
+		return(
+			<span>
+				<tr className={trClasses}>
+					<td>
+						<a href='#' id={this.props.position} className="geneExonExpandCollapseButton">+</a>
+					</td>
+				</tr>
+			</span>
+		);
+	}
+});
+
 var BodyReportTable = React.createClass({
 	render: function(){
+		var allGeneExonRows = [];
+		this.props.geneExons.forEach(function(geneExon, index){
+			allGeneExonRows.push(
+				<GeneExonParent geneExon={geneExon} position={index+1}/>
+			);
+		});
 		return(
-			<div></div>
+			<span>
+				{allGeneExonRows}
+			</span>
 		);
 	}
 });
@@ -163,8 +195,8 @@ var QcReportTable = React.createClass({
 		return(
 			<span>
 				<table id="QcReportTable" className="dataTable">
-					<HeadReportTable />
-					<BodyReportTable />
+					<HeadReportTable bins={this.props.geneExons.one().bins}/>
+					<BodyReportTable geneExons={this.props.geneExons}/>
 				</table>
 			</span>
 		);
