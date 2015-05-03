@@ -6,7 +6,7 @@ var DrawingChart = React.createClass({
     render: function(){
         return(
             <span>
-                Coming soon...
+                Chart coming soon...
             </span>
         );
     }

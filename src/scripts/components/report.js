@@ -228,12 +228,52 @@ var GeneExonParent = React.createClass({
 	}
 });
 
-var FilteredAndAnnotatedVariants = React.createClass({
+var FilteredAndAnnotatedVariantRow = React.createClass({
 	render: function(){
 		return(
-			<span>
-				Coucou je suis un filtered
-			</span>
+			<tr className="filteredAnnotatedVariant">
+				<td className="checkBox_filteredAnnotatedVariant">
+					<input type="checkbox" className="exportCheckbox"/>
+				</td>
+				<td data-export-label="gene">{this.props.variant.gene}</td>
+			</tr>
+		);
+	}
+});
+
+var FilteredAndAnnotatedVariants = React.createClass({
+	render: function(){
+		var filteredAndAnnotatedVariantRows = [];
+		this.props.geneExon.variants.forEach(function(variant){
+			filteredAndAnnotatedVariantRows.push(<FilteredAndAnnotatedVariantRow variant={variant}/>);
+		});
+		return(
+			<div id="filteredAndAnnotatedVariants">
+				<h3>Filtered and Annotated Variant(s)</h3>
+				<table className="dataTable">
+					<thead>
+						<tr>
+							<th>export?</th>
+							<th>gene</th>
+							<th>coordinate</th>
+							<th>filters</th>
+							<th>consequence</th>
+							<th>genotype</th>
+							<th>AVF</th>
+							<th>cDNA</th>
+							<th>amino acid</th>
+							<th>dbSNP</th>
+							<th>MAF</th>
+							<th>COSMIC ID</th>
+							<th>COSMIC (alternate)</th>
+							<th>call status</th>
+						</tr>
+					</thead>
+					<tbody>
+						{filteredAndAnnotatedVariantRows}
+					</tbody>
+				</table>
+			</div>
 		);
 	}
 });
@@ -253,9 +293,8 @@ var GeneExonChild = React.createClass({
 		);
 
 		var filteredAndAnnotatedVariants;
-		console.log(this.props.geneExon.variants);
 		if(this.props.geneExon.variants.length > 0){
-			filteredAndAnnotatedVariants = <FilteredAndAnnotatedVariants/>;
+			filteredAndAnnotatedVariants = <FilteredAndAnnotatedVariants geneExon={this.props.geneExon}/>;
 		}
 		return(
 			<span>

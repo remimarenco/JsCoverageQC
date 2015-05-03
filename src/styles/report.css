@@ -97,3 +97,12 @@ table.footNoteTable td {
 .exonReported{
 	text-align: right;
 }
+
+#filteredAndAnnotatedVariants{
+	font-size: small;
+	padding: 10px;
+}
+
+.checkBox_filteredAnnotatedVariant{
+	text-align: center;
+}
