@@ -365,7 +365,7 @@ var GeneExonChild = React.createClass({
 		}
 		return(
 			<span>
-				<tr className={trClasses}>
+				<tr style={{display:'none'}} className={trClasses}>
 					<td colSpan={nbBinsPlusSixColumns}>
 						<div id={geneExonPositionIdDiv}>
 							<DrawingChart geneExon={this.props.geneExon} position={this.props.position}/>
