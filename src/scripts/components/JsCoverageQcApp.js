@@ -118,7 +118,8 @@ var InputFilesForm = React.createClass({
 			var vcf = new Vcf(parameters.vcfFile.name, parameters.vcfFile.reader.result,
 				parameters.exonFile.name, parameters.exonFile.reader.result,
 				parameters.ampliconFile.name, parameters.ampliconFile.reader.result,
-				parameters.variantTsv.name, parameters.variantTsv.reader.result.split("\n").length);
+				parameters.variantTsv.name, parameters.variantTsv.reader.result.split("\n").length,
+				parameters.variantTsv.reader.result);
 
 			// We notify we have our vcf object updated
 			this.props.vcfUpdated(vcf);

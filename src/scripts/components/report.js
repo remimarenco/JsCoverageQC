@@ -228,23 +228,43 @@ var GeneExonParent = React.createClass({
 	}
 });
 
+var FilteredAndAnnotatedVariants = React.createClass({
+	render: function(){
+		return(
+			<span>
+				Coucou je suis un filtered
+			</span>
+		);
+	}
+});
+
 var GeneExonChild = React.createClass({
 	render: function(){
+		var DrawingChart = require('../functions/DrawingChart');
 		var cx = React.addons.classSet; // To manipulate class(es)
 		var geneExonPositionId = 'geneExon'+ this.props.position;
 		var geneExonPositionClass = geneExonPositionId+'_child';
-		var geneExonPositionIdDiv = geneExonPositionIdDiv + '_div';
+		var geneExonPositionIdDiv = geneExonPositionId + '_div';
 		var nbBinsPlusSixColumns = this.props.geneExon.bins.length + 6;
-		var trClasses = cx({
-			'tablesorter-childRow': true,
-			'geneExon_child': true,
-			geneExonPositionClass: true
-		});
+		var trClasses = cx(
+			'tablesorter-childRow',
+			'geneExon_child',
+			geneExonPositionClass
+		);
+
+		var filteredAndAnnotatedVariants;
+		console.log(this.props.geneExon.variants);
+		if(this.props.geneExon.variants.length > 0){
+			filteredAndAnnotatedVariants = <FilteredAndAnnotatedVariants/>;
+		}
 		return(
 			<span>
 				<tr className={trClasses}>
 					<td colSpan={nbBinsPlusSixColumns}>
-						<div id={geneExonPositionIdDiv}>Hello</div>
+						<div id={geneExonPositionIdDiv}>
+							<DrawingChart geneExon={this.props.geneExon} position={this.props.position}/>
+						</div>
+						{filteredAndAnnotatedVariants}
 					</td>
 				</tr>
 			</span>
