@@ -50,6 +50,10 @@ table.footNoteTable td {
 	padding: 0px;
 }
 
+#footNoteFiltersDescription{
+	border-bottom: 1px solid black;
+}
+
 #blocker {
 	display: none;
 	position: fixed;
@@ -94,15 +98,15 @@ table.footNoteTable td {
 	font-size: x-small;
 }
 
-.exonReported{
+.alignMiddle{
+	text-align: center;
+}
+
+.alignRight{
 	text-align: right;
 }
 
 #filteredAndAnnotatedVariants{
 	font-size: small;
 	padding: 10px;
-}
-
-.checkBox_filteredAnnotatedVariant{
-	text-align: center;
 }

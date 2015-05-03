@@ -210,7 +210,7 @@ var GeneExonParent = React.createClass({
 							<br/>vendor ID: {geneExonProps.vendorGeneExonName}
 						</span>
 					</td>
-					<td className="exonReported">{geneExonProps.pctOfExon}</td>
+					<td className="alignRight">{geneExonProps.pctOfExon}</td>
 					<td data-export-label="locus">
 						<a href="#">
 							{geneExonProps.chr}:{geneExonProps.startPos}-{geneExonProps.endPos}
@@ -230,13 +230,78 @@ var GeneExonParent = React.createClass({
 
 var FilteredAndAnnotatedVariantRow = React.createClass({
 	render: function(){
+		var variantProp = this.props.variant;
+		var dbSnpUrl = "http://www.ncbi.nlm.nih.gov/projects/SNP/snp_ref.cgi?"+variantProp.dbSnpIdPrefix+'='+variantProp.dbSnpIdSuffix;
+		var cosmicUrl = "http://cancer.sanger.ac.uk/cosmic/search?q="+variantProp.cosmicId;
+		var cosmicAlternate = "http://cancer.sanger.ac.uk/cosmic/search?q="+variantProp.geneMutation;
 		return(
 			<tr className="filteredAnnotatedVariant">
-				<td className="checkBox_filteredAnnotatedVariant">
+				<td className="alignMiddle">
 					<input type="checkbox" className="exportCheckbox"/>
 				</td>
-				<td data-export-label="gene">{this.props.variant.gene}</td>
+				<td data-export-label="gene">{variantProp.gene}</td>
+				<td data-export-label="coordinate">chr{variantProp.chr}:{variantProp.coordinate}</td>
+				<td data-export-label="filters">{variantProp.filters}</td>
+				<td data-export-label="consequence">{variantProp.consequence}</td>
+				<td data-export-label="genotype">{variantProp.genotype}</td>
+				<td data-export-label="avf" className="alignRight">{variantProp.altVariantFreq}</td>
+				<td data-export-label="cDna">{variantProp.hgvsc}</td>
+				<td data-export-label="aminoAcid">{variantProp.hgvsp}</td>
+				<td>
+				    <a href={dbSnpUrl}>
+				        {variantProp.dbSnpIdPrefix}
+				        {variantProp.dbSnpIdSuffix}
+				    </a>
+				</td>
+				<td data-export-label="maf" className="alignRight">
+				    {variantProp.alleleFreqGlobalMinor}
+				</td>
+				<td>
+				    <a href={cosmicUrl}>
+				        {variantProp.cosmicId}
+				    </a>
+				</td>
+				<td>
+				    <a href={cosmicAlternate}>
+				        {variantProp.geneMutation}
+				    </a>
+				</td>
+				<td width="5%">
+					{variantProp.typeOfDoNotCall}
+				</td>
 			</tr>
+		);
+	}
+});
+
+var FootNoteTable = React.createClass({
+	render: function(){
+		return(
+			<table className="footNoteTable">
+				<tr>
+					<td colSpan="2" id="footNoteFiltersDescription">
+						<sup>*</sup>filter descriptions
+					</td>
+				</tr>
+				<tr>
+					<td>LowDP</td>
+					<td>
+						= low coverage (DP tag), therefore no genotype called
+					</td>
+				</tr>
+				<tr>
+					<td>DB</td>
+					<td>
+						= variant strand bias too high
+					</td>
+				</tr>
+				<tr>
+					<td>PB</td>
+					<td>
+						= probe pool bias - variant not found, or found with low frequency, in one of two probe pools
+					</td>
+				</tr>
+			</table>
 		);
 	}
 });
@@ -273,6 +338,8 @@ var FilteredAndAnnotatedVariants = React.createClass({
 						{filteredAndAnnotatedVariantRows}
 					</tbody>
 				</table>
+				<br/>
+				<FootNoteTable/>
 			</div>
 		);
 	}
