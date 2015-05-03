@@ -234,7 +234,7 @@ var GeneExonChild = React.createClass({
 		var geneExonPositionId = 'geneExon'+ this.props.position;
 		var geneExonPositionClass = geneExonPositionId+'_child';
 		var geneExonPositionIdDiv = geneExonPositionIdDiv + '_div';
-		var nbBinsPlusSix = this.props.geneExon.bins.length + 6;
+		var nbBinsPlusSixColumns = this.props.geneExon.bins.length + 6;
 		var trClasses = cx({
 			'tablesorter-childRow': true,
 			'geneExon_child': true,
@@ -243,7 +243,7 @@ var GeneExonChild = React.createClass({
 		return(
 			<span>
 				<tr className={trClasses}>
-					<td colSpan={nbBinsPlusSix}>
+					<td colSpan={nbBinsPlusSixColumns}>
 						<div id={geneExonPositionIdDiv}>Hello</div>
 					</td>
 				</tr>
