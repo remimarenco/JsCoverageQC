@@ -432,7 +432,6 @@ var GeneExonRow = React.createClass({
 	render: function(){
 		return(
 			<span>
-				<GeneExonParent geneExon={this.props.geneExon} position={this.props.position} onClickShowOrHideButton={this.showOrHideButtonClicked}/>
 				<GeneExonChild geneExon={this.props.geneExon} position={this.props.position} display={this.state.shouldDisplayChild}/>
 			</span>
 		);
@@ -446,8 +445,8 @@ var BodyReportTable = React.createClass({
 		this.props.geneExons.forEach(function(geneExon, index){
 			var position = index + 1;
 			allGeneExonRows.push(
-				<span>
-					<GeneExonRow geneExon={geneExon} position={position} key={index}/>
+				<span key={index}>
+					<GeneExonRow geneExon={geneExon} position={position}/>
 				</span>
 			);
 		});
