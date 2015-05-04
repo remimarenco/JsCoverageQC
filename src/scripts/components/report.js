@@ -161,6 +161,21 @@ var ReadHistogram = React.createClass({
 });
 
 var GeneExonParent = React.createClass({
+	getInitialState: function(){
+		return{
+			showOrHideButton: '+'
+		};
+	},
+	showOrHideButtonCliked: function(e){
+		e.preventDefault();
+		if(this.state.showOrHideButton === '+')
+		{
+			this.setState({showOrHideButton: '-'});
+		}
+		else{
+			this.setState({showOrHideButton: '+'});
+		}
+	},
 	// TODO: The link to collapse or show should be on the entire TD and not only on the '+'' or '-' text for UX
 	render: function(){
 		var cx = React.addons.classSet; // To manipulate class(es)
@@ -197,7 +212,10 @@ var GeneExonParent = React.createClass({
 			<span>
 				<tr className={trClasses}>
 					<td>
-						<a href='#' id={geneExonPosition} className="geneExonExpandCollapseButton">+</a>
+						<a href='#' id={geneExonPosition} className="geneExonExpandCollapseButton"
+							onClick={this.showOrHideButtonCliked}>
+							{this.state.showOrHideButton}
+						</a>
 					</td>
 					<td className={colorQcClasses} data-export-label="qc">
 					    {geneExonProps.qc}
