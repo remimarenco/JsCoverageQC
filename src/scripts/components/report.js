@@ -294,11 +294,13 @@ var FilteredAndAnnotatedVariantRow = React.createClass({
 		var dbSnpUrl = "http://www.ncbi.nlm.nih.gov/projects/SNP/snp_ref.cgi?"+variantProp.dbSnpIdPrefix+'='+variantProp.dbSnpIdSuffix;
 		var cosmicUrl = "http://cancer.sanger.ac.uk/cosmic/search?q="+variantProp.cosmicId;
 		var cosmicAlternate = "http://cancer.sanger.ac.uk/cosmic/search?q="+variantProp.geneMutation;
+		var geneNumber = variantProp.gene+'chr'+variantProp.chr+variantProp.coordinate;
 		return(
 			<tbody>
 				<tr className="filteredAnnotatedVariant">
 					<td className="alignMiddle">
-						<input type="checkbox" className="exportCheckbox"/>
+						{/* TODO: Find where the Invariant error could came from */}
+						{/*<input type="checkbox" className="exportCheckbox"/>*/}
 					</td>
 					<td data-export-label="gene">{variantProp.gene}</td>
 					<td data-export-label="coordinate">chr{variantProp.chr}:{variantProp.coordinate}</td>
@@ -457,7 +459,7 @@ var GeneExonRow = React.createClass({
 		return(
 			<span>
 				<GeneExonParent geneExon={this.props.geneExon} position={this.props.position} onClickShowOrHideButton={this.showOrHideButtonClicked}/>
-				{/*<GeneExonChild geneExon={this.props.geneExon} position={this.props.position} display={this.state.shouldDisplayChild}/>*/}
+				<GeneExonChild geneExon={this.props.geneExon} position={this.props.position} display={this.state.shouldDisplayChild}/>
 			</span>
 		);
 	}
