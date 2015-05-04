@@ -122,8 +122,8 @@ var QcRules = React.createClass({
 var HeadReportTable = React.createClass({
 	render: function(){
 		var allReadsTh = [];
-		this.props.bins.forEach(function(bin){
-			allReadsTh.push(<th>{bin.name}<br/>reads</th>);
+		this.props.bins.forEach(function(bin, index){
+			allReadsTh.push(<th key={index}>{bin.name}<br/>reads</th>);
 		});
 		return(
 			<thead>
@@ -347,8 +347,8 @@ var FootNoteTable = React.createClass({
 var FilteredAndAnnotatedVariants = React.createClass({
 	render: function(){
 		var filteredAndAnnotatedVariantRows = [];
-		this.props.geneExon.variants.forEach(function(variant){
-			filteredAndAnnotatedVariantRows.push(<FilteredAndAnnotatedVariantRow variant={variant}/>);
+		this.props.geneExon.variants.forEach(function(variant, index){
+			filteredAndAnnotatedVariantRows.push(<FilteredAndAnnotatedVariantRow variant={variant} key={index}/>);
 		});
 		return(
 			<div id="filteredAndAnnotatedVariants">
@@ -447,7 +447,7 @@ var BodyReportTable = React.createClass({
 			var position = index + 1;
 			allGeneExonRows.push(
 				<span>
-					<GeneExonRow geneExon={geneExon} position={position}/>
+					<GeneExonRow geneExon={geneExon} position={position} key={index}/>
 				</span>
 			);
 		});

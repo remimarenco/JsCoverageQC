@@ -168,7 +168,7 @@ var JsCoverageQcApp = React.createClass({
 	getInitialState: function(){
 		return{
 			vcf: {},
-			report: {},
+			report: React.addons.createFragment({}),
 			googleChartLibLoaded: false
 		};
 	},
@@ -182,7 +182,9 @@ var JsCoverageQcApp = React.createClass({
 		/* jshint ignore:end */
 	},
 	setStateVcfEnded: function(){
-		var report = <Report vcf={this.state.vcf} googleChartLibLoaded={this.state.googleChartLibLoaded}/>;
+		var report = React.addons.createFragment({
+			report: <Report vcf={this.state.vcf} googleChartLibLoaded={this.state.googleChartLibLoaded}/>
+		});
 		this.setState({report: report});
 	},
 	handleChange: function(newVcf){
