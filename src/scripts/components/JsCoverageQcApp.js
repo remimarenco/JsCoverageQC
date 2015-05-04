@@ -168,11 +168,22 @@ var JsCoverageQcApp = React.createClass({
 	getInitialState: function(){
 		return{
 			vcf: {},
-			report: {}
+			report: {},
+			googleChartLibLoaded: false
 		};
 	},
+	googleChartLibLoaded: function(){
+		console.log("google chart loaded!");
+		this.setState({googleChartLibLoaded: true});
+	},
+	componentDidMount: function(){
+		/* jshint ignore:start */
+		google.load("visualization", "1", {packages: ["corechart"]});
+		google.setOnLoadCallback(this.googleChartLibLoaded);
+		/* jshint ignore:end */
+	},
 	setStateVcfEnded: function(){
-		var report = <Report vcf={this.state.vcf}/>;
+		var report = <Report vcf={this.state.vcf} googleChartLibLoaded={this.state.googleChartLibLoaded}/>;
 		this.setState({report: report});
 	},
 	handleChange: function(newVcf){
