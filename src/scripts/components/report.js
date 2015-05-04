@@ -151,9 +151,25 @@ var HeadReportTable = React.createClass({
 });
 
 var ReadHistogram = React.createClass({
+	componentDidMount: function(){
+		var domNodeReadHistogram = React.findDOMNode(this.refs[this.props.identifier]);
+
+		/* jshint ignore:start */
+		console.log(this.props.refReadHistogram+ " avant : "+$(domNodeReadHistogram).css("background-position"));
+		$(domNodeReadHistogram).css("background-position", '0px ' +
+		(((1.0 * (100 - this.props.bin.pct)) / 100) * $(domNodeReadHistogram).outerHeight()) + 'px');
+		console.log(this.props.refReadHistogram+ " après : "+$(domNodeReadHistogram).css("background-position"));
+		/* jshint ignore:end */
+
+		/*
+		$(this).css("background-position", "0px " + 
+			((1.0 * (100 - parseInt($(this).attr("data-pct")))) / 100) * 
+			$(this).outerHeight() + "px");
+		*/
+	},
 	render: function(){
 		return(
-			<td className="readHistogram" data-pct={this.props.pct}>
+			<td className="readHistogram" id={this.props.refReadHistogram} ref={this.props.identifier}>
 				{this.props.bin.count}
 			</td>
 		);
@@ -206,45 +222,46 @@ var GeneExonParent = React.createClass({
 
 		var readHistogram = [];
 
-		geneExonProps.bins.forEach(function(bin){
-			readHistogram.push(<ReadHistogram bin={bin}/>);
+		var self = this;
+
+		geneExonProps.bins.forEach(function(bin, index){
+			var refReadHistogram = 'readHistogram_' + self.props.geneExonName + index;
+			readHistogram.push(<ReadHistogram bin={bin} identifier={refReadHistogram} key={index}/>);
 		});
 		return(
-			<span>
-				<tr className={trClasses}>
-					<td>
-						<a href='#' id={geneExonPosition} className="geneExonExpandCollapseButton"
-							onClick={this.showOrHideButtonCliked}>
-							{this.state.showOrHideButton}
-						</a>
-					</td>
-					<td className={colorQcClasses} data-export-label="qc">
-					    {geneExonProps.qc}
-					</td>
-					<td data-export-label="exon">
-						{geneExonProps.name}
-						<br/>
-						<span className="geneExonSmallDetails">Ensembl ID: 
-							<a href="{ensemblID}">{ensemblID}</a>
-							<br/>RefSeq accession no.: 
-							<a href="{refSeqAccessionNo}">{refSeqAccessionNo}</a>
-							<br/>vendor ID: {geneExonProps.vendorGeneExonName}
-						</span>
-					</td>
-					<td className="alignRight">{geneExonProps.pctOfExon}</td>
-					<td data-export-label="locus">
-						<a href="#">
-							{geneExonProps.chr}:{geneExonProps.startPos}-{geneExonProps.endPos}
-						</a>
-					</td>
-					<td>
-						{variantCalled.toString()}
-						{variantAnnotated}
-						{onlyContainsDoNotCallAlways}
-					</td>
-					{readHistogram}
-				</tr>
-			</span>
+			<tr className={trClasses}>
+				<td>
+					<a href='#' id={geneExonPosition} className="geneExonExpandCollapseButton"
+						onClick={this.showOrHideButtonCliked}>
+						{this.state.showOrHideButton}
+					</a>
+				</td>
+				<td className={colorQcClasses} data-export-label="qc">
+				    {geneExonProps.qc}
+				</td>
+				<td data-export-label="exon">
+					{geneExonProps.name}
+					<br/>
+					<span className="geneExonSmallDetails">Ensembl ID: 
+						<a href="{ensemblID}">{ensemblID}</a>
+						<br/>RefSeq accession no.: 
+						<a href="{refSeqAccessionNo}">{refSeqAccessionNo}</a>
+						<br/>vendor ID: {geneExonProps.vendorGeneExonName}
+					</span>
+				</td>
+				<td className="alignRight">{geneExonProps.pctOfExon}</td>
+				<td data-export-label="locus">
+					<a href="#">
+						{geneExonProps.chr}:{geneExonProps.startPos}-{geneExonProps.endPos}
+					</a>
+				</td>
+				<td>
+					{variantCalled.toString()}
+					{variantAnnotated}
+					{onlyContainsDoNotCallAlways}
+				</td>
+				{readHistogram}
+			</tr>
 		);
 	}
 });
@@ -391,7 +408,6 @@ var GeneExonChild = React.createClass({
 		}
 
 		return(
-			<span>
 				<tr style={trDisplayStyle} className={trClasses}>
 					<td colSpan={nbBinsPlusSixColumns}>
 						<div id={geneExonPositionIdDiv}>
@@ -400,7 +416,6 @@ var GeneExonChild = React.createClass({
 						{filteredAndAnnotatedVariants}
 					</td>
 				</tr>
-			</span>
 		);
 	}
 });
@@ -412,7 +427,6 @@ var GeneExonRow = React.createClass({
 		};
 	},
 	showOrHideButtonClicked: function(){
-		console.log("On est dans showOrHideButtonClicked");
 		this.setState({shouldDisplayChild: !this.state.shouldDisplayChild});
 	},
 	render: function(){

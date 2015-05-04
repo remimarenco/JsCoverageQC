@@ -23,9 +23,6 @@ var DrawingChart = React.createClass({
 module.exports = DrawingChart;
 
 /* Beginning ----
-var chartWidth;
-google.load("visualization", "1", {packages:["corechart"]});
-google.setOnLoadCallback(function() {
 $(document).ready(function() {
 
 // set up read count histograms
