@@ -477,6 +477,12 @@ var Report = React.createClass({
 			fail.fail2 = propsVcf.geneExons.one().bins[1].name;
 		}
 
+		// Only show the bodyReportTable once the googleLibChar has been loaded
+		var qcReportTable;
+		if(this.props.googleChartLibLoaded){
+			qcReportTable = <QcReportTable geneExons={propsVcf.geneExons}/>;
+		}
+
 		return(
 			<div>
 				<Blocker/>
@@ -494,7 +500,7 @@ var Report = React.createClass({
 				<QcRules pass={pass}
 					warn={warn}
 					fail={fail}/>
-				<QcReportTable geneExons={propsVcf.geneExons}/>
+				{qcReportTable}
 				<p>Copyright &#169; 2015 Rémi Marenco and Jeremy Goecks. Java original version : 2014 Geoffrey H. Smith.</p>
 			</div>
 		);

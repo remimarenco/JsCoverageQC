@@ -173,7 +173,6 @@ var JsCoverageQcApp = React.createClass({
 		};
 	},
 	googleChartLibLoaded: function(){
-		console.log("google chart loaded!");
 		this.setState({googleChartLibLoaded: true});
 	},
 	componentDidMount: function(){
