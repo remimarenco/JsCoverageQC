@@ -166,6 +166,8 @@ var GeneExonParent = React.createClass({
 		var cx = React.addons.classSet; // To manipulate class(es)
 		var geneExonProps = this.props.geneExon;
 
+		var geneExonPosition = 'geneExon'+this.props.position;
+
 		var variantCalled = geneExonProps.getVariantCalled();
 		// TODO: Check why AKT1ex3 is not marked as variantCalled
 		var variantAnnotated = geneExonProps.getVariantAnnotated() ? '(annotated)' : '';
@@ -195,7 +197,7 @@ var GeneExonParent = React.createClass({
 			<span>
 				<tr className={trClasses}>
 					<td>
-						<a href='#' id={this.props.position} className="geneExonExpandCollapseButton">+</a>
+						<a href='#' id={geneExonPosition} className="geneExonExpandCollapseButton">+</a>
 					</td>
 					<td className={colorQcClasses} data-export-label="qc">
 					    {geneExonProps.qc}
