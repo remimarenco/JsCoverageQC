@@ -175,6 +175,7 @@ var GeneExonParent = React.createClass({
 		else{
 			this.setState({showOrHideButton: '+'});
 		}
+		this.props.onClickShowOrHideButton();
 	},
 	// TODO: The link to collapse or show should be on the entire TD and not only on the '+'' or '-' text for UX
 	render: function(){
@@ -383,9 +384,15 @@ var GeneExonChild = React.createClass({
 		if(this.props.geneExon.variants.length > 0){
 			filteredAndAnnotatedVariants = <FilteredAndAnnotatedVariants geneExon={this.props.geneExon}/>;
 		}
+
+		var trDisplayStyle = {display: 'none'};
+		if(this.props.display){
+			trDisplayStyle = {display: 'table-row'};
+		}
+
 		return(
 			<span>
-				<tr style={{display:'none'}} className={trClasses}>
+				<tr style={trDisplayStyle} className={trClasses}>
 					<td colSpan={nbBinsPlusSixColumns}>
 						<div id={geneExonPositionIdDiv}>
 							<DrawingChart geneExon={this.props.geneExon} position={this.props.position}/>
@@ -398,15 +405,35 @@ var GeneExonChild = React.createClass({
 	}
 });
 
+var GeneExonRow = React.createClass({
+	getInitialState: function(){
+		return{
+			shouldDisplayChild: false
+		};
+	},
+	showOrHideButtonClicked: function(){
+		console.log("On est dans showOrHideButtonClicked");
+		this.setState({shouldDisplayChild: !this.state.shouldDisplayChild});
+	},
+	render: function(){
+		return(
+			<span>
+				<GeneExonParent geneExon={this.props.geneExon} position={this.props.position} onClickShowOrHideButton={this.showOrHideButtonClicked}/>
+				<GeneExonChild geneExon={this.props.geneExon} position={this.props.position} display={this.state.shouldDisplayChild}/>
+			</span>
+		);
+	}
+});
+
 var BodyReportTable = React.createClass({
 	render: function(){
 		var allGeneExonRows = [];
+		var self = this;
 		this.props.geneExons.forEach(function(geneExon, index){
 			var position = index + 1;
 			allGeneExonRows.push(
 				<span>
-					<GeneExonParent geneExon={geneExon} position={position}/>
-					<GeneExonChild geneExon={geneExon} position={position}/>
+					<GeneExonRow geneExon={geneExon} position={position}/>
 				</span>
 			);
 		});
