@@ -177,7 +177,8 @@ function Vcf(vcfFileName, vcfNotCutLines, exonBedFileName, exonBedNotCutLines, a
 			    	if (base.getTotalReadDepth() >= bin.startCount &&
 			    		base.getTotalReadDepth() <= bin.endCount) {
 			    	    bin.addCount();
-			    	    bin.processPct();
+			    	    bin.processPct(geneExon.endPos, geneExon.codingRegion.endPos,
+			    	    	geneExon.codingRegion.startPos, geneExon.startPos);
 			    	}
 			    });
 			}

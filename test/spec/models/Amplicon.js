@@ -33,7 +33,7 @@ describe('Amplicon', function () {
     var ampliconBedLine = '';
 
     beforeEach(function(done){
-      ampliconsBedFile = "http://localhost:8080/base/test/data/cancer_panel_26.20140311.amplicons.bed";
+      ampliconsBedFile = "http://localhost:8080/base/test/data/cancer_panel_26.20140717.amplicons.bed";
 
       var req = new XMLHttpRequest();
       req.open("GET", ampliconsBedFile, true);

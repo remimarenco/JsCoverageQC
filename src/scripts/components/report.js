@@ -43,57 +43,59 @@ var InformationsTable = React.createClass({
 	render: function(){
 		return(
 			<table>
-				<tr>
-					<td>version</td>
-					<td>:</td>
-					<td id="version">
-						{this.props.version}
-					</td>
-				</tr>
-				<tr>
-					<td>report run date</td>
-					<td>:</td>
-					<td id="runDate">
-						{this.props.runDate ? this.props.runDate.toDateString() : ''}
-					</td>
-				</tr>
-				<tr>
-					<td>gVCF file</td>
-					<td>:</td>
-					<td id="fileName">
-						{this.props.fileName}
-					</td>
-				</tr>
-				<tr>
-					<td>variant TSV file</td>
-					<td>:</td>
-					<td>
-						<VariantTSV variantTsvFileName={this.props.variantTsvFileName}
-							variantTsvFileLineCount={this.props.variantTsvFileLineCount}
-							filteredAnnotatedVariantCount={this.props.filteredAnnotatedVariantCount}/>
-					</td>
-				</tr>
-				<tr>
-					<td>exon BED file</td>
-					<td>:</td>
-					<td id="exonBedFileName">
-						{this.props.exonBedFileName}
-					</td>
-				</tr>
-				<tr>
-					<td>amplicon BED file</td>
-					<td>:</td>
-					<td id="ampliconBedFileName">
-						{this.props.ampliconBedFileName}
-					</td>
-				</tr>
-				<tr>
-					<td>Do NOT Call file</td>
-					<td>:</td>
-					<td id="doNotCallFileName">
-						{this.props.doNotCallFileName}
-					</td>
-				</tr>
+				<tbody>
+					<tr>
+						<td>version</td>
+						<td>:</td>
+						<td id="version">
+							{this.props.version}
+						</td>
+					</tr>
+					<tr>
+						<td>report run date</td>
+						<td>:</td>
+						<td id="runDate">
+							{this.props.runDate ? this.props.runDate.toDateString() : ''}
+						</td>
+					</tr>
+					<tr>
+						<td>gVCF file</td>
+						<td>:</td>
+						<td id="fileName">
+							{this.props.fileName}
+						</td>
+					</tr>
+					<tr>
+						<td>variant TSV file</td>
+						<td>:</td>
+						<td>
+							<VariantTSV variantTsvFileName={this.props.variantTsvFileName}
+								variantTsvFileLineCount={this.props.variantTsvFileLineCount}
+								filteredAnnotatedVariantCount={this.props.filteredAnnotatedVariantCount}/>
+						</td>
+					</tr>
+					<tr>
+						<td>exon BED file</td>
+						<td>:</td>
+						<td id="exonBedFileName">
+							{this.props.exonBedFileName}
+						</td>
+					</tr>
+					<tr>
+						<td>amplicon BED file</td>
+						<td>:</td>
+						<td id="ampliconBedFileName">
+							{this.props.ampliconBedFileName}
+						</td>
+					</tr>
+					<tr>
+						<td>Do NOT Call file</td>
+						<td>:</td>
+						<td id="doNotCallFileName">
+							{this.props.doNotCallFileName}
+						</td>
+					</tr>
+				</tbody>
 			</table>
 		);
 	}
@@ -119,32 +121,48 @@ var QcRules = React.createClass({
 	}
 });
 
-var HeadReportTable = React.createClass({
+var FirstHeadRow = React.createClass({
+	render: function(){
+		return(
+			<tr>
+				<th></th>
+				<th colSpan="5">gene/exon</th>
+				<th colSpan={this.props.binsLength}>base count by read depth</th>
+			</tr>
+		);
+	}
+});
+
+var SecondHeadRow = React.createClass({
 	render: function(){
 		var allReadsTh = [];
 		this.props.bins.forEach(function(bin, index){
 			allReadsTh.push(<th key={index}>{bin.name}<br/>reads</th>);
 		});
 		return(
+			<tr>
+				<th>
+					<a href="#" id="geneExonExpandCollapseAllButton">+</a>
+				</th>
+				<th>QC</th>
+				<th>name</th>
+				<th>%exon
+					<br>reported</br>
+					<th>locus</th>
+					<th>variant</th>
+					{allReadsTh}
+				</th>
+			</tr>
+		);
+	}
+});
+
+var HeadReportTable = React.createClass({
+	render: function(){
+		return(
 			<thead>
-				<tr>
-					<th></th>
-					<th colSpan="5">gene/exon</th>
-					<th colSpan={this.props.bins.length}>base count by read depth</th>
-				</tr>
-				<tr>
-					<th>
-						<a href="#" id="geneExonExpandCollapseAllButton">+</a>
-					</th>
-					<th>QC</th>
-					<th>name</th>
-					<th>%exon
-						<br>reported</br>
-						<th>locus</th>
-						<th>variant</th>
-						{allReadsTh}
-					</th>
-				</tr>
+				<FirstHeadRow binsLength={this.props.bins.length}/>
+				<SecondHeadRow bins={this.props.bins}/>
 			</thead>
 		);
 	}
@@ -152,13 +170,14 @@ var HeadReportTable = React.createClass({
 
 var ReadHistogram = React.createClass({
 	componentDidMount: function(){
-		var domNodeReadHistogram = React.findDOMNode(this.refs[this.props.identifier]);
+		var domNodeReadHistogram = '#'+this.props.identifier;
 
 		/* jshint ignore:start */
-		console.log(this.props.refReadHistogram+ " avant : "+$(domNodeReadHistogram).css("background-position"));
+		//debugger;
+		//console.log(this.props.identifier+ " avant : "+ this.props.bin.pct);
 		$(domNodeReadHistogram).css("background-position", '0px ' +
 		(((1.0 * (100 - this.props.bin.pct)) / 100) * $(domNodeReadHistogram).outerHeight()) + 'px');
-		console.log(this.props.refReadHistogram+ " après : "+$(domNodeReadHistogram).css("background-position"));
+		//console.log(this.props.identifier+ " après : "+$(domNodeReadHistogram).css("background-position"));
 		/* jshint ignore:end */
 
 		/*
@@ -169,9 +188,11 @@ var ReadHistogram = React.createClass({
 	},
 	render: function(){
 		return(
-			<td className="readHistogram" id={this.props.refReadHistogram} ref={this.props.identifier}>
-				{this.props.bin.count}
-			</td>
+			<span>
+				<td className="readHistogram" id={this.props.identifier}>
+					{this.props.bin.count}
+				</td>
+			</span>
 		);
 	}
 });
@@ -225,7 +246,8 @@ var GeneExonParent = React.createClass({
 		var self = this;
 
 		geneExonProps.bins.forEach(function(bin, index){
-			var refReadHistogram = 'readHistogram_' + self.props.geneExonName + index;
+			//console.log("Dans geneExonParent: "+bin.pct);
+			var refReadHistogram = 'readHistogram_' + self.props.geneExon.name + index;
 			readHistogram.push(<ReadHistogram bin={bin} identifier={refReadHistogram} key={index}/>);
 		});
 		return(
@@ -273,41 +295,43 @@ var FilteredAndAnnotatedVariantRow = React.createClass({
 		var cosmicUrl = "http://cancer.sanger.ac.uk/cosmic/search?q="+variantProp.cosmicId;
 		var cosmicAlternate = "http://cancer.sanger.ac.uk/cosmic/search?q="+variantProp.geneMutation;
 		return(
-			<tr className="filteredAnnotatedVariant">
-				<td className="alignMiddle">
-					<input type="checkbox" className="exportCheckbox"/>
-				</td>
-				<td data-export-label="gene">{variantProp.gene}</td>
-				<td data-export-label="coordinate">chr{variantProp.chr}:{variantProp.coordinate}</td>
-				<td data-export-label="filters">{variantProp.filters}</td>
-				<td data-export-label="consequence">{variantProp.consequence}</td>
-				<td data-export-label="genotype">{variantProp.genotype}</td>
-				<td data-export-label="avf" className="alignRight">{variantProp.altVariantFreq}</td>
-				<td data-export-label="cDna">{variantProp.hgvsc}</td>
-				<td data-export-label="aminoAcid">{variantProp.hgvsp}</td>
-				<td>
-				    <a href={dbSnpUrl}>
-				        {variantProp.dbSnpIdPrefix}
-				        {variantProp.dbSnpIdSuffix}
-				    </a>
-				</td>
-				<td data-export-label="maf" className="alignRight">
-				    {variantProp.alleleFreqGlobalMinor}
-				</td>
-				<td>
-				    <a href={cosmicUrl}>
-				        {variantProp.cosmicId}
-				    </a>
-				</td>
-				<td>
-				    <a href={cosmicAlternate}>
-				        {variantProp.geneMutation}
-				    </a>
-				</td>
-				<td width="5%">
-					{variantProp.typeOfDoNotCall}
-				</td>
-			</tr>
+			<tbody>
+				<tr className="filteredAnnotatedVariant">
+					<td className="alignMiddle">
+						<input type="checkbox" className="exportCheckbox"/>
+					</td>
+					<td data-export-label="gene">{variantProp.gene}</td>
+					<td data-export-label="coordinate">chr{variantProp.chr}:{variantProp.coordinate}</td>
+					<td data-export-label="filters">{variantProp.filters}</td>
+					<td data-export-label="consequence">{variantProp.consequence}</td>
+					<td data-export-label="genotype">{variantProp.genotype}</td>
+					<td data-export-label="avf" className="alignRight">{variantProp.altVariantFreq}</td>
+					<td data-export-label="cDna">{variantProp.hgvsc}</td>
+					<td data-export-label="aminoAcid">{variantProp.hgvsp}</td>
+					<td>
+					    <a href={dbSnpUrl}>
+					        {variantProp.dbSnpIdPrefix}
+					        {variantProp.dbSnpIdSuffix}
+					    </a>
+					</td>
+					<td data-export-label="maf" className="alignRight">
+					    {variantProp.alleleFreqGlobalMinor}
+					</td>
+					<td>
+					    <a href={cosmicUrl}>
+					        {variantProp.cosmicId}
+					    </a>
+					</td>
+					<td>
+					    <a href={cosmicAlternate}>
+					        {variantProp.geneMutation}
+					    </a>
+					</td>
+					<td width="5%">
+						{variantProp.typeOfDoNotCall}
+					</td>
+				</tr>
+			</tbody>
 		);
 	}
 });
@@ -316,29 +340,31 @@ var FootNoteTable = React.createClass({
 	render: function(){
 		return(
 			<table className="footNoteTable">
-				<tr>
-					<td colSpan="2" id="footNoteFiltersDescription">
-						<sup>*</sup>filter descriptions
-					</td>
-				</tr>
-				<tr>
-					<td>LowDP</td>
-					<td>
-						= low coverage (DP tag), therefore no genotype called
-					</td>
-				</tr>
-				<tr>
-					<td>SB</td>
-					<td>
-						= variant strand bias too high
-					</td>
-				</tr>
-				<tr>
-					<td>PB</td>
-					<td>
-						= probe pool bias - variant not found, or found with low frequency, in one of two probe pools
-					</td>
-				</tr>
+				<tbody>
+					<tr>
+						<td colSpan="2" id="footNoteFiltersDescription">
+							<sup>*</sup>filter descriptions
+						</td>
+					</tr>
+					<tr>
+						<td>LowDP</td>
+						<td>
+							= low coverage (DP tag), therefore no genotype called
+						</td>
+					</tr>
+					<tr>
+						<td>SB</td>
+						<td>
+							= variant strand bias too high
+						</td>
+					</tr>
+					<tr>
+						<td>PB</td>
+						<td>
+							= probe pool bias - variant not found, or found with low frequency, in one of two probe pools
+						</td>
+					</tr>
+				</tbody>
 			</table>
 		);
 	}
@@ -372,9 +398,7 @@ var FilteredAndAnnotatedVariants = React.createClass({
 							<th>call status</th>
 						</tr>
 					</thead>
-					<tbody>
-						{filteredAndAnnotatedVariantRows}
-					</tbody>
+					{filteredAndAnnotatedVariantRows}
 				</table>
 				<br/>
 				<FootNoteTable/>
@@ -432,7 +456,8 @@ var GeneExonRow = React.createClass({
 	render: function(){
 		return(
 			<span>
-				<GeneExonChild geneExon={this.props.geneExon} position={this.props.position} display={this.state.shouldDisplayChild}/>
+				<GeneExonParent geneExon={this.props.geneExon} position={this.props.position} onClickShowOrHideButton={this.showOrHideButtonClicked}/>
+				{/*<GeneExonChild geneExon={this.props.geneExon} position={this.props.position} display={this.state.shouldDisplayChild}/>*/}
 			</span>
 		);
 	}
@@ -451,9 +476,9 @@ var BodyReportTable = React.createClass({
 			);
 		});
 		return(
-			<span>
+			<tbody>
 				{allGeneExonRows}
-			</span>
+			</tbody>
 		);
 	}
 });
