@@ -11,10 +11,11 @@
   "mainOutput": "main",
   "dependencies": {
     "react-router": "^0.13.2",
-    "react": "~0.13.1",
+    "react": "http://react.zpao.com/builds/master/latest/react.tgz",
     "collections": "~1.2.2",
     "xlsx": "~0.8.0",
-    "browser-filesaver": "~1.0.0"
+    "browser-filesaver": "~1.0.0",
+    "classnames": "~2.1.0"
   },
   "devDependencies": {
     "grunt": "~0.4.5",

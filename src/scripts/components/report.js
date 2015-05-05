@@ -1,6 +1,7 @@
 'use strict';
 
 var React = require('react/addons');
+var classNames = require('classnames');
 
 require('../../styles/report.css');
 
@@ -146,12 +147,10 @@ var SecondHeadRow = React.createClass({
 				</th>
 				<th>QC</th>
 				<th>name</th>
-				<th>%exon
-					<br>reported</br>
-					<th>locus</th>
-					<th>variant</th>
-					{allReadsTh}
-				</th>
+				<th>%exon<br>reported</br></th>
+				<th>locus</th>
+				<th>variant</th>
+				{allReadsTh}
 			</tr>
 		);
 	}
@@ -216,7 +215,6 @@ var GeneExonParent = React.createClass({
 	},
 	// TODO: The link to collapse or show should be on the entire TD and not only on the '+'' or '-' text for UX
 	render: function(){
-		var cx = React.addons.classSet; // To manipulate class(es)
 		var geneExonProps = this.props.geneExon;
 
 		var geneExonPosition = 'geneExon'+this.props.position;
@@ -226,11 +224,11 @@ var GeneExonParent = React.createClass({
 		var variantAnnotated = geneExonProps.getVariantAnnotated() ? '(annotated)' : '';
 		var onlyContainsText = <span><br/>Do Not Call, on lab list<br/> of definitive do-not-calls</span>;
 		var onlyContainsDoNotCallAlways = geneExonProps.getOnlyContainsDoNotCallAlways() ? onlyContainsText : '';
-		var trClasses = cx({
+		var trClasses = classNames({
 			'geneExon_parent': true,
 			'variantCalled': variantCalled
 		});
-		var colorQcClasses = cx({
+		var colorQcClasses = classNames({
 			'qcGeneExonColor_pass': (geneExonProps.qc === 'pass'),
 			'qcGeneExonColor_warn': (geneExonProps.qc === 'warn'),
 			'qcGeneExonColor_fail': (geneExonProps.qc === 'fail')
@@ -412,12 +410,11 @@ var FilteredAndAnnotatedVariants = React.createClass({
 var GeneExonChild = React.createClass({
 	render: function(){
 		var DrawingChart = require('../functions/DrawingChart');
-		var cx = React.addons.classSet; // To manipulate class(es)
 		var geneExonPositionId = 'geneExon'+ this.props.position;
 		var geneExonPositionClass = geneExonPositionId+'_child';
 		var geneExonPositionIdDiv = geneExonPositionId + '_div';
 		var nbBinsPlusSixColumns = this.props.geneExon.bins.length + 6;
-		var trClasses = cx(
+		var trClasses = classNames(
 			'tablesorter-childRow',
 			'geneExon_child',
 			geneExonPositionClass
@@ -457,10 +454,8 @@ var GeneExonRow = React.createClass({
 	},
 	render: function(){
 		return(
-			<span>
-				<GeneExonParent geneExon={this.props.geneExon} position={this.props.position} onClickShowOrHideButton={this.showOrHideButtonClicked}/>
-				<GeneExonChild geneExon={this.props.geneExon} position={this.props.position} display={this.state.shouldDisplayChild}/>
-			</span>
+			<GeneExonParent geneExon={this.props.geneExon} position={this.props.position} onClickShowOrHideButton={this.showOrHideButtonClicked}/>
+			<GeneExonChild geneExon={this.props.geneExon} position={this.props.position} display={this.state.shouldDisplayChild}/>
 		);
 	}
 });
@@ -472,9 +467,7 @@ var BodyReportTable = React.createClass({
 		this.props.geneExons.forEach(function(geneExon, index){
 			var position = index + 1;
 			allGeneExonRows.push(
-				<span key={index}>
-					<GeneExonRow geneExon={geneExon} position={position}/>
-				</span>
+				<GeneExonRow key={index} geneExon={geneExon} position={position}/>
 			);
 		});
 		return(
