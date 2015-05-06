@@ -147,7 +147,7 @@ var SecondHeadRow = React.createClass({
 				</th>
 				<th>QC</th>
 				<th>name</th>
-				<th>%exon<br>reported</br></th>
+				<th>%exon<br/>reported</th>
 				<th>locus</th>
 				<th>variant</th>
 				{allReadsTh}
@@ -455,11 +455,13 @@ var BodyReportTable = React.createClass({
 		var self = this;
 		this.props.geneExons.forEach(function(geneExon, index){
 			var position = index + 1;
+			var parentKey = 'geneExonParent' + index;
+			var childKey = 'geneExonChild' + index;
 			allGeneExonRows.push(
-				<GeneExonParent geneExon={geneExon} position={position} onClickShowOrHideButton={self.showOrHideButtonClicked}/>
+				<GeneExonParent key={parentKey} geneExon={geneExon} position={position} onClickShowOrHideButton={self.showOrHideButtonClicked}/>
 			);
 			allGeneExonRows.push(
-				<GeneExonChild geneExon={geneExon} position={position} display={self.state.shouldDisplayChild}/>
+				<GeneExonChild key={childKey} geneExon={geneExon} position={position} display={self.state.shouldDisplayChild}/>
 			);
 		});
 		return(
