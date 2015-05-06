@@ -137,6 +137,7 @@ var ExpandCollapseButton = React.createClass({
 		else{
 			this.setState({showOrHideButton: '+'});
 		}
+		debugger;
 		this.props.onClickShowOrHideButton();
 	},
 	render: function(){
@@ -173,7 +174,7 @@ var SecondHeadRow = React.createClass({
 		return(
 			<tr>
 				<th>
-					<ExpandCollapseButton onClickShowOrHideButton={this.showOrHideButtonCliked}/>
+					<ExpandCollapseButton onClickShowOrHideButton={this.showOrHideButtonCliked} elementKey={this.props.key}/>
 				</th>
 				<th>QC</th>
 				<th>name</th>
@@ -217,7 +218,7 @@ var ReadHistogram = React.createClass({
 
 var GeneExonParent = React.createClass({
 	showOrHideButtonCliked: function(e){
-		this.props.onClickShowOrHideButton();
+		this.props.onClickShowOrHideButton(this.props.elementKey);
 	},
 	// TODO: The link to collapse or show should be on the entire TD and not only on the '+'' or '-' text for UX
 	render: function(){
@@ -253,10 +254,11 @@ var GeneExonParent = React.createClass({
 			var refReadHistogram = 'readHistogram_' + self.props.geneExon.name + index;
 			readHistogram.push(<ReadHistogram bin={bin} identifier={refReadHistogram} key={index}/>);
 		});
+
 		return(
 			<tr className={trClasses}>
 				<td>
-					<ExpandCollapseButton onClickShowOrHideButton={this.showOrHideButtonCliked}/>
+					<ExpandCollapseButton onClickShowOrHideButton={this.showOrHideButtonCliked} elementKey={this.props.elementKey}/>
 				</td>
 				<td className={colorQcClasses} data-export-label="qc">
 				    {geneExonProps.qc}
@@ -448,24 +450,45 @@ var GeneExonChild = React.createClass({
 var BodyReportTable = React.createClass({
 	getInitialState: function(){
 		return{
-			shouldDisplayChild: false
+			shouldDisplayChild: {}
 		};
 	},
-	showOrHideButtonClicked: function(){
-		this.setState({shouldDisplayChild: !this.state.shouldDisplayChild});
+	generateParentKey: function(number){
+		return 'geneExonParent' + number;
+	},
+	generateChildKey: function(number){
+		return 'geneExonChild' + number;
+	},
+	componentDidMount: function(){
+		var self = this;
+		this.props.geneExons.forEach(function(geneExon, index){
+			var __parentKey = self.generateParentKey(index);
+			var __childKey = self.generateChildKey(index);
+
+			var tempDict = self.state.shouldDisplayChild;
+			tempDict[__parentKey] = false;
+			self.setState({shouldDisplayChild: tempDict});
+		});
+	},
+	showOrHideButtonClicked: function(parentKey){
+		debugger;
+		var tempDict = this.state.shouldDisplayChild;
+		tempDict[parentKey] = !this.state.shouldDisplayChild[parentKey];
+		this.setState({shouldDisplayChild: tempDict});
 	},
 	render: function(){
 		var allGeneExonRows = [];
 		var self = this;
 		this.props.geneExons.forEach(function(geneExon, index){
 			var position = index + 1;
-			var parentKey = 'geneExonParent' + index;
-			var childKey = 'geneExonChild' + index;
+			var __parentKey = self.generateParentKey(index);
+			var __childKey = self.generateChildKey(index);
+
 			allGeneExonRows.push(
-				<GeneExonParent key={parentKey} geneExon={geneExon} position={position} onClickShowOrHideButton={self.showOrHideButtonClicked}/>
+				<GeneExonParent key={__parentKey} elementKey={__parentKey} geneExon={geneExon} position={position} onClickShowOrHideButton={self.showOrHideButtonClicked}/>
 			);
 			allGeneExonRows.push(
-				<GeneExonChild key={childKey} geneExon={geneExon} position={position} display={self.state.shouldDisplayChild}/>
+				<GeneExonChild key={__childKey} geneExon={geneExon} position={position} display={self.state.shouldDisplayChild[__parentKey]}/>
 			);
 		});
 		return(
