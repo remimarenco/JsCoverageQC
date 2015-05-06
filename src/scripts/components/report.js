@@ -187,11 +187,9 @@ var ReadHistogram = React.createClass({
 	},
 	render: function(){
 		return(
-			<span>
-				<td className="readHistogram" id={this.props.identifier}>
-					{this.props.bin.count}
-				</td>
-			</span>
+			<td className="readHistogram" id={this.props.identifier}>
+				{this.props.bin.count}
+			</td>
 		);
 	}
 });
@@ -443,7 +441,7 @@ var GeneExonChild = React.createClass({
 	}
 });
 
-var GeneExonRow = React.createClass({
+var BodyReportTable = React.createClass({
 	getInitialState: function(){
 		return{
 			shouldDisplayChild: false
@@ -453,21 +451,15 @@ var GeneExonRow = React.createClass({
 		this.setState({shouldDisplayChild: !this.state.shouldDisplayChild});
 	},
 	render: function(){
-		return(
-			<GeneExonParent geneExon={this.props.geneExon} position={this.props.position} onClickShowOrHideButton={this.showOrHideButtonClicked}/>
-			<GeneExonChild geneExon={this.props.geneExon} position={this.props.position} display={this.state.shouldDisplayChild}/>
-		);
-	}
-});
-
-var BodyReportTable = React.createClass({
-	render: function(){
 		var allGeneExonRows = [];
 		var self = this;
 		this.props.geneExons.forEach(function(geneExon, index){
 			var position = index + 1;
 			allGeneExonRows.push(
-				<GeneExonRow key={index} geneExon={geneExon} position={position}/>
+				<GeneExonParent geneExon={geneExon} position={position} onClickShowOrHideButton={self.showOrHideButtonClicked}/>
+			);
+			allGeneExonRows.push(
+				<GeneExonChild geneExon={geneExon} position={position} display={self.state.shouldDisplayChild}/>
 			);
 		});
 		return(
