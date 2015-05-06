@@ -122,6 +122,33 @@ var QcRules = React.createClass({
 	}
 });
 
+var ExpandCollapseButton = React.createClass({
+	getInitialState: function(){
+		return{
+			showOrHideButton: '+'
+		};
+	},
+	showOrHideButtonCliked: function(e){
+		e.preventDefault();
+		if(this.state.showOrHideButton === '+')
+		{
+			this.setState({showOrHideButton: '-'});
+		}
+		else{
+			this.setState({showOrHideButton: '+'});
+		}
+		this.props.onClickShowOrHideButton();
+	},
+	render: function(){
+		return(
+				<a href='#' className="geneExonExpandCollapseButton"
+					onClick={this.showOrHideButtonCliked}>
+					{this.state.showOrHideButton}
+				</a>
+		);
+	}
+});
+
 var FirstHeadRow = React.createClass({
 	render: function(){
 		return(
@@ -135,6 +162,9 @@ var FirstHeadRow = React.createClass({
 });
 
 var SecondHeadRow = React.createClass({
+	showOrHideButtonCliked: function(){
+
+	},
 	render: function(){
 		var allReadsTh = [];
 		this.props.bins.forEach(function(bin, index){
@@ -143,7 +173,7 @@ var SecondHeadRow = React.createClass({
 		return(
 			<tr>
 				<th>
-					<a href="#" id="geneExonExpandCollapseAllButton">+</a>
+					<ExpandCollapseButton onClickShowOrHideButton={this.showOrHideButtonCliked}/>
 				</th>
 				<th>QC</th>
 				<th>name</th>
@@ -172,18 +202,9 @@ var ReadHistogram = React.createClass({
 		var domNodeReadHistogram = '#'+this.props.identifier;
 
 		/* jshint ignore:start */
-		//debugger;
-		//console.log(this.props.identifier+ " avant : "+ this.props.bin.pct);
 		$(domNodeReadHistogram).css("background-position", '0px ' +
 		(((1.0 * (100 - this.props.bin.pct)) / 100) * $(domNodeReadHistogram).outerHeight()) + 'px');
-		//console.log(this.props.identifier+ " après : "+$(domNodeReadHistogram).css("background-position"));
 		/* jshint ignore:end */
-
-		/*
-		$(this).css("background-position", "0px " + 
-			((1.0 * (100 - parseInt($(this).attr("data-pct")))) / 100) * 
-			$(this).outerHeight() + "px");
-		*/
 	},
 	render: function(){
 		return(
@@ -195,20 +216,7 @@ var ReadHistogram = React.createClass({
 });
 
 var GeneExonParent = React.createClass({
-	getInitialState: function(){
-		return{
-			showOrHideButton: '+'
-		};
-	},
 	showOrHideButtonCliked: function(e){
-		e.preventDefault();
-		if(this.state.showOrHideButton === '+')
-		{
-			this.setState({showOrHideButton: '-'});
-		}
-		else{
-			this.setState({showOrHideButton: '+'});
-		}
 		this.props.onClickShowOrHideButton();
 	},
 	// TODO: The link to collapse or show should be on the entire TD and not only on the '+'' or '-' text for UX
@@ -218,7 +226,6 @@ var GeneExonParent = React.createClass({
 		var geneExonPosition = 'geneExon'+this.props.position;
 
 		var variantCalled = geneExonProps.getVariantCalled();
-		// TODO: Check why AKT1ex3 is not marked as variantCalled
 		var variantAnnotated = geneExonProps.getVariantAnnotated() ? '(annotated)' : '';
 		var onlyContainsText = <span><br/>Do Not Call, on lab list<br/> of definitive do-not-calls</span>;
 		var onlyContainsDoNotCallAlways = geneExonProps.getOnlyContainsDoNotCallAlways() ? onlyContainsText : '';
@@ -249,10 +256,7 @@ var GeneExonParent = React.createClass({
 		return(
 			<tr className={trClasses}>
 				<td>
-					<a href='#' id={geneExonPosition} className="geneExonExpandCollapseButton"
-						onClick={this.showOrHideButtonCliked}>
-						{this.state.showOrHideButton}
-					</a>
+					<ExpandCollapseButton onClickShowOrHideButton={this.showOrHideButtonCliked}/>
 				</td>
 				<td className={colorQcClasses} data-export-label="qc">
 				    {geneExonProps.qc}
@@ -296,7 +300,7 @@ var FilteredAndAnnotatedVariantRow = React.createClass({
 				<tr className="filteredAnnotatedVariant">
 					<td className="alignMiddle">
 						{/* TODO: Find where the Invariant error could came from */}
-						{/*<input type="checkbox" className="exportCheckbox"/>*/}
+						<input type="checkbox" className="exportCheckbox"/>
 					</td>
 					<td data-export-label="gene">{variantProp.gene}</td>
 					<td data-export-label="coordinate">chr{variantProp.chr}:{variantProp.coordinate}</td>
@@ -473,10 +477,30 @@ var BodyReportTable = React.createClass({
 });
 
 var QcReportTable = React.createClass({
+	componentDidMount: function(){
+		/* jshint ignore:start */
+		$("#qcReportTable").tablesorter({
+			headers: {
+			0: { sorter:false },
+			1: { sorter:false },
+			2: { sorter:false },
+			3: { sorter:false },
+			4: { sorter:"text" },
+			5: { sorter:"text" },
+			6: { sorter:"text" },
+			7: { sorter:"text" },
+			8: { sorter:"text" },
+			9: { sorter:"text" },
+			10: { sorter:"text" },
+			11: { sorter:"text" },
+			}
+		});
+		/* jshint ignore:end */
+	},
 	render: function(){
 		return(
 			<span>
-				<table id="QcReportTable" className="dataTable">
+				<table id="qcReportTable" className="dataTable">
 					<HeadReportTable bins={this.props.geneExons.one().bins}/>
 					<BodyReportTable geneExons={this.props.geneExons}/>
 				</table>
