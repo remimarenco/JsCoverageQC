@@ -7,8 +7,15 @@ require('../../styles/report.css');
 
 var Blocker = React.createClass({
 	render: function(){
+		var blocker;
+		var displayStyle;
+		if(this.props.displayMe){
+			displayStyle = {
+				display: 'block'
+			};
+		}
 		return(
-			<div id="blocker">
+			<div id="blocker" style={displayStyle}>
 				<div>wait...</div>
 			</div>
 		);
@@ -137,7 +144,6 @@ var ExpandCollapseButton = React.createClass({
 		else{
 			this.setState({showOrHideButton: '+'});
 		}
-		debugger;
 		this.props.onClickShowOrHideButton();
 	},
 	render: function(){
@@ -163,8 +169,8 @@ var FirstHeadRow = React.createClass({
 });
 
 var SecondHeadRow = React.createClass({
-	showOrHideButtonCliked: function(){
-
+	showOrHideButtonClicked: function(){
+		this.props.showOrHideButtonClicked();
 	},
 	render: function(){
 		var allReadsTh = [];
@@ -174,7 +180,7 @@ var SecondHeadRow = React.createClass({
 		return(
 			<tr>
 				<th>
-					<ExpandCollapseButton onClickShowOrHideButton={this.showOrHideButtonCliked} elementKey={this.props.key}/>
+					<ExpandCollapseButton onClickShowOrHideButton={this.showOrHideButtonClicked} elementKey={this.props.key}/>
 				</th>
 				<th>QC</th>
 				<th>name</th>
@@ -188,11 +194,14 @@ var SecondHeadRow = React.createClass({
 });
 
 var HeadReportTable = React.createClass({
+	showOrHideButtonClicked: function(){
+		this.props.showOrHideButtonClicked();
+	},
 	render: function(){
 		return(
 			<thead>
 				<FirstHeadRow binsLength={this.props.bins.length}/>
-				<SecondHeadRow bins={this.props.bins}/>
+				<SecondHeadRow bins={this.props.bins} showOrHideButtonClicked={this.props.showOrHideButtonClicked}/>
 			</thead>
 		);
 	}
@@ -471,7 +480,6 @@ var BodyReportTable = React.createClass({
 		});
 	},
 	showOrHideButtonClicked: function(parentKey){
-		debugger;
 		var tempDict = this.state.shouldDisplayChild;
 		tempDict[parentKey] = !this.state.shouldDisplayChild[parentKey];
 		this.setState({shouldDisplayChild: tempDict});
@@ -500,6 +508,9 @@ var BodyReportTable = React.createClass({
 });
 
 var QcReportTable = React.createClass({
+	showOrHideButtonClicked: function(){
+		this.props.showOrHideButtonClicked();
+	},
 	componentDidMount: function(){
 		/* jshint ignore:start */
 		$("#qcReportTable").tablesorter({
@@ -524,7 +535,7 @@ var QcReportTable = React.createClass({
 		return(
 			<span>
 				<table id="qcReportTable" className="dataTable">
-					<HeadReportTable bins={this.props.geneExons.one().bins}/>
+					<HeadReportTable bins={this.props.geneExons.one().bins} showOrHideButtonClicked={this.showOrHideButtonClicked}/>
 					<BodyReportTable geneExons={this.props.geneExons}/>
 				</table>
 			</span>
@@ -533,6 +544,16 @@ var QcReportTable = React.createClass({
 });
 
 var Report = React.createClass({
+	getInitialState: function(){
+		return{
+			showBlocker: false
+		};
+	},
+	componentWillMount: function(){
+	},
+	onTakeTimeProcess: function(beginWait){
+			this.setState({showBlocker: !this.state.showBlocker});
+	},
 	render: function(){
 		var propsVcf = this.props.vcf;
 		var filteredAnnotatedVariantCount;
@@ -554,12 +575,12 @@ var Report = React.createClass({
 		// Only show the bodyReportTable once the googleLibChar has been loaded
 		var qcReportTable;
 		if(this.props.googleChartLibLoaded){
-			qcReportTable = <QcReportTable geneExons={propsVcf.geneExons}/>;
+			qcReportTable = <QcReportTable geneExons={this.props.vcf.geneExons} showOrHideButtonClicked={this.onTakeTimeProcess}/>;
 		}
 
 		return(
 			<div>
-				<Blocker/>
+				<Blocker displayMe={this.state.showBlocker}/>
 				<h2>Coverage QC Report</h2>
 				<InformationsTable version={propsVcf.version}
 					runDate={propsVcf.runDate}
