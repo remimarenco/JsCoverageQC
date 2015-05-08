@@ -508,7 +508,6 @@ var BodyReportTable = React.createClass({
 
 var QcReportTable = React.createClass({
 	showOrHideButtonClicked: function(){
-		this.props.showOrHideButtonClicked();
 	},
 	componentDidMount: function(){
 		/* jshint ignore:start */
