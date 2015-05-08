@@ -20,8 +20,6 @@ var Vcf = require('models/Vcf');
 //var XLSX = require('xlsx');
 var saveAs = require('browser-filesaver');
 
-var BindToMixin = require('react-binding');
-
 var imageURL = require('../../images/yeoman.png');
 
 function s2ab(s) {

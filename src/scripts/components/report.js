@@ -310,7 +310,6 @@ var FilteredAndAnnotatedVariantRow = React.createClass({
 			<tbody>
 				<tr className="filteredAnnotatedVariant">
 					<td className="alignMiddle">
-						{/* TODO: Find where the Invariant error could came from */}
 						<input type="checkbox" className="exportCheckbox"/>
 					</td>
 					<td data-export-label="gene">{variantProp.gene}</td>
