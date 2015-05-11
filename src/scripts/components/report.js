@@ -169,8 +169,8 @@ var FirstHeadRow = React.createClass({
 });
 
 var SecondHeadRow = React.createClass({
-	showOrHideButtonClicked: function(){
-		this.props.showOrHideButtonClicked();
+	showOrHideButtonAllClicked: function(){
+		this.props.showOrHideButtonAllClicked();
 	},
 	render: function(){
 		var allReadsTh = [];
@@ -180,7 +180,7 @@ var SecondHeadRow = React.createClass({
 		return(
 			<tr>
 				<th>
-					<ExpandCollapseButton onClickShowOrHideButton={this.showOrHideButtonClicked} elementKey={this.props.key}/>
+					<ExpandCollapseButton onClickShowOrHideButton={this.showOrHideButtonAllClicked} elementKey={this.props.key}/>
 				</th>
 				<th>QC</th>
 				<th>name</th>
@@ -194,14 +194,14 @@ var SecondHeadRow = React.createClass({
 });
 
 var HeadReportTable = React.createClass({
-	showOrHideButtonClicked: function(){
-		this.props.showOrHideButtonClicked();
+	showOrHideButtonAllClicked: function(){
+		this.props.showOrHideButtonAllClicked();
 	},
 	render: function(){
 		return(
 			<thead>
 				<FirstHeadRow binsLength={this.props.bins.length}/>
-				<SecondHeadRow bins={this.props.bins} showOrHideButtonClicked={this.props.showOrHideButtonClicked}/>
+				<SecondHeadRow bins={this.props.bins} showOrHideButtonAllClicked={this.props.showOrHideButtonAllClicked}/>
 			</thead>
 		);
 	}
@@ -479,9 +479,15 @@ var BodyReportTable = React.createClass({
 			self.setState({shouldDisplayChild: tempDict});
 		});
 	},
-	showOrHideButtonClicked: function(parentKey){
+	showOrHideButtonClicked: function(parentKey, forceState){
 		var tempDict = this.state.shouldDisplayChild;
-		tempDict[parentKey] = !this.state.shouldDisplayChild[parentKey];
+		// In case we do not received a forceState, we guess we just want to change the state to the opposite
+		if(forceState !== null || typeof forceState !== 'undefined'){
+			tempDict[parentKey] = !this.state.shouldDisplayChild[parentKey];
+		}
+		else{
+			tempDict[parentKey] = forceState;
+		}
 		this.setState({shouldDisplayChild: tempDict});
 	},
 	render: function(){
@@ -508,25 +514,25 @@ var BodyReportTable = React.createClass({
 });
 
 var QcReportTable = React.createClass({
-	showOrHideButtonClicked: function(){
+	showOrHideButtonAllClicked: function(){
 		this.props.showOrHideButtonClicked();
 	},
 	componentDidMount: function(){
 		/* jshint ignore:start */
 		$("#qcReportTable").tablesorter({
 			headers: {
-			0: { sorter:false },
-			1: { sorter:false },
-			2: { sorter:false },
-			3: { sorter:false },
-			4: { sorter:"text" },
-			5: { sorter:"text" },
-			6: { sorter:"text" },
-			7: { sorter:"text" },
-			8: { sorter:"text" },
-			9: { sorter:"text" },
-			10: { sorter:"text" },
-			11: { sorter:"text" },
+				0: { sorter:false },
+				1: { sorter:false },
+				2: { sorter:false },
+				3: { sorter:false },
+				4: { sorter:"text" },
+				5: { sorter:"text" },
+				6: { sorter:"text" },
+				7: { sorter:"text" },
+				8: { sorter:"text" },
+				9: { sorter:"text" },
+				10: { sorter:"text" },
+				11: { sorter:"text" },
 			}
 		});
 		/* jshint ignore:end */
@@ -535,7 +541,7 @@ var QcReportTable = React.createClass({
 		return(
 			<span>
 				<table id="qcReportTable" className="dataTable">
-					<HeadReportTable bins={this.props.geneExons.one().bins} showOrHideButtonClicked={this.showOrHideButtonClicked}/>
+					<HeadReportTable bins={this.props.geneExons.one().bins} showOrHideButtonAllClicked={this.showOrHideButtonAllClicked}/>
 					<BodyReportTable geneExons={this.props.geneExons}/>
 				</table>
 			</span>
@@ -548,8 +554,6 @@ var Report = React.createClass({
 		return{
 			showBlocker: false
 		};
-	},
-	componentWillMount: function(){
 	},
 	onTakeTimeProcess: function(beginWait){
 			this.setState({showBlocker: !this.state.showBlocker});
