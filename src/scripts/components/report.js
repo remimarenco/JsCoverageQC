@@ -527,6 +527,9 @@ var BodyReportTable = React.createClass({
 			var __parentKey = self.generateParentKey(index);
 			self.refs[__parentKey].clickShowOrUpdate();
 		});
+
+		// Once it is finished, we send an event to notify the end
+		this.props.showAllEnded();
 	}
 });
 
@@ -535,6 +538,9 @@ var QcReportTable = React.createClass({
 		this.props.showOrHideButtonAllClicked();
 
 		this.refs.bodyReportTable.showOrHideButtonAllClicked();
+	},
+	showAllEnded: function(){
+		this.props.showAllEnded();
 	},
 	componentDidMount: function(){
 		/* jshint ignore:start */
@@ -561,7 +567,7 @@ var QcReportTable = React.createClass({
 			<span>
 				<table id="qcReportTable" className="dataTable">
 					<HeadReportTable bins={this.props.geneExons.one().bins} showOrHideButtonAllClicked={this.showOrHideButtonAllClicked}/>
-					<BodyReportTable geneExons={this.props.geneExons} ref="bodyReportTable"/>
+					<BodyReportTable geneExons={this.props.geneExons} ref="bodyReportTable" showAllEnded={this.showAllEnded}/>
 				</table>
 			</span>
 		);
@@ -574,8 +580,11 @@ var Report = React.createClass({
 			showBlocker: false
 		};
 	},
-	onTakeTimeProcess: function(beginWait){
-			this.setState({showBlocker: !this.state.showBlocker});
+	showOrHideButtonAllClicked: function(){
+		this.setState({showBlocker: true});
+	},
+	showAllEnded: function(){
+		this.setState({showBlocker: false});
 	},
 	render: function(){
 		var propsVcf = this.props.vcf;
@@ -598,7 +607,7 @@ var Report = React.createClass({
 		// Only show the bodyReportTable once the googleLibChar has been loaded
 		var qcReportTable;
 		if(this.props.googleChartLibLoaded){
-			qcReportTable = <QcReportTable geneExons={this.props.vcf.geneExons} showOrHideButtonAllClicked={this.onTakeTimeProcess}/>;
+			qcReportTable = <QcReportTable geneExons={this.props.vcf.geneExons} showOrHideButtonAllClicked={this.showOrHideButtonAllClicked} showAllEnded={this.showAllEnded}/>;
 		}
 
 		return(
