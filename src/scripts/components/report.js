@@ -310,7 +310,6 @@ var FilteredAndAnnotatedVariantRow = React.createClass({
 			<tbody>
 				<tr className="filteredAnnotatedVariant">
 					<td className="alignMiddle">
-						{/* TODO: Find where the Invariant error could came from */}
 						<input type="checkbox" className="exportCheckbox"/>
 					</td>
 					<td data-export-label="gene">{variantProp.gene}</td>
@@ -514,8 +513,12 @@ var BodyReportTable = React.createClass({
 });
 
 var QcReportTable = React.createClass({
+<<<<<<< HEAD
 	showOrHideButtonAllClicked: function(){
 		this.props.showOrHideButtonClicked();
+=======
+	showOrHideButtonClicked: function(){
+>>>>>>> 3804b79e6e8c74a8b396f47cb14ef27573bc98da
 	},
 	componentDidMount: function(){
 		/* jshint ignore:start */
