@@ -137,14 +137,7 @@ var ExpandCollapseButton = React.createClass({
 	},
 	showOrHideButtonCliked: function(e){
 		e.preventDefault();
-		if(this.state.showOrHideButton === '+')
-		{
-			this.setState({showOrHideButton: '-'});
-		}
-		else{
-			this.setState({showOrHideButton: '+'});
-		}
-		this.props.onClickShowOrHideButton();
+		this.showOrHide();
 	},
 	render: function(){
 		return(
@@ -153,6 +146,18 @@ var ExpandCollapseButton = React.createClass({
 					{this.state.showOrHideButton}
 				</a>
 		);
+	},
+
+	// Functions made for external access
+	showOrHide: function(){
+		if(this.state.showOrHideButton === '+')
+		{
+			this.setState({showOrHideButton: '-'});
+		}
+		else{
+			this.setState({showOrHideButton: '+'});
+		}
+		this.props.onClickShowOrHideButton();
 	}
 });
 
@@ -267,7 +272,7 @@ var GeneExonParent = React.createClass({
 		return(
 			<tr className={trClasses}>
 				<td>
-					<ExpandCollapseButton onClickShowOrHideButton={this.showOrHideButtonCliked} elementKey={this.props.elementKey}/>
+					<ExpandCollapseButton ref="expandCollapseButton" onClickShowOrHideButton={this.showOrHideButtonCliked} elementKey={this.props.elementKey}/>
 				</td>
 				<td className={colorQcClasses} data-export-label="qc">
 				    {geneExonProps.qc}
@@ -296,6 +301,10 @@ var GeneExonParent = React.createClass({
 				{readHistogram}
 			</tr>
 		);
+	},
+
+	clickShowOrUpdate: function(){
+		this.refs.expandCollapseButton.showOrHide();
 	}
 });
 
@@ -490,35 +499,42 @@ var BodyReportTable = React.createClass({
 		this.setState({shouldDisplayChild: tempDict});
 	},
 	render: function(){
-		var allGeneExonRows = [];
+		this.allGeneExonRows = [];
 		var self = this;
 		this.props.geneExons.forEach(function(geneExon, index){
 			var position = index + 1;
 			var __parentKey = self.generateParentKey(index);
 			var __childKey = self.generateChildKey(index);
 
-			allGeneExonRows.push(
-				<GeneExonParent key={__parentKey} elementKey={__parentKey} geneExon={geneExon} position={position} onClickShowOrHideButton={self.showOrHideButtonClicked}/>
+			self.allGeneExonRows.push(
+				<GeneExonParent ref={__parentKey} key={__parentKey} elementKey={__parentKey} geneExon={geneExon} position={position} onClickShowOrHideButton={self.showOrHideButtonClicked}/>
 			);
-			allGeneExonRows.push(
+			self.allGeneExonRows.push(
 				<GeneExonChild key={__childKey} geneExon={geneExon} position={position} display={self.state.shouldDisplayChild[__parentKey]}/>
 			);
 		});
 		return(
 			<tbody>
-				{allGeneExonRows}
+				{this.allGeneExonRows}
 			</tbody>
 		);
+	},
+
+	// Functions made for external access
+	showOrHideButtonAllClicked: function(){
+		var self = this;
+		this.props.geneExons.forEach(function(geneExon, index){
+			var __parentKey = self.generateParentKey(index);
+			self.refs[__parentKey].clickShowOrUpdate();
+		});
 	}
 });
 
 var QcReportTable = React.createClass({
-<<<<<<< HEAD
 	showOrHideButtonAllClicked: function(){
-		this.props.showOrHideButtonClicked();
-=======
-	showOrHideButtonClicked: function(){
->>>>>>> 3804b79e6e8c74a8b396f47cb14ef27573bc98da
+		this.props.showOrHideButtonAllClicked();
+
+		this.refs.bodyReportTable.showOrHideButtonAllClicked();
 	},
 	componentDidMount: function(){
 		/* jshint ignore:start */
@@ -545,7 +561,7 @@ var QcReportTable = React.createClass({
 			<span>
 				<table id="qcReportTable" className="dataTable">
 					<HeadReportTable bins={this.props.geneExons.one().bins} showOrHideButtonAllClicked={this.showOrHideButtonAllClicked}/>
-					<BodyReportTable geneExons={this.props.geneExons}/>
+					<BodyReportTable geneExons={this.props.geneExons} ref="bodyReportTable"/>
 				</table>
 			</span>
 		);
@@ -582,7 +598,7 @@ var Report = React.createClass({
 		// Only show the bodyReportTable once the googleLibChar has been loaded
 		var qcReportTable;
 		if(this.props.googleChartLibLoaded){
-			qcReportTable = <QcReportTable geneExons={this.props.vcf.geneExons} showOrHideButtonClicked={this.onTakeTimeProcess}/>;
+			qcReportTable = <QcReportTable geneExons={this.props.vcf.geneExons} showOrHideButtonAllClicked={this.onTakeTimeProcess}/>;
 		}
 
 		return(
