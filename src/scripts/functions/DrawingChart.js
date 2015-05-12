@@ -4,9 +4,46 @@ var React = require('react/addons');
 
 var DrawingChart = React.createClass({
     componentWillMount: function(){
+        var self = this;
+        // draw chart using Google Charts
+        var rows = '';
+        this.props.geneExon.bases.forEach(function(base, index){
+            rows.push(
+                {c:
+                    [
+                    {v: base.pos},
+                    {v: base.variant},
+                    {v: base.variantText},
+                    {v: base.totalReadDepth},
+                    {v: self.bins[self.bins.length - 1].startCount}
+                    ]
+                });
+        });
+        var data = {
+        cols:[
+        {id:'pos', label:'pos', type:'number'},
+        {type:'string', role:'annotation'},
+        {type:'string', role:'annotationText'},
+        {id:'readDepth', label:'reads', type:'number'},
+        {id:'qcThreshold', label:'QC level', type:'number'}
+        ],
+        rows: rows};
+        var dataTable = new google.visualization.DataTable(data);
+        var dataView = new google.visualization.DataView(dataTable);
+        var chart = new google.visualization.LineChart(document.getElementById('geneExon<xsl:value-of select="position()"/>_div'));
+        chart.draw(dataView, { colors: ['blue', 'red'], annotations: { style: 'line' } });
 
+        // add the amplicon guides to chart (custom SVG)
+        var amplicons = [
+        /*
+        <xsl:for-each select="amplicons/amplicon">
+            <xsl:if test="position() != 1">,</xsl:if>{name:'<xsl:value-of select="@name"/>', startPos:<xsl:value-of select="@startPos"/>, endPos:'<xsl:value-of select="@endPos"/>'}
+        </xsl:for-each>
+        */
+        ];
     },
     componentDidMount: function(){
+
     },
     shouldComponentUpdate: function(){
         return false;
@@ -17,82 +54,16 @@ var DrawingChart = React.createClass({
                 Chart coming soon...
             </span>
         );
+    },
+
+    a: function(parentElement, element, eldict){
+        var el = $(document.createElementNS('http://www.w3.org/2000/svg', element));
+        el.attr(eldict).appendTo(parentElement);
+        return el;
     }
 });
 
 module.exports = DrawingChart;
-
-/* Beginning ----
-$(document).ready(function() {
-
-// set up read count histograms
-$(".readHistogram").each(function() {
-$(this).css("background-position", "0px " + ((1.0 * (100 - parseInt($(this).attr("data-pct")))) / 100) * $(this).outerHeight() + "px");
-});
-
-// engage the tablesorter
-$("#qcReportTable").tablesorter({
-headers: {
-0: { sorter:false },
-1: { sorter:false },
-2: { sorter:false },
-3: { sorter:false },
-4: { sorter:"text" },
-5: { sorter:"text" },
-6: { sorter:"text" },
-7: { sorter:"text" },
-8: { sorter:"text" },
-9: { sorter:"text" },
-10: { sorter:"text" },
-11: { sorter:"text" },
-}
-});
-            
-// expand all takes so long that a modal "wait..." is displayed
-$("#geneExonExpandCollapseAllButton").bind("click", function() {
-if($(this).html() == "+") {
-$(this).html("-");
-$(".geneExonExpandCollapseButton").html("-");
-$("#blocker").show();
-$(".geneExon_child").show();
-setTimeout(function() {
-var geneExonPos = 1;
-$(".geneExon_child").each(function() {
-eval("geneExon" + geneExonPos + "_drawChart()");
-geneExonPos++;
-});
-$("#blocker").hide();
-}, 10);
-}
-else {
-$(this).html("+");
-$(".geneExonExpandCollapseButton").html("+");
-$(".geneExon_child").hide();
-}
-return false;
-});
-
-$(".geneExonExpandCollapseButton").bind("click", function() {
-$("." + $(this).attr('id') + "_child").toggle();
-if($(this).html() == "+") {
-$(this).html("-");
-eval($(this).attr('id') + "_drawChart()");
-}
-else {
-$(this).html("+");
-}
-return false;
-
-});
-
-$("#exportLink").bind("click", function() {
-showExportDialog();
-return false;
-});
-
-});
-});
-*/
 
 /* Draw Chart function / For each row
 function geneExon<xsl:value-of select="position()"/>_drawChart() {
