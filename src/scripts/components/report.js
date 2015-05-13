@@ -429,8 +429,11 @@ var FilteredAndAnnotatedVariants = React.createClass({
 });
 
 var GeneExonChild = React.createClass({
-	render: function(){
+	componentWillMount: function(){
 		var DrawingChart = require('../functions/DrawingChart');
+		this.drawingChart = <DrawingChart geneExon={this.props.geneExon} position={this.props.position}/>;
+	},
+	render: function(){
 		var geneExonPositionId = 'geneExon'+ this.props.position;
 		var geneExonPositionIdDiv = geneExonPositionId + '_div';
 		var geneExonPositionClass = geneExonPositionId+'_child';
@@ -450,7 +453,10 @@ var GeneExonChild = React.createClass({
 		var drawingChart;
 		if(this.props.display){
 			trDisplayStyle = {display: 'table-row'};
-			drawingChart = <DrawingChart geneExon={this.props.geneExon} position={this.props.position}/>;
+			drawingChart = this.drawingChart;
+		}
+		else{
+			drawingChart = null;
 		}
 
 		return(
