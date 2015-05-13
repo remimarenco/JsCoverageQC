@@ -26,13 +26,13 @@ var VariantTSV = React.createClass({
 	render: function(){
 		var renderVariantTsv;
 		if(this.props.variantTsvFileName){
-			renderVariantTsv = <span id="tsvOk">
+			renderVariantTsv = <span id="tsvOk" className="fontWeightNormal">
 					<br/>variant TSV file line count (including header): {this.props.variantTsvFileLineCount}
 					<br/>number of annoted variants displayed below: {this.props.filteredAnnotatedVariantCount}
 				</span>;
 		}
 		else{
-			renderVariantTsv = <span id="tsvNOk">
+			renderVariantTsv = <span id="tsvNOk" className="fontWeightNormal">
 					<span>*** NO VARIANT TSV FILE IDENTIFIED ***</span>
 					<span>
 					    <br/>This report was likely created in error.
@@ -52,31 +52,31 @@ var InformationsTable = React.createClass({
 		return(
 			<table>
 				<tbody>
-					<tr>
+					<tr className="alignTop">
 						<td>version</td>
 						<td>:</td>
-						<td id="version">
+						<td id="version" className="fontWeightBold">
 							{this.props.version}
 						</td>
 					</tr>
-					<tr>
+					<tr className="alignTop">
 						<td>report run date</td>
 						<td>:</td>
-						<td id="runDate">
+						<td id="runDate" className="fontWeightBold">
 							{this.props.runDate ? this.props.runDate.toDateString() : ''}
 						</td>
 					</tr>
-					<tr>
+					<tr className="alignTop">
 						<td>gVCF file</td>
 						<td>:</td>
-						<td id="fileName">
+						<td id="fileName" className="fontWeightBold">
 							{this.props.fileName}
 						</td>
 					</tr>
 					<tr>
 						<td>variant TSV file</td>
 						<td>:</td>
-						<td>
+						<td className="fontWeightBold">
 							<VariantTSV variantTsvFileName={this.props.variantTsvFileName}
 								variantTsvFileLineCount={this.props.variantTsvFileLineCount}
 								filteredAnnotatedVariantCount={this.props.filteredAnnotatedVariantCount}/>
@@ -85,21 +85,21 @@ var InformationsTable = React.createClass({
 					<tr>
 						<td>exon BED file</td>
 						<td>:</td>
-						<td id="exonBedFileName">
+						<td id="exonBedFileName" className="fontWeightBold">
 							{this.props.exonBedFileName}
 						</td>
 					</tr>
 					<tr>
 						<td>amplicon BED file</td>
 						<td>:</td>
-						<td id="ampliconBedFileName">
+						<td id="ampliconBedFileName" className="fontWeightBold">
 							{this.props.ampliconBedFileName}
 						</td>
 					</tr>
 					<tr>
 						<td>Do NOT Call file</td>
 						<td>:</td>
-						<td id="doNotCallFileName">
+						<td id="doNotCallFileName" className="fontWeightBold">
 							{this.props.doNotCallFileName}
 						</td>
 					</tr>
@@ -246,7 +246,7 @@ var GeneExonParent = React.createClass({
 		var onlyContainsDoNotCallAlways = geneExonProps.getOnlyContainsDoNotCallAlways() ? onlyContainsText : '';
 		var trClasses = classNames({
 			'geneExon_parent': true,
-			'variantCalled': variantCalled
+			'fontWeightBold': variantCalled
 		});
 		var colorQcClasses = classNames({
 			'qcGeneExonColor_pass': (geneExonProps.qc === 'pass'),

@@ -78,8 +78,12 @@ table.footNoteTable td {
 }
 
 /* TODO: Import all inline style of report into this document */
-.variantCalled{
+.fontWeightBold{
 	font-weight: bold;
+}
+
+.fontWeightNormal{
+	font-weight: normal;
 }
 
 .qcGeneExonColor_pass{
@@ -116,4 +120,8 @@ table.footNoteTable td {
 	text-decoration: none;
 	font-size: large;
 	font-weight: bold;
+}
+
+.alignTop{
+	vertical-align: top;
 }
