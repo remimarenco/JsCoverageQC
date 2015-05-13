@@ -3,6 +3,7 @@
 var React = require('react/addons');
 var classNames = require('classnames');
 
+//require('../../styles/tablesorter.theme.default.css');
 require('../../styles/report.css');
 
 var Blocker = React.createClass({
@@ -550,22 +551,7 @@ var QcReportTable = React.createClass({
 	},
 	componentDidMount: function(){
 		/* jshint ignore:start */
-		$("#qcReportTable").tablesorter({
-			headers: {
-				0: { sorter:false },
-				1: { sorter:false },
-				2: { sorter:false },
-				3: { sorter:false },
-				4: { sorter:"text" },
-				5: { sorter:"text" },
-				6: { sorter:"text" },
-				7: { sorter:"text" },
-				8: { sorter:"text" },
-				9: { sorter:"text" },
-				10: { sorter:"text" },
-				11: { sorter:"text" },
-			}
-		});
+		$("#qcReportTable").tablesorter();
 		/* jshint ignore:end */
 	},
 	render: function(){
