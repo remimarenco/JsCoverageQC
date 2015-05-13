@@ -432,8 +432,8 @@ var GeneExonChild = React.createClass({
 	render: function(){
 		var DrawingChart = require('../functions/DrawingChart');
 		var geneExonPositionId = 'geneExon'+ this.props.position;
-		var geneExonPositionClass = geneExonPositionId+'_child';
 		var geneExonPositionIdDiv = geneExonPositionId + '_div';
+		var geneExonPositionClass = geneExonPositionId+'_child';
 		var nbBinsPlusSixColumns = this.props.geneExon.bins.length + 6;
 		var trClasses = classNames(
 			'tablesorter-childRow',
@@ -447,16 +447,16 @@ var GeneExonChild = React.createClass({
 		}
 
 		var trDisplayStyle = {display: 'none'};
+		var drawingChart;
 		if(this.props.display){
 			trDisplayStyle = {display: 'table-row'};
+			drawingChart = <DrawingChart geneExon={this.props.geneExon} position={this.props.position}/>;
 		}
 
 		return(
 				<tr style={trDisplayStyle} className={trClasses}>
 					<td colSpan={nbBinsPlusSixColumns}>
-						<div id={geneExonPositionIdDiv}>
-							<DrawingChart geneExon={this.props.geneExon} position={this.props.position}/>
-						</div>
+						{drawingChart}
 						{filteredAndAnnotatedVariants}
 					</td>
 				</tr>

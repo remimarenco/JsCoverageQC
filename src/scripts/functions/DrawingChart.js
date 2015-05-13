@@ -4,9 +4,17 @@ var React = require('react/addons');
 
 var DrawingChart = React.createClass({
     componentWillMount: function(){
+        this.geneExonPositionId = 'geneExon'+ this.props.position;
+        this.geneExonPositionIdDiv = this.geneExonPositionId + '_div';
+    },
+    componentDidMount: function(){
+        if(this.geneExonPositionIdDiv === 'geneExon1_div'){
+            debugger;
+        }
+
         var self = this;
         // draw chart using Google Charts
-        var rows = '';
+        var rows = [];
         this.props.geneExon.bases.forEach(function(base, index){
             rows.push(
                 {c:
@@ -15,7 +23,7 @@ var DrawingChart = React.createClass({
                     {v: base.variant},
                     {v: base.variantText},
                     {v: base.totalReadDepth},
-                    {v: self.bins[self.bins.length - 1].startCount}
+                    {v: self.props.geneExon.bins[self.props.geneExon.bins.length - 1].startCount}
                     ]
                 });
         });
@@ -28,10 +36,12 @@ var DrawingChart = React.createClass({
         {id:'qcThreshold', label:'QC level', type:'number'}
         ],
         rows: rows};
+        /* jshint ignore:start */
         var dataTable = new google.visualization.DataTable(data);
         var dataView = new google.visualization.DataView(dataTable);
-        var chart = new google.visualization.LineChart(document.getElementById('geneExon<xsl:value-of select="position()"/>_div'));
+        var chart = new google.visualization.LineChart(React.findDOMNode(this.refs[this.geneExonPositionIdDiv]));
         chart.draw(dataView, { colors: ['blue', 'red'], annotations: { style: 'line' } });
+        /* jshint ignore:end */
 
         // add the amplicon guides to chart (custom SVG)
         var amplicons = [
@@ -42,17 +52,19 @@ var DrawingChart = React.createClass({
         */
         ];
     },
-    componentDidMount: function(){
-
-    },
     shouldComponentUpdate: function(){
-        return false;
+        return false; // Equivalent to the old code :
+        // // don't draw the chart if it has already been drawn
+        /*
+        if($("#geneExon<xsl:value-of select="position()"/>_div svg").length > 0) {
+            return;
+        }
+         */
     },
     render: function(){
         return(
-            <span ref="drawingChart">
-                Chart coming soon...
-            </span>
+            <div id={this.geneExonPositionIdDiv} ref={this.geneExonPositionIdDiv}>
+            </div>
         );
     },
 
