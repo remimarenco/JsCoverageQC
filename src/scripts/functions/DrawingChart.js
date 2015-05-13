@@ -26,7 +26,7 @@ var DrawingChart = React.createClass({
                     {v: base.pos},
                     {v: base.variant},
                     {v: base.variantText},
-                    {v: base.totalReadDepth},
+                    {v: base.getTotalReadDepth()},
                     {v: geneExonBins[geneExonBins.length - 1].startCount}
                     ]
                 });
@@ -88,11 +88,11 @@ var DrawingChart = React.createClass({
             if((amplicons[x].startPos >= geneExonBases.values()[0].pos) && (amplicons[x].endPos <= geneExonBases.values()[geneExonBases.length - 1].pos)) {
                 this.a(g, 'rect', { x:(amplicons[x].startPos - geneExonBases.values()[0].pos), y:y, width:(amplicons[x].endPos - amplicons[x].startPos), height:'25', opacity:'0.5', style:'fill: ' + color + ';' });
                 this.a(g, 'rect', { x:(amplicons[x].startPos - geneExonBases.values()[0].pos), y:'-' + (svgHeight - 90), width:'1', height:(svgHeight - 90 + y), opacity:'0.5', style:'fill: ' + color + ';' });
-                this.a(g, 'rect', { x:(amplicons[x].endPos - geneExonBases.values()[0].pos), y:'-' + (svgHeight - 90), width:'1', height:(svgHeight - 90 + y), opacity:'0.5', style:'fill: ' + color + ';' });
+                this.a(g, 'rect', { x:(amplicons[x].endPos - geneExonBases.values()[0].pos - 1), y:'-' + (svgHeight - 90), width:'1', height:(svgHeight - 90 + y), opacity:'0.5', style:'fill: ' + color + ';' });
                 this.a(g, 'text', { x:(((amplicons[x].startPos - geneExonBases.values()[0].pos) * xScale) + 5), y:(y + 15), transform:'scale(' + (1 / xScale) + ' 1)', style:'font-size: small;' }).context.textContent = amplicons[x].name;
             }
             else if((amplicons[x].startPos < geneExonBases.values()[0].pos) && (amplicons[x].endPos <= geneExonBases.values()[geneExonBases.length - 1].pos)) {
-                this.a(g, 'rect', { x:'0', y:y, width:(amplicons[x].endPos - geneExonBases[0].pos), height:'25', opacity:'0.5', style:'fill: ' + color + ';' });
+                this.a(g, 'rect', { x:'0', y:y, width:(amplicons[x].endPos - geneExonBases.values()[0].pos), height:'25', opacity:'0.5', style:'fill: ' + color + ';' });
                 this.a(g, 'rect', { x:(amplicons[x].endPos - geneExonBases.values()[0].pos - 1), y:'-' + (svgHeight - 90), width:'1', height:(svgHeight - 90 + y), opacity:'0.5', style:'fill: ' + color + ';' });
                 this.a(g, 'polygon', { points:'0,' + y + ' 0,' + (y + 25) + ' -25,' + (y + 12), transform:'scale(' + (1 / xScale) + ' 1)', opacity:'0.5', style:'fill: ' + color + ';' });
                 this.a(g, 'text', { x:'-75', y:(y + 15), transform:'scale(' + (1 / xScale) + ' 1)', style:'font-size: small;' }).context.textContent = (geneExonBases.values()[0].pos - amplicons[x].startPos) + " bp";
@@ -102,7 +102,7 @@ var DrawingChart = React.createClass({
                 this.a(g, 'rect', { x:(amplicons[x].startPos - geneExonBases.values()[0].pos), y:y, width:(geneExonBases.values()[0].pos - amplicons[x].startPos), height:'25', opacity:'0.5', style:'fill: ' + color + ';' });
                 this.a(g, 'rect', { x:(amplicons[x].startPos - geneExonBases.values()[0].pos), y:'-' + (svgHeight - 90), width:'1', height:(svgHeight - 90 + y), opacity:'0.5', style:'fill: ' + color + ';' });
                 this.a(g, 'polygon', { points:chartBoundingBox.width + ',' + y + ' ' + chartBoundingBox.width + ',' + (y + 25) + ' ' + (chartBoundingBox.width + 25) + ',' + (y + 12), transform:'scale(' + (1 / xScale) + ' 1)', opacity:'0.5', style:'fill: ' + color + ';' });
-                this.a(g, 'text', { x:(chartBoundingBox.width + 27), y:(y + 15), transform:'scale(' + (1 / xScale) + ' 1)', style:'font-size: small;' }).context.textContent = (amplicons[x].endPos - geneExonBases.values()[0].pos) + " bp";
+                this.a(g, 'text', { x:(chartBoundingBox.width + 27), y:(y + 15), transform:'scale(' + (1 / xScale) + ' 1)', style:'font-size: small;' }).context.textContent = (amplicons[x].endPos - geneExonBases.values()[geneExonBases.length - 1].pos) + " bp";
                 this.a(g, 'text', { x:(((amplicons[x].startPos - geneExonBases.values()[0].pos) * xScale) + 5), y:(y + 15), transform:'scale(' + (1 / xScale) + ' 1)', style:'font-size: small;' }).context.textContent = amplicons[x].name;
             }
             else if((amplicons[x].startPos < geneExonBases.values()[0].pos) && (amplicons[x].endPos > geneExonBases.values()[geneExonBases.length - 1].pos)) {
@@ -110,7 +110,7 @@ var DrawingChart = React.createClass({
                 this.a(g, 'polygon', { points:'0,' + y + ' 0,' + (y + 25) + ' -25,' + (y + 12), transform:'scale(' + (1 / xScale) + ' 1)', opacity:'0.5', style:'fill: ' + color + ';' });
                 this.a(g, 'text', { x:'-75', y:(y + 15), transform:'scale(' + (1 / xScale) + ' 1)', style:'font-size: small;' }).context.textContent = (geneExonBases.values()[0].pos - amplicons[x].startPos) + " bp";
                 this.a(g, 'polygon', { points:chartBoundingBox.width + ',' + y + ' ' + chartBoundingBox.width + ',' + (y + 25) + ' ' + (chartBoundingBox.width + 25) + ',' + (y + 12), transform:'scale(' + (1 / xScale) + ' 1)', opacity:'0.5', style:'fill: ' + color + ';' });
-                this.a(g, 'text', { x:(chartBoundingBox.width + 27), y:(y + 15), transform:'scale(' + (1 / xScale) + ' 1)', style:'font-size: small;' }).context.textContent = (amplicons[x].endPos - geneExonBases.values()[0].pos) + " bp";
+                this.a(g, 'text', { x:(chartBoundingBox.width + 27), y:(y + 15), transform:'scale(' + (1 / xScale) + ' 1)', style:'font-size: small;' }).context.textContent = (amplicons[x].endPos - geneExonBases.values()[geneExonBases.length - 1].pos) + " bp";
                 this.a(g, 'text', { x:'5', y:(y + 15), transform:'scale(' + (1 / xScale) + ' 1)', style:'font-size: small;' }).context.textContent = amplicons[x].name;
             }
         }
