@@ -8,12 +8,6 @@ var DrawingChart = React.createClass({
         this.geneExonPositionIdDiv = this.geneExonPositionId + '_div';
     },
     componentDidMount: function(){
-        if(this.geneExonPositionIdDiv === 'geneExon1_div'){
-            /* jshint ignore:start */
-            debugger;
-            /* jshint ignore:end */
-        }
-
         var self = this;
         var geneExonBases = this.props.geneExon.bases;
         var geneExonBins = this.props.geneExon.bins;
