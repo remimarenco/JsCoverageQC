@@ -110,3 +110,10 @@ table.footNoteTable td {
 	font-size: small;
 	padding: 10px;
 }
+
+.geneExonExpandCollapseButton{
+	color: blue;
+	text-decoration: none;
+	font-size: large;
+	font-weight: bold;
+}
