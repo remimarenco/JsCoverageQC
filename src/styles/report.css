@@ -127,7 +127,6 @@ table.footNoteTable td {
 }
 
 #qcReportTable th.header{
-	background-image: url(../images/tableSorter_arrows.gif);
 	cursor: pointer;
 	font-weight: bold;
 	background-repeat: no-repeat;

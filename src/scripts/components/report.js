@@ -282,9 +282,9 @@ var GeneExonParent = React.createClass({
 					{geneExonProps.name}
 					<br/>
 					<span className="geneExonSmallDetails">Ensembl ID: 
-						<a href="{ensemblID}">{ensemblID}</a>
+						<a href="{ensemblID}">{geneExonProps.ensemblTranscriptId}</a>
 						<br/>RefSeq accession no.: 
-						<a href="{refSeqAccessionNo}">{refSeqAccessionNo}</a>
+						<a href="{refSeqAccessionNo}">{geneExonProps.refSeqAccNo}</a>
 						<br/>vendor ID: {geneExonProps.vendorGeneExonName}
 					</span>
 				</td>
