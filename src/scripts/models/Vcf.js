@@ -9,6 +9,66 @@ var Amplicon = require("./Amplicon.js");
 var Base = require("./Base.js");
 var Variant = require("./Variant.js");
 
+function basePopulation(vcf){
+	if(vcf.vcfLines !== '' && typeof vcf.vcfLines !== 'undefined'){
+		var arrayVcfLines = vcf.vcfLines.split("\n");
+		arrayVcfLines.forEach(function(vcfLine){
+			if (vcfLine.search("#") !== 0) {
+				var base = new Base(vcfLine, vcf.bases);
+				var foundGeneExon = false;
+
+				vcf.findGeneExonsForChrPos(base.chr, base.pos).forEach(function(geneExon){
+					foundGeneExon = true;
+					geneExon.bases.set(base.pos, base);
+				});
+
+				if (!foundGeneExon) {
+				    //console.log("the following base does not correspond to an exon region: " + vcfLine);
+				}
+			}
+		});
+	}
+
+	vcf.geneExons.forEach(function(geneExon){
+		// If a position is absent, create it with read depth 0
+		for(var pos = geneExon.startPos; pos <= geneExon.endPos; pos++){
+			if(!vcf.bases.has(geneExon.chr + '|' + pos)){
+				var base = new Base(null, vcf.bases);
+				base.pos = pos;
+				base.readDepths.add(0);
+				vcf.bases.set(geneExon.chr + "|" + pos, base);
+			}
+			if(!geneExon.bases.has(pos)){
+				geneExon.bases.set(pos, vcf.bases.get(geneExon.chr + "|" + pos));
+			}
+		}
+		// Perform binning operation
+		geneExon.bases.forEach(function(base){
+			// Don't count a base if it is outside of the coding region
+			if (!((base.pos < geneExon.codingRegion.startPos) || (base.pos > geneExon.codingRegion.endPos))) {
+			    geneExon.bins.forEach(function(bin){
+			    	if (base.getTotalReadDepth() >= bin.startCount &&
+			    		base.getTotalReadDepth() <= bin.endCount) {
+			    	    bin.addCount();
+			    	    bin.processPct(geneExon.endPos, geneExon.codingRegion.endPos,
+			    	    	geneExon.codingRegion.startPos, geneExon.startPos);
+			    	}
+			    });
+			}
+		});
+
+		// Assign QC value
+		if (geneExon.bins[0].count > 0 || geneExon.bins[1].count > 0) {
+		    geneExon.qc = "fail";
+		} else if (geneExon.bins[2].count > 0) {
+		    geneExon.qc = "warn";
+		} else if (geneExon.bins[3].count > 0) {
+		    geneExon.qc = "pass";
+		}
+	});
+	// console.log(this.geneExons.length + " regions read from exon BED file");
+}
+
 /**
  * VCF stands for Variant Call Format, and this file format is used by the 1000 Genomes project to encode SNPs and other structural genetic variants.  The format is further described on the 1000 Genomes project Web site.  VCF calls are available at EBI / NCBI.
  * @param {String} vcfFileUrl              Url of the vcf file
@@ -137,63 +197,7 @@ function Vcf(vcfFileName, vcfNotCutLines, exonBedFileName, exonBedNotCutLines, a
 	//////////////////////
 	// Base population //
 	//////////////////////
-	if(this.vcfLines !== '' && typeof this.vcfLines !== 'undefined'){
-		var arrayVcfLines = this.vcfLines.split("\n");
-		arrayVcfLines.forEach(function(vcfLine){
-			if (vcfLine.search("#") !== 0) {
-				var base = new Base(vcfLine, self.bases);
-				var foundGeneExon = false;
-
-				self.findGeneExonsForChrPos(base.chr, base.pos).forEach(function(geneExon){
-					foundGeneExon = true;
-					geneExon.bases.set(base.pos, base);
-				});
-
-				if (!foundGeneExon) {
-				    //console.log("the following base does not correspond to an exon region: " + vcfLine);
-				}
-			}
-		});
-	}
-
-	this.geneExons.forEach(function(geneExon){
-		// If a position is absent, create it with read depth 0
-		for(var pos = geneExon.startPos; pos <= geneExon.endPos; pos++){
-			if(!self.bases.has(geneExon.chr + '|' + pos)){
-				var base = new Base(null, self.bases);
-				base.pos = pos;
-				base.readDepths.add(0);
-				self.bases.set(geneExon.chr + "|" + pos, base);
-			}
-			if(!geneExon.bases.has(pos)){
-				geneExon.bases.set(pos, self.bases.get(geneExon.chr + "|" + pos));
-			}
-		}
-		// Perform binning operation
-		geneExon.bases.forEach(function(base){
-			// Don't count a base if it is outside of the coding region
-			if (!((base.pos < geneExon.codingRegion.startPos) || (base.pos > geneExon.codingRegion.endPos))) {
-			    geneExon.bins.forEach(function(bin){
-			    	if (base.getTotalReadDepth() >= bin.startCount &&
-			    		base.getTotalReadDepth() <= bin.endCount) {
-			    	    bin.addCount();
-			    	    bin.processPct(geneExon.endPos, geneExon.codingRegion.endPos,
-			    	    	geneExon.codingRegion.startPos, geneExon.startPos);
-			    	}
-			    });
-			}
-		});
-
-		// Assign QC value
-		if (geneExon.bins[0].count > 0 || geneExon.bins[1].count > 0) {
-		    geneExon.qc = "fail";
-		} else if (geneExon.bins[2].count > 0) {
-		    geneExon.qc = "warn";
-		} else if (geneExon.bins[3].count > 0) {
-		    geneExon.qc = "pass";
-		}
-	});
-	// console.log(this.geneExons.length + " regions read from exon BED file");
+	basePopulation(this);
 
 	/////////////////////////
 	// Variant population //
