@@ -25,6 +25,7 @@
     "afterEach": false,
     "react": false,
     "before": false,
+    "beforeAll": false,
     "beforeEach": false,
     "browser": false,
     "describe": false,
