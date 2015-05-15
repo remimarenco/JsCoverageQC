@@ -174,11 +174,13 @@ describe('Vcf', function(){
 			});
 
 			it('should return a SortedSet with a 1 length when 85 geneExons in Vcf object, and good parameters', function(){
+				// TODO: Change that tests => If the files used for the tests are different, the tests won't work anymore
 				expect(vcf.findGeneExonsForChrRange('chr14', 105246419 + 1, 105246558 + 0)).toEqual(jasmine.any(cSortedSet));
 				expect(vcf.findGeneExonsForChrRange('chr14', 105246426, 105246553).length).toEqual(1);
 			});
 
 			it('should return a SortedSet with a 0 length when 85 geneExons in Vcf object, and bad parameters', function(){
+				// TODO: Change that tests => If the files used for the tests are different, the tests won't work anymore
 				expect(vcf.findGeneExonsForChrRange('chr40', 105246400 + 1, 105246800 + 0)).toEqual(jasmine.any(cSortedSet));
 				expect(vcf.findGeneExonsForChrRange('chr40', 105246400 + 1, 105246800 + 0).length).toEqual(0);
 			});
