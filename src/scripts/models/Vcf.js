@@ -88,7 +88,7 @@ function Vcf(vcfFileName, vcfNotCutLines, exonBedFileName, exonBedNotCutLines, a
 	//////////////////////////
 	// GeneExon Population //
 	//////////////////////////
-	if(this.exonBedLines !== ''){
+	if(this.exonBedLines !== '' && typeof this.exonBedLines !== 'undefined'){
 		var arrayExonBedLines = this.exonBedLines.split("\n");
 		arrayExonBedLines.forEach(function(exonBedLine){
 			if(exonBedLine.search("chr") === 0)
@@ -102,7 +102,7 @@ function Vcf(vcfFileName, vcfNotCutLines, exonBedFileName, exonBedNotCutLines, a
 	//////////////////////////
 	// Amplicon population //
 	//////////////////////////
-	if(this.ampliconBedLines !== ''){
+	if(this.ampliconBedLines !== '' && typeof this.ampliconBedLines !== 'undefined'){
 		var arrayAmpliconBedLines = this.ampliconBedLines.split("\n");
 		arrayAmpliconBedLines.forEach(function(ampliconBedLine){
 			// We are only interested in "chr" beginning lines
@@ -137,7 +137,7 @@ function Vcf(vcfFileName, vcfNotCutLines, exonBedFileName, exonBedNotCutLines, a
 	//////////////////////
 	// Base population //
 	//////////////////////
-	if(this.vcfLines !== ''){
+	if(this.vcfLines !== '' && typeof this.vcfLines !== 'undefined'){
 		var arrayVcfLines = this.vcfLines.split("\n");
 		arrayVcfLines.forEach(function(vcfLine){
 			if (vcfLine.search("#") !== 0) {
@@ -198,7 +198,7 @@ function Vcf(vcfFileName, vcfNotCutLines, exonBedFileName, exonBedNotCutLines, a
 	/////////////////////////
 	// Variant population //
 	/////////////////////////
-	if(this.variantTsvNotCutLines !== ''){
+	if(this.variantTsvNotCutLines !== '' && typeof this.variantTsvNotCutLines !== 'undefined'){
 		var variantTsvCutLines = this.variantTsvNotCutLines.split("\n");
 		var variantTsvHeadingLine = variantTsvCutLines[0];
 		var variantTsvDataLines = variantTsvCutLines.slice(1, variantTsvCutLines.length);
