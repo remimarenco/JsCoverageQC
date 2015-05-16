@@ -6,110 +6,6 @@ var classNames = require('classnames');
 //require('../../styles/tablesorter.theme.default.css');
 require('../../styles/report.css');
 
-var Blocker = React.createClass({
-	render: function(){
-		var blocker;
-		var displayStyle;
-		if(this.props.displayMe){
-			displayStyle = {
-				display: 'block'
-			};
-		}
-		return(
-			<div id="blocker" style={displayStyle}>
-				<div>wait...</div>
-			</div>
-		);
-	}
-});
-
-var VariantTSV = React.createClass({
-	render: function(){
-		var renderVariantTsv;
-		if(this.props.variantTsvFileName){
-			renderVariantTsv = <span id="tsvOk" className="fontWeightNormal">
-					<br/>variant TSV file line count (including header): {this.props.variantTsvFileLineCount}
-					<br/>number of annoted variants displayed below: {this.props.filteredAnnotatedVariantCount}
-				</span>;
-		}
-		else{
-			renderVariantTsv = <span id="tsvNOk" className="fontWeightNormal">
-					<span>*** NO VARIANT TSV FILE IDENTIFIED ***</span>
-					<span>
-					    <br/>This report was likely created in error.
-					</span>
-				</span>;
-		}
-		return(
-			<span>
-				{renderVariantTsv}
-			</span>
-		);
-	}
-});
-
-var InformationsTable = React.createClass({
-	render: function(){
-		return(
-			<table>
-				<tbody>
-					<tr className="alignTop">
-						<td>version</td>
-						<td>:</td>
-						<td id="version" className="fontWeightBold">
-							{this.props.version}
-						</td>
-					</tr>
-					<tr className="alignTop">
-						<td>report run date</td>
-						<td>:</td>
-						<td id="runDate" className="fontWeightBold">
-							{this.props.runDate ? this.props.runDate.toDateString() : ''}
-						</td>
-					</tr>
-					<tr className="alignTop">
-						<td>gVCF file</td>
-						<td>:</td>
-						<td id="fileName" className="fontWeightBold">
-							{this.props.fileName}
-						</td>
-					</tr>
-					<tr>
-						<td>variant TSV file</td>
-						<td>:</td>
-						<td className="fontWeightBold">
-							<VariantTSV variantTsvFileName={this.props.variantTsvFileName}
-								variantTsvFileLineCount={this.props.variantTsvFileLineCount}
-								filteredAnnotatedVariantCount={this.props.filteredAnnotatedVariantCount}/>
-						</td>
-					</tr>
-					<tr>
-						<td>exon BED file</td>
-						<td>:</td>
-						<td id="exonBedFileName" className="fontWeightBold">
-							{this.props.exonBedFileName}
-						</td>
-					</tr>
-					<tr>
-						<td>amplicon BED file</td>
-						<td>:</td>
-						<td id="ampliconBedFileName" className="fontWeightBold">
-							{this.props.ampliconBedFileName}
-						</td>
-					</tr>
-					<tr>
-						<td>Do NOT Call file</td>
-						<td>:</td>
-						<td id="doNotCallFileName" className="fontWeightBold">
-							{this.props.doNotCallFileName}
-						</td>
-					</tr>
-				</tbody>
-			</table>
-		);
-	}
-});
-
 var QcRules = React.createClass({
 	// TODO: Add the exportLink + content
 	render: function(){
@@ -431,7 +327,7 @@ var FilteredAndAnnotatedVariants = React.createClass({
 
 var GeneExonChild = React.createClass({
 	componentWillMount: function(){
-		var DrawingChart = require('../functions/DrawingChart');
+		var DrawingChart = require('./DrawingChart');
 		this.drawingChart = <DrawingChart geneExon={this.props.geneExon} position={this.props.position}/>;
 	},
 	render: function(){
@@ -572,18 +468,13 @@ var Report = React.createClass({
 			showBlocker: false
 		};
 	},
-	showOrHideButtonAllClicked: function(){
-		this.setState({showBlocker: true});
-	},
-	showAllEnded: function(){
-		this.setState({showBlocker: false});
+	componentWillMount: function(){
+		this.initBlocker();
+
+		this.initInformationsTable();
 	},
 	render: function(){
 		var propsVcf = this.props.vcf;
-		var filteredAnnotatedVariantCount;
-		if(propsVcf && propsVcf.getFilteredAnnotatedVariantCount) {
-			filteredAnnotatedVariantCount = propsVcf.getFilteredAnnotatedVariantCount();
-		}
 
 		var pass;
 		var warn = {warn1: '', warn2: ''};
@@ -604,9 +495,42 @@ var Report = React.createClass({
 
 		return(
 			<div>
-				<Blocker displayMe={this.state.showBlocker}/>
+				{this.Blocker}
 				<h2>Coverage QC Report</h2>
-				<InformationsTable version={propsVcf.version}
+				{this.InformationsTable}
+				<QcRules pass={pass}
+					warn={warn}
+					fail={fail}/>
+				{qcReportTable}
+				<p>Copyright &#169; 2015 Rémi Marenco and Jeremy Goecks. Java original version : 2014 Geoffrey H. Smith.</p>
+			</div>
+		);
+	},
+
+	// Custom functions
+	showOrHideButtonAllClicked: function(){
+		this.setState({showBlocker: true});
+	},
+	showAllEnded: function(){
+		this.setState({showBlocker: false});
+	},
+
+	initBlocker: function(){
+		// Load the Blocker Component
+		var Blocker = require('./Blocker');
+		this.Blocker = <Blocker displayMe={this.state.showBlocker}/>;
+	},
+	initInformationsTable: function(){
+		// Load the InformationsTable Component
+		var InformationsTable = require('./InformationsTable');
+
+		var propsVcf = this.props.vcf;
+		var filteredAnnotatedVariantCount;
+		if(propsVcf && propsVcf.getFilteredAnnotatedVariantCount) {
+			filteredAnnotatedVariantCount = propsVcf.getFilteredAnnotatedVariantCount();
+		}
+
+		this.InformationsTable = <InformationsTable version={propsVcf.version}
 					runDate={propsVcf.runDate}
 					fileName={propsVcf.fileName}
 					variantTsvFileName={propsVcf.variantTsvFileName}
@@ -615,14 +539,7 @@ var Report = React.createClass({
 					exonBedFileName={propsVcf.exonBedFileName}
 					ampliconBedFileName={propsVcf.ampliconBedFileName}
 					doNotCallFileName={propsVcf.doNotCallFileName}
-					/>
-				<QcRules pass={pass}
-					warn={warn}
-					fail={fail}/>
-				{qcReportTable}
-				<p>Copyright &#169; 2015 Rémi Marenco and Jeremy Goecks. Java original version : 2014 Geoffrey H. Smith.</p>
-			</div>
-		);
+					/>;
 	}
 });
 
