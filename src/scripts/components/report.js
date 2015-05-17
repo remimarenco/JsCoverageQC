@@ -393,7 +393,7 @@ var BodyReportTable = React.createClass({
 	showOrHideButtonClicked: function(parentKey, forceState){
 		var tempDict = this.state.shouldDisplayChild;
 		// In case we do not received a forceState, we guess we just want to change the state to the opposite
-		if(forceState !== null || typeof forceState !== 'undefined'){
+		if(forceState === null || typeof forceState === 'undefined'){
 			tempDict[parentKey] = !this.state.shouldDisplayChild[parentKey];
 		}
 		else{
@@ -469,6 +469,7 @@ var Report = React.createClass({
 		};
 	},
 	componentWillMount: function(){
+		// TODO: Warning about the componentWillMount called only once? The blocker would not be update...
 		this.initBlocker();
 
 		this.initInformationsTable();
@@ -509,9 +510,11 @@ var Report = React.createClass({
 
 	// Custom functions
 	showOrHideButtonAllClicked: function(){
+		//debugger;
 		this.setState({showBlocker: true});
 	},
 	showAllEnded: function(){
+		//debugger;
 		this.setState({showBlocker: false});
 	},
 
