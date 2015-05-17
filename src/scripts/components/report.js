@@ -380,7 +380,13 @@ var BodyReportTable = React.createClass({
 		return 'geneExonChild' + number;
 	},
 	componentDidMount: function(){
+		// We keep the number of child to display
+		this.numberOfChildToDisplay = this.props.geneExons.length;
+		/** @type {Number} The number of child currently displayed */
+		this.numberOfChildCurrentlyDisplayed = 0;
+
 		var self = this;
+
 		this.props.geneExons.forEach(function(geneExon, index){
 			var __parentKey = self.generateParentKey(index);
 			var __childKey = self.generateChildKey(index);
@@ -399,7 +405,7 @@ var BodyReportTable = React.createClass({
 		else{
 			tempDict[parentKey] = forceState;
 		}
-		this.setState({shouldDisplayChild: tempDict});
+		this.setState({shouldDisplayChild: tempDict}, this.geneExonShown);
 	},
 	render: function(){
 		this.allGeneExonRows = [];
@@ -426,11 +432,22 @@ var BodyReportTable = React.createClass({
 	// Functions made for external access
 	showOrHideButtonAllClicked: function(){
 		var self = this;
+
 		this.props.geneExons.forEach(function(geneExon, index){
 			var __parentKey = self.generateParentKey(index);
 			self.refs[__parentKey].clickShowOrUpdate();
 		});
+	},
+	geneExonShown: function(){
+		//debugger;
+		this.numberOfChildCurrentlyDisplayed++;
 
+		// If we shown every child, update the UI
+		if(this.numberOfChildCurrentlyDisplayed === this.numberOfChildToDisplay){
+			this.geneExonAllShown();
+		}
+	},
+	geneExonAllShown: function(){
 		// Once it is finished, we send an event to notify the end
 		this.props.showAllEnded();
 	}

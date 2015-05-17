@@ -76,6 +76,8 @@ var DrawingChart = React.createClass({
                 color = 'gray';
             }
 
+            //debugger;
+
             if((amplicons[x].startPos >= geneExonBases.values()[0].pos) && (amplicons[x].endPos <= geneExonBases.values()[geneExonBases.length - 1].pos)) {
                 this.a(g, 'rect', { x:(amplicons[x].startPos - geneExonBases.values()[0].pos), y:y, width:(amplicons[x].endPos - amplicons[x].startPos), height:'25', opacity:'0.5', style:'fill: ' + color + ';' });
                 this.a(g, 'rect', { x:(amplicons[x].startPos - geneExonBases.values()[0].pos), y:'-' + (svgHeight - 90), width:'1', height:(svgHeight - 90 + y), opacity:'0.5', style:'fill: ' + color + ';' });
@@ -90,7 +92,7 @@ var DrawingChart = React.createClass({
                 this.a(g, 'text', { x:'5', y:(y + 15), transform:'scale(' + (1 / xScale) + ' 1)', style:'font-size: small;' }).context.textContent = amplicons[x].name;
             }
             else if((amplicons[x].startPos >= geneExonBases.values()[0].pos) && (amplicons[x].endPos > geneExonBases.values()[0].pos)) {
-                this.a(g, 'rect', { x:(amplicons[x].startPos - geneExonBases.values()[0].pos), y:y, width:(geneExonBases.values()[0].pos - amplicons[x].startPos), height:'25', opacity:'0.5', style:'fill: ' + color + ';' });
+                this.a(g, 'rect', { x:(amplicons[x].startPos - geneExonBases.values()[0].pos), y:y, width:(geneExonBases.values()[geneExonBases.length - 1].pos - amplicons[x].startPos), height:'25', opacity:'0.5', style:'fill: ' + color + ';' });
                 this.a(g, 'rect', { x:(amplicons[x].startPos - geneExonBases.values()[0].pos), y:'-' + (svgHeight - 90), width:'1', height:(svgHeight - 90 + y), opacity:'0.5', style:'fill: ' + color + ';' });
                 this.a(g, 'polygon', { points:chartBoundingBox.width + ',' + y + ' ' + chartBoundingBox.width + ',' + (y + 25) + ' ' + (chartBoundingBox.width + 25) + ',' + (y + 12), transform:'scale(' + (1 / xScale) + ' 1)', opacity:'0.5', style:'fill: ' + color + ';' });
                 this.a(g, 'text', { x:(chartBoundingBox.width + 27), y:(y + 15), transform:'scale(' + (1 / xScale) + ' 1)', style:'font-size: small;' }).context.textContent = (amplicons[x].endPos - geneExonBases.values()[geneExonBases.length - 1].pos) + " bp";
