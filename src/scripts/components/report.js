@@ -26,38 +26,6 @@ var QcRules = React.createClass({
 	}
 });
 
-var ExpandCollapseButton = React.createClass({
-	getInitialState: function(){
-		return{
-			showOrHideButton: '+'
-		};
-	},
-	showOrHideButtonCliked: function(e){
-		e.preventDefault();
-		this.showOrHide();
-	},
-	render: function(){
-		return(
-				<a href='#' className="geneExonExpandCollapseButton"
-					onClick={this.showOrHideButtonCliked}>
-					{this.state.showOrHideButton}
-				</a>
-		);
-	},
-
-	// Functions made for external access
-	showOrHide: function(){
-		if(this.state.showOrHideButton === '+')
-		{
-			this.setState({showOrHideButton: '-'});
-		}
-		else{
-			this.setState({showOrHideButton: '+'});
-		}
-		this.props.onClickShowOrHideButton();
-	}
-});
-
 var FirstHeadRow = React.createClass({
 	render: function(){
 		return(
@@ -75,6 +43,8 @@ var SecondHeadRow = React.createClass({
 		this.props.showOrHideButtonAllClicked();
 	},
 	render: function(){
+		var ExpandCollapseButton = require('./ExpandCollapseButton');
+
 		var allReadsTh = [];
 		this.props.bins.forEach(function(bin, index){
 			allReadsTh.push(<th key={index}>{bin.name}<br/>reads</th>);
@@ -133,6 +103,8 @@ var GeneExonParent = React.createClass({
 	},
 	// TODO: The link to collapse or show should be on the entire TD and not only on the '+'' or '-' text for UX
 	render: function(){
+		var ExpandCollapseButton = require('./ExpandCollapseButton');
+		
 		var geneExonProps = this.props.geneExon;
 
 		var geneExonPosition = 'geneExon'+this.props.position;
