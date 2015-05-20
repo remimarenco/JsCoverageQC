@@ -13,9 +13,9 @@ require('../../styles/main.css');
 var Report = require('./report');
 
 // Models
-var Amplicon = require('models/Amplicon');
-var Bin = require('models/Bin');
-var Vcf = require('models/Vcf');
+var Amplicon = require('../models/Amplicon');
+var Bin = require('../models/Bin');
+var Vcf = require('../models/Vcf');
 //TODO: Is XLSX still needed ?
 //var XLSX = require('xlsx');
 var saveAs = require('browser-filesaver');
