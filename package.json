@@ -11,7 +11,7 @@
   "mainOutput": "main",
   "dependencies": {
     "react-router": "^0.13.2",
-    "react": "http://react.zpao.com/builds/master/latest/react.tgz",
+    "react": "~0.13.2",
     "collections": "~1.2.2",
     "xlsx": "~0.8.0",
     "browser-filesaver": "~1.0.0",
