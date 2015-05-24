@@ -492,7 +492,6 @@ var Report = React.createClass({
 					warn={warn}
 					fail={fail}/>
 				{qcReportTable}
-				<p>Copyright &#169; 2015 Rémi Marenco and Jeremy Goecks. Java original version : 2014 Geoffrey H. Smith.</p>
 			</div>
 		);
 	},

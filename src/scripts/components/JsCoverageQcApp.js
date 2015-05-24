@@ -193,6 +193,7 @@ var JsCoverageQcApp = React.createClass({
 		  <div className='main'>
 		    <InputFilesForm vcfUpdated={this.handleChange}/>
 			{this.state.report}
+			<p>Copyright &#169; 2015 Rémi Marenco and Jeremy Goecks. Java original version : 2014 Geoffrey H. Smith.</p>
 		  </div>
 		);
 	}
