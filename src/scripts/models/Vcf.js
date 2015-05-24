@@ -14,9 +14,11 @@ function basePopulation(vcf){
 		var arrayVcfLines = vcf.vcfLines.split("\n");
 		arrayVcfLines.forEach(function(vcfLine){
 			if (vcfLine.search("#") !== 0) {
-				var base = new Base(vcfLine, vcf.bases);
+				var base = new Base(vcfLine, vcf.bases); // Taking 1.3sec
 				var foundGeneExon = false;
 
+				// TODO: BottleNeck here. Solution 1 => Pass a function to execute instead of rerunning the whole list returned
+				// Taking 1 sec
 				vcf.findGeneExonsForChrPos(base.chr, base.pos).forEach(function(geneExon){
 					foundGeneExon = true;
 					geneExon.bases.set(base.pos, base);
@@ -29,8 +31,11 @@ function basePopulation(vcf){
 		});
 	}
 
+	// TODO: findGeneExonsForChrPos already parse the whole geneExons data structure...see if we can avoid reparsing the whole file again
+	// Taking 1.6 sec
 	vcf.geneExons.forEach(function(geneExon){
 		// If a position is absent, create it with read depth 0
+		// Taking 0.6s
 		for(var pos = geneExon.startPos; pos <= geneExon.endPos; pos++){
 			if(!vcf.bases.has(geneExon.chr + '|' + pos)){
 				var base = new Base(null, vcf.bases);
@@ -42,6 +47,8 @@ function basePopulation(vcf){
 				geneExon.bases.set(pos, vcf.bases.get(geneExon.chr + "|" + pos));
 			}
 		}
+
+		// Taking 1 sec
 		// Perform binning operation
 		geneExon.bases.forEach(function(base){
 			// Don't count a base if it is outside of the coding region
