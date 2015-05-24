@@ -104,7 +104,7 @@ var GeneExonParent = React.createClass({
 	// TODO: The link to collapse or show should be on the entire TD and not only on the '+'' or '-' text for UX
 	render: function(){
 		var ExpandCollapseButton = require('./ExpandCollapseButton');
-		
+
 		var geneExonProps = this.props.geneExon;
 
 		var geneExonPosition = 'geneExon'+this.props.position;
@@ -150,9 +150,9 @@ var GeneExonParent = React.createClass({
 					{geneExonProps.name}
 					<br/>
 					<span className="geneExonSmallDetails">Ensembl ID: 
-						<a href="{ensemblID}">{geneExonProps.ensemblTranscriptId}</a>
+						<a href={ensemblID} target="_blank">{geneExonProps.ensemblTranscriptId}</a>
 						<br/>RefSeq accession no.: 
-						<a href="{refSeqAccessionNo}">{geneExonProps.refSeqAccNo}</a>
+						<a href={refSeqAccessionNo} target="_blank">{geneExonProps.refSeqAccNo}</a>
 						<br/>vendor ID: {geneExonProps.vendorGeneExonName}
 					</span>
 				</td>
