@@ -3,6 +3,10 @@
 html, body {
 }
 
+body{
+  margin-left: 2%;
+}
+
 /* main */
 
 .main {
