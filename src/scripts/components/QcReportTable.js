@@ -166,7 +166,9 @@ var FilteredAndAnnotatedVariantRow = React.createClass({
 			<tbody>
 				<tr className="filteredAnnotatedVariant">
 					<td className="alignMiddle">
-						<input type="checkbox" className="exportCheckbox"/>
+						<input type="checkbox"
+							className="exportCheckbox"
+							onChange={this.props.onCheckedGene}/>
 					</td>
 					<td data-export-label="gene">{variantProp.gene}</td>
 					<td data-export-label="coordinate">chr{variantProp.chr}:{variantProp.coordinate}</td>
@@ -240,9 +242,13 @@ var FootNoteTable = React.createClass({
 
 var FilteredAndAnnotatedVariants = React.createClass({
 	render: function(){
+		var self = this;
 		var filteredAndAnnotatedVariantRows = [];
 		this.props.geneExon.variants.forEach(function(variant, index){
-			filteredAndAnnotatedVariantRows.push(<FilteredAndAnnotatedVariantRow variant={variant} key={index}/>);
+			filteredAndAnnotatedVariantRows.push(
+				<FilteredAndAnnotatedVariantRow variant={variant}
+					key={index}
+					onCheckedGene={self.props.onCheckedGene}/>);
 		});
 		return(
 			<div id="filteredAndAnnotatedVariants">
@@ -293,7 +299,9 @@ var GeneExonChild = React.createClass({
 
 		var filteredAndAnnotatedVariants;
 		if(this.props.geneExon.variants.length > 0){
-			filteredAndAnnotatedVariants = <FilteredAndAnnotatedVariants geneExon={this.props.geneExon}/>;
+			filteredAndAnnotatedVariants =
+				<FilteredAndAnnotatedVariants geneExon={this.props.geneExon}
+					onCheckedGene={this.props.onCheckedGene}/>;
 		}
 
 		var trDisplayStyle = {display: 'none'};
@@ -314,6 +322,10 @@ var GeneExonChild = React.createClass({
 					</td>
 				</tr>
 		);
+	},
+
+	onCheckedGene: function(){
+		//TODO: Implement
 	}
 });
 
@@ -366,10 +378,19 @@ var BodyReportTable = React.createClass({
 			var __childKey = self.generateChildKey(index);
 
 			self.allGeneExonRows.push(
-				<GeneExonParent ref={__parentKey} key={__parentKey} elementKey={__parentKey} geneExon={geneExon} position={position} onClickShowOrHideButton={self.showOrHideButtonClicked}/>
+				<GeneExonParent ref={__parentKey} 
+					key={__parentKey}
+					elementKey={__parentKey}
+					geneExon={geneExon}
+					position={position}
+					onClickShowOrHideButton={self.showOrHideButtonClicked}/>
 			);
 			self.allGeneExonRows.push(
-				<GeneExonChild key={__childKey} geneExon={geneExon} position={position} display={self.state.shouldDisplayChild[__parentKey]}/>
+				<GeneExonChild key={__childKey}
+					geneExon={geneExon}
+					position={position}
+					display={self.state.shouldDisplayChild[__parentKey]}
+					onCheckedGene={self.onCheckedGene}/>
 			);
 		});
 		return(
@@ -400,6 +421,10 @@ var BodyReportTable = React.createClass({
 	geneExonAllShown: function(){
 		// Once it is finished, we send an event to notify the end
 		this.props.showAllEnded();
+	},
+	onCheckedGene: function(){
+		// TODO: Implement
+		
 	}
 });
 
@@ -422,10 +447,17 @@ var QcReportTable = React.createClass({
 			<span>
 				<table id="qcReportTable" className="dataTable">
 					<HeadReportTable bins={this.props.geneExons.one().bins} showOrHideButtonAllClicked={this.showOrHideButtonAllClicked}/>
-					<BodyReportTable geneExons={this.props.geneExons} ref="bodyReportTable" showAllEnded={this.showAllEnded}/>
+					<BodyReportTable geneExons={this.props.geneExons}
+						ref="bodyReportTable"
+						showAllEnded={this.showAllEnded}
+						onCheckedGene={this.onCheckedGene}/>
 				</table>
 			</span>
 		);
+	},
+
+	onCheckedGene: function(){
+		// TODO: Implement
 	}
 });
 
