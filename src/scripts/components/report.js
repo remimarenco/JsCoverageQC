@@ -28,7 +28,8 @@ var QcRules = React.createClass({
 var Report = React.createClass({
 	getInitialState: function(){
 		return{
-			showBlocker: false
+			showBlocker: false,
+			geneChecked: {}
 		};
 	},
 	componentWillMount: function(){
@@ -55,7 +56,10 @@ var Report = React.createClass({
 		var qcReportTable;
 		if(this.props.googleChartLibLoaded){
 			var QcReportTable = require('./QcReportTable');
-			qcReportTable = <QcReportTable geneExons={this.props.vcf.geneExons} showOrHideButtonAllClicked={this.showOrHideButtonAllClicked} showAllEnded={this.showAllEnded}/>;
+			qcReportTable = <QcReportTable geneExons={this.props.vcf.geneExons}
+				showOrHideButtonAllClicked={this.showOrHideButtonAllClicked}
+				showAllEnded={this.showAllEnded}
+				onCheckedGene={this.onCheckedGene}/>;
 		}
 
 		return(
@@ -106,6 +110,17 @@ var Report = React.createClass({
 					ampliconBedFileName={propsVcf.ampliconBedFileName}
 					doNotCallFileName={propsVcf.doNotCallFileName}
 					/>;
+	},
+
+	onCheckedGene: function(gene){
+		var geneName = gene.name;
+		// Used to change immutable data : https://facebook.github.io/react/docs/update.html
+		var new_GeneChecked_State = React.addons.update(this.state, {
+			geneChecked: {
+				geneName: {$set: gene}
+			}
+		});
+		this.setState(new_GeneChecked_State);
 	}
 });
 
