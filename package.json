@@ -45,6 +45,7 @@
     "grunt-contrib-clean": "~0.6.0",
     "less-loader": "^2.0.0",
     "react-hot-loader": "^1.0.7",
-    "grunt-bump": "~0.3.1"
+    "grunt-bump": "~0.3.1",
+    "babel-loader": "~5.1.3"
   }
 }

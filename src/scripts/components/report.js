@@ -114,6 +114,7 @@ var Report = React.createClass({
 
 	onCheckedVariant: function(variant, key){
 		debugger;
+		
 		var new_VariantChecked_State;
 		// Check if it is an add or a a deletion
 		if(this.state.variantChecked[key] !== null &&
