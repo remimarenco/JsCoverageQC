@@ -113,13 +113,12 @@ var Report = React.createClass({
 	},
 
 	onCheckedVariant: function(variant, key){
-		debugger;
-		
 		var new_VariantChecked_State;
+
 		// Check if it is an add or a a deletion
 		if(this.state.variantChecked[key] !== null &&
 			typeof this.state.variantChecked[key] !== 'undefined'){
-			console.log("On UNset "+variant.gene+" de clé "+key);
+			// Used to change immutable data : https://facebook.github.io/react/docs/update.html
 			new_VariantChecked_State = React.addons.update(this.state.variantChecked, {
 				[key]: {
 					$set: null
@@ -127,7 +126,6 @@ var Report = React.createClass({
 			});
 		}
 		else{
-			console.log("On set "+variant.gene+" de clé "+key);
 			// Used to change immutable data : https://facebook.github.io/react/docs/update.html
 			var objVariantChecked_ToAdd = {
 				[key]: {
@@ -135,12 +133,9 @@ var Report = React.createClass({
 				}
 			};
 			new_VariantChecked_State = React.addons.update(this.state.variantChecked, objVariantChecked_ToAdd);
-			console.log("Etat du new_VariantChecked_State before: "+ new_VariantChecked_State[key]);
 		}
 
-		this.setState(new_VariantChecked_State, function(){
-			console.log("Ok for the new Variant gene checked: "+this.state.variantChecked[key]+ ", avec le variant:"+variant.gene);
-		});
+		this.setState({variantChecked: new_VariantChecked_State});
 	}
 });
 
