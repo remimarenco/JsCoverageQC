@@ -29,7 +29,7 @@ var Report = React.createClass({
 	getInitialState: function(){
 		return{
 			showBlocker: false,
-			geneChecked: {}
+			variantChecked: {}
 		};
 	},
 	componentWillMount: function(){
@@ -59,7 +59,7 @@ var Report = React.createClass({
 			qcReportTable = <QcReportTable geneExons={this.props.vcf.geneExons}
 				showOrHideButtonAllClicked={this.showOrHideButtonAllClicked}
 				showAllEnded={this.showAllEnded}
-				onCheckedGene={this.onCheckedGene}/>;
+				onCheckedVariant={this.onCheckedVariant}/>;
 		}
 
 		return(
@@ -112,15 +112,34 @@ var Report = React.createClass({
 					/>;
 	},
 
-	onCheckedGene: function(gene){
-		var geneName = gene.name;
-		// Used to change immutable data : https://facebook.github.io/react/docs/update.html
-		var new_GeneChecked_State = React.addons.update(this.state, {
-			geneChecked: {
-				geneName: {$set: gene}
-			}
+	onCheckedVariant: function(variant, key){
+		debugger;
+		var new_VariantChecked_State;
+		// Check if it is an add or a a deletion
+		if(this.state.variantChecked[key] !== null &&
+			typeof this.state.variantChecked[key] !== 'undefined'){
+			console.log("On UNset "+variant.gene+" de clé "+key);
+			new_VariantChecked_State = React.addons.update(this.state.variantChecked, {
+				[key]: {
+					$set: null
+				}
+			});
+		}
+		else{
+			console.log("On set "+variant.gene+" de clé "+key);
+			// Used to change immutable data : https://facebook.github.io/react/docs/update.html
+			var objVariantChecked_ToAdd = {
+				[key]: {
+					$set: variant
+				}
+			};
+			new_VariantChecked_State = React.addons.update(this.state.variantChecked, objVariantChecked_ToAdd);
+			console.log("Etat du new_VariantChecked_State before: "+ new_VariantChecked_State[key]);
+		}
+
+		this.setState(new_VariantChecked_State, function(){
+			console.log("Ok for the new Variant gene checked: "+this.state.variantChecked[key]+ ", avec le variant:"+variant.gene);
 		});
-		this.setState(new_GeneChecked_State);
 	}
 });
 
