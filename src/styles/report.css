@@ -135,3 +135,7 @@ table.footNoteTable td {
 	border-right: 1px solid #dad9c7;
 	margin-left: -1px;
 }
+
+#referenceAssembly{
+	text-decoration: underline;
+}

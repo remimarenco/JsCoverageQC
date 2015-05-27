@@ -32,10 +32,20 @@ var QcRules = React.createClass({
 		var toObjectVariantChecked = Object.keys(propVariantChecked);
 
 		var exportTitle = "Export selected variant";
+
+		var interpretationContent;
+		var interpretation;
+		var resultsContent;
+		var results;
+		var referenceAssembly;
+		var failedExonsContent;
+		var failedExons;
+		var notes;
 		if(toObjectVariantChecked.length !== null &&
 			typeof toObjectVariantChecked.length !== 'undefined' &&
 			toObjectVariantChecked.length > 0){
 
+			// TODO: Delete this repetition
 			exportTitle = "Export selected variant";
 			if(toObjectVariantChecked.length > 1)
 			{
@@ -48,11 +58,43 @@ var QcRules = React.createClass({
 				}
 			}
 		}
+		else{
+			interpretationContent = <p>No variants detected by next-generation sequencing.</p>;
+			resultsContent = <p>No variants detected by next-generation sequencing.</p>;
+		}
+
+		interpretation =
+			<div>
+				<h2>Interpretation</h2>
+				{interpretationContent}
+			</div>;
+
+		results =
+			<div>
+				<h2>Results</h2>
+				{resultsContent}
+			</div>;
+
+		referenceAssembly = <p id="referenceAssembly">The reference assembly is hg19, GRCh37.</p>;
+
+		// TODO: The failedExons loop
+		failedExons = 
+			<div>
+				<h2>Portions of the following captured regions were not sequenced 
+					sufficiently for clinical interpretation (at least one base in the sequenced portion 
+					of the coding region was read less than 500 times):
+				</h2>
+				{failedExonsContent}
+			</div>;
 
 		var modal = <Modal isOpen={this.state.modalIsOpen}
           onRequestClose={this.closeModal}>
           	<h1>{exportTitle}</h1>
-          	{variantsChecked}
+          	{interpretation}
+          	{results}
+          	{referenceAssembly}
+          	{failedExons}
+          	{notes}
           	<button onClick={this.closeModal}>Close</button>
           </Modal>;
 		return(
