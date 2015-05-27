@@ -206,7 +206,8 @@ var FilteredAndAnnotatedVariantRow = React.createClass({
 	},
 
 	onCheckedVariant: function(){
-		this.props.onCheckedVariant(this.props.variant, this.props.geneAndVariantKey);
+		debugger;
+		this.props.onCheckedVariant(this.props.geneAndVariantKey);
 	}
 });
 
@@ -307,7 +308,7 @@ var GeneExonChild = React.createClass({
 			filteredAndAnnotatedVariants =
 				<FilteredAndAnnotatedVariants geneExon={this.props.geneExon}
 					geneIndex={this.props.position}
-					onCheckedVariant={this.props.onCheckedVariant}/>;
+					onCheckedVariant={this.onCheckedVariant}/>;
 		}
 
 		var trDisplayStyle = {display: 'none'};
@@ -328,6 +329,11 @@ var GeneExonChild = React.createClass({
 					</td>
 				</tr>
 		);
+	},
+
+	onCheckedVariant: function(geneAndVariantKey){
+		debugger;
+		this.props.onCheckedVariant(this.props.geneExon, geneAndVariantKey);
 	}
 });
 

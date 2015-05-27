@@ -5,6 +5,8 @@ var React = require('react/addons');
 //require('../../styles/tablesorter.theme.default.css');
 require('../../styles/report.css');
 
+var classNames = require('classnames');
+
 var Modal = require('react-modal');
 
 var appElement = document.getElementById('content');
@@ -33,7 +35,7 @@ var QcRules = React.createClass({
 
 		var exportTitle = "Export selected variant";
 
-		var interpretationContent;
+		var interpretationContent = [];
 		var interpretation;
 		var resultsContent;
 		var results;
@@ -52,9 +54,18 @@ var QcRules = React.createClass({
 				exportTitle += "s";
 			}
 
+			var boldClass = classNames('fontWeightBold');
+
 			for(var key in propVariantChecked){
 				if (propVariantChecked.hasOwnProperty(key)){
-					variantsChecked.push(<p>{propVariantChecked[key].gene}</p>);
+					interpretationContent.push(
+						<p className={boldClass}>
+							POSITIVE for detection of {propVariantChecked[key].gene} sequence variant by 
+							next generation sequencing: 
+							{propVariantChecked[key].gene} {propVariantChecked[key].hgvsc} / {propVariantChecked[key].hgvsp} 
+							in exon {propVariantChecked[key].gene}
+						</p>
+					);
 				}
 			}
 		}
@@ -201,7 +212,8 @@ var Report = React.createClass({
 					/>;
 	},
 
-	onCheckedVariant: function(variant, key){
+	onCheckedVariant: function(gene, key){
+		debugger;
 		var new_VariantChecked_State;
 
 		// Check if it is an add or a a deletion
@@ -226,7 +238,7 @@ var Report = React.createClass({
 			// Used to change immutable data : https://facebook.github.io/react/docs/update.html
 			var objVariantChecked_ToAdd = {
 				[key]: {
-					$set: variant
+					$set: gene
 				}
 			};
 			new_VariantChecked_State = React.addons.update(this.state.variantChecked, objVariantChecked_ToAdd);
