@@ -31,9 +31,16 @@ var QcRules = React.createClass({
 		var variantsChecked = [];
 		var toObjectVariantChecked = Object.keys(propVariantChecked);
 
+		var exportTitle = "Export selected variant";
 		if(toObjectVariantChecked.length !== null &&
 			typeof toObjectVariantChecked.length !== 'undefined' &&
 			toObjectVariantChecked.length > 0){
+
+			exportTitle = "Export selected variant";
+			if(toObjectVariantChecked.length > 1)
+			{
+				exportTitle += "s";
+			}
 
 			for(var key in propVariantChecked){
 				if (propVariantChecked.hasOwnProperty(key)){
@@ -41,9 +48,10 @@ var QcRules = React.createClass({
 				}
 			}
 		}
+
 		var modal = <Modal isOpen={this.state.modalIsOpen}
           onRequestClose={this.closeModal}>
-          	<h2>Hello</h2>
+          	<h1>{exportTitle}</h1>
           	{variantsChecked}
           	<button onClick={this.closeModal}>Close</button>
           </Modal>;
