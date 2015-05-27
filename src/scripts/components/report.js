@@ -8,6 +8,20 @@ require('../../styles/report.css');
 var QcRules = React.createClass({
 	// TODO: Add the exportLink + content
 	render: function(){
+		var propVariantChecked = this.props.variantChecked;
+		var variantsChecked = [];
+		var toObjectVariantChecked = Object.keys(propVariantChecked);
+
+		if(toObjectVariantChecked.length !== null &&
+			typeof toObjectVariantChecked.length !== 'undefined' &&
+			toObjectVariantChecked.length > 0){
+
+			for(var key in propVariantChecked){
+				if (propVariantChecked.hasOwnProperty(key)){
+					variantsChecked.push(<p>{propVariantChecked[key].gene}</p>);
+				}
+			}
+		}
 		return(
 			<ul>
 			    <li>QC rules are applied to bases <i>in the coding region</i> of each locus:
@@ -20,6 +34,7 @@ var QcRules = React.createClass({
 			    <li>Coding regions and amplicons are specified by vendor.</li>
 			    <li>If the gVCF file contains multiple entries for the same position (e.g., indels), the maximum read depth value is reported here.</li>
 			    <li>After selecting variants for export, <a id="exportLink" href="#">click here</a> to see them as a text document suitable for cut-and-paste operations.</li>
+				{variantsChecked}
 			</ul>
 		);
 	}
@@ -69,7 +84,8 @@ var Report = React.createClass({
 				{this.InformationsTable}
 				<QcRules pass={pass}
 					warn={warn}
-					fail={fail}/>
+					fail={fail}
+					variantChecked={this.state.variantChecked}/>
 				{qcReportTable}
 			</div>
 		);
@@ -118,12 +134,19 @@ var Report = React.createClass({
 		// Check if it is an add or a a deletion
 		if(this.state.variantChecked[key] !== null &&
 			typeof this.state.variantChecked[key] !== 'undefined'){
+
+			/* TODO: See why it is not working
+			var keyArraysToUnshift = [];
+			keyArraysToUnshift.push(key);
 			// Used to change immutable data : https://facebook.github.io/react/docs/update.html
 			new_VariantChecked_State = React.addons.update(this.state.variantChecked, {
-				[key]: {
-					$set: null
-				}
+				$unshift: keyArraysToUnshift
 			});
+			*/
+
+			var tempVariantChecked = this.state.variantChecked;
+			delete tempVariantChecked[key];
+			this.setState({variantChecked: tempVariantChecked});
 		}
 		else{
 			// Used to change immutable data : https://facebook.github.io/react/docs/update.html
@@ -133,9 +156,8 @@ var Report = React.createClass({
 				}
 			};
 			new_VariantChecked_State = React.addons.update(this.state.variantChecked, objVariantChecked_ToAdd);
+			this.setState({variantChecked: new_VariantChecked_State});
 		}
-
-		this.setState({variantChecked: new_VariantChecked_State});
 	}
 });
 
