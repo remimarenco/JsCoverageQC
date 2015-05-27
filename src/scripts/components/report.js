@@ -5,9 +5,28 @@ var React = require('react/addons');
 //require('../../styles/tablesorter.theme.default.css');
 require('../../styles/report.css');
 
+var Modal = require('react-modal');
+
+var appElement = document.getElementById('content');
+
+Modal.setAppElement(appElement);
+Modal.injectCSS();
+
 var QcRules = React.createClass({
+	// TODO: Separate the modal from the QCRules
+	getInitialState: function() {
+	    return { modalIsOpen: false };
+	},
+	openModal: function() {
+	    this.setState({modalIsOpen: true});
+	},
+	closeModal: function() {
+	    this.setState({modalIsOpen: false});
+	},
 	// TODO: Add the exportLink + content
 	render: function(){
+		var Modal = require('react-modal');
+
 		var propVariantChecked = this.props.variantChecked;
 		var variantsChecked = [];
 		var toObjectVariantChecked = Object.keys(propVariantChecked);
@@ -22,6 +41,12 @@ var QcRules = React.createClass({
 				}
 			}
 		}
+		var modal = <Modal isOpen={this.state.modalIsOpen}
+          onRequestClose={this.closeModal}>
+          	<h2>Hello</h2>
+          	{variantsChecked}
+          	<button onClick={this.closeModal}>Close</button>
+          </Modal>;
 		return(
 			<ul>
 			    <li>QC rules are applied to bases <i>in the coding region</i> of each locus:
@@ -33,7 +58,8 @@ var QcRules = React.createClass({
 			    </li>
 			    <li>Coding regions and amplicons are specified by vendor.</li>
 			    <li>If the gVCF file contains multiple entries for the same position (e.g., indels), the maximum read depth value is reported here.</li>
-			    <li>After selecting variants for export, <a id="exportLink" href="#" onClick={this.openDialog}>click here</a> to see them as a text document suitable for cut-and-paste operations.</li>
+			    <li>After selecting variants for export, <a id="exportLink" href="#" onClick={this.openModal}>click here</a> to see them as a text document suitable for cut-and-paste operations.</li>
+				{modal}
 			</ul>
 		);
 	}
