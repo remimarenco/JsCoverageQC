@@ -33,8 +33,7 @@ var QcRules = React.createClass({
 			    </li>
 			    <li>Coding regions and amplicons are specified by vendor.</li>
 			    <li>If the gVCF file contains multiple entries for the same position (e.g., indels), the maximum read depth value is reported here.</li>
-			    <li>After selecting variants for export, <a id="exportLink" href="#">click here</a> to see them as a text document suitable for cut-and-paste operations.</li>
-				{variantsChecked}
+			    <li>After selecting variants for export, <a id="exportLink" href="#" onClick={this.openDialog}>click here</a> to see them as a text document suitable for cut-and-paste operations.</li>
 			</ul>
 		);
 	}
@@ -93,11 +92,9 @@ var Report = React.createClass({
 
 	// Custom functions
 	showOrHideButtonAllClicked: function(){
-		//debugger;
 		this.setState({showBlocker: true});
 	},
 	showAllEnded: function(){
-		//debugger;
 		this.setState({showBlocker: false});
 	},
 
@@ -130,7 +127,7 @@ var Report = React.createClass({
 
 	onCheckedVariant: function(variant, key){
 		var new_VariantChecked_State;
-		debugger;
+
 		// Check if it is an add or a a deletion
 		if(this.state.variantChecked[key] !== null &&
 			typeof this.state.variantChecked[key] !== 'undefined' &&
