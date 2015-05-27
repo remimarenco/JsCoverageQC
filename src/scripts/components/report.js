@@ -130,10 +130,11 @@ var Report = React.createClass({
 
 	onCheckedVariant: function(variant, key){
 		var new_VariantChecked_State;
-
+		debugger;
 		// Check if it is an add or a a deletion
 		if(this.state.variantChecked[key] !== null &&
-			typeof this.state.variantChecked[key] !== 'undefined'){
+			typeof this.state.variantChecked[key] !== 'undefined' &&
+			Object.keys(this.state.variantChecked).length > 0){
 
 			/* TODO: See why it is not working
 			var keyArraysToUnshift = [];
