@@ -54,21 +54,10 @@ var QcRules = React.createClass({
 				exportTitle += "s";
 			}
 
-			var boldClass = classNames('fontWeightBold');
-
 			for(var key in propVariantsChecked){
 				if (propVariantsChecked.hasOwnProperty(key)){
 					var geneVariantsObj = propVariantsChecked[key];
-					geneVariantsObj.variants.forEach(function(variant){
-						interpretationContent.push(
-							<p className={boldClass}>
-								POSITIVE for detection of {variant.gene} sequence variant by 
-								next generation sequencing: 
-								{variant.gene} {variant.hgvsc} / {variant.hgvsp} in
-								exon {geneVariantsObj.gene.name}
-							</p>
-						);
-					});
+					interpretationContent.push(this.writeInterpretationContent(geneVariantsObj));
 				}
 			}
 		}
@@ -126,6 +115,22 @@ var QcRules = React.createClass({
 				{modal}
 			</ul>
 		);
+	},
+
+	writeInterpretationContent: function(geneVariantsObj){
+		var interpretationContent = [];
+		var boldClass = classNames('fontWeightBold');
+		geneVariantsObj.variants.forEach(function(variant){
+			interpretationContent.push(
+				<p className={boldClass}>
+					POSITIVE for detection of {variant.gene} sequence variant by 
+					next generation sequencing: 
+					{variant.gene} {variant.hgvsc} / {variant.hgvsp} in
+					exon {geneVariantsObj.gene.name}
+				</p>
+			);
+		});
+		return interpretationContent;
 	}
 });
 
@@ -241,6 +246,7 @@ var Report = React.createClass({
 				var s_variantsCheckedGene_variant = s_variantsChecked[geneIndex].variants[variantIndex];
 				if(s_variantsCheckedGene_variant !== null &&
 					typeof s_variantsCheckedGene_variant !== 'undefined'){
+
 					var tempVariantsCheckedGene_variant = s_variantsChecked[geneIndex].variants;
 					delete tempVariantsCheckedGene_variant[variantIndex];
 					this.setState({variantsChecked: tempVariantsCheckedGene_variant}, function(){
