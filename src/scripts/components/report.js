@@ -29,9 +29,9 @@ var QcRules = React.createClass({
 	render: function(){
 		var Modal = require('react-modal');
 
-		var propVariantChecked = this.props.variantChecked;
+		var propVariantsChecked = this.props.variantsChecked;
 		var variantsChecked = [];
-		var toObjectVariantChecked = Object.keys(propVariantChecked);
+		var toObjectVariantsChecked = Object.keys(propVariantsChecked);
 
 		var exportTitle = "Export selected variant";
 
@@ -43,29 +43,32 @@ var QcRules = React.createClass({
 		var failedExonsContent;
 		var failedExons;
 		var notes;
-		if(toObjectVariantChecked.length !== null &&
-			typeof toObjectVariantChecked.length !== 'undefined' &&
-			toObjectVariantChecked.length > 0){
+		if(toObjectVariantsChecked.length !== null &&
+			typeof toObjectVariantsChecked.length !== 'undefined' &&
+			toObjectVariantsChecked.length > 0){
 
 			// TODO: Delete this repetition
 			exportTitle = "Export selected variant";
-			if(toObjectVariantChecked.length > 1)
+			if(toObjectVariantsChecked.length > 1)
 			{
 				exportTitle += "s";
 			}
 
 			var boldClass = classNames('fontWeightBold');
 
-			for(var key in propVariantChecked){
-				if (propVariantChecked.hasOwnProperty(key)){
-					interpretationContent.push(
-						<p className={boldClass}>
-							POSITIVE for detection of {propVariantChecked[key].gene} sequence variant by 
-							next generation sequencing: 
-							{propVariantChecked[key].gene} {propVariantChecked[key].hgvsc} / {propVariantChecked[key].hgvsp} 
-							in exon {propVariantChecked[key].gene}
-						</p>
-					);
+			for(var key in propVariantsChecked){
+				if (propVariantsChecked.hasOwnProperty(key)){
+					var geneVariantsObj = propVariantsChecked[key];
+					geneVariantsObj.variants.forEach(function(variant){
+						interpretationContent.push(
+							<p className={boldClass}>
+								POSITIVE for detection of {variant.gene} sequence variant by 
+								next generation sequencing: 
+								{variant.gene} {variant.hgvsc} / {variant.hgvsp} in
+								exon {geneVariantsObj.gene.name}
+							</p>
+						);
+					});
 				}
 			}
 		}
@@ -130,7 +133,7 @@ var Report = React.createClass({
 	getInitialState: function(){
 		return{
 			showBlocker: false,
-			variantChecked: {}
+			variantsChecked: {}
 		};
 	},
 	componentWillMount: function(){
@@ -171,7 +174,7 @@ var Report = React.createClass({
 				<QcRules pass={pass}
 					warn={warn}
 					fail={fail}
-					variantChecked={this.state.variantChecked}/>
+					variantsChecked={this.state.variantsChecked}/>
 				{qcReportTable}
 			</div>
 		);
@@ -212,37 +215,76 @@ var Report = React.createClass({
 					/>;
 	},
 
-	onCheckedVariant: function(gene, key){
-		debugger;
-		var new_VariantChecked_State;
+	onCheckedVariant: function(gene, geneIndex, variantIndex){
+		var s_variantsChecked = this.state.variantsChecked;
+		var new_VariantsChecked_State;
 
 		// Check if it is an add or a a deletion
-		if(this.state.variantChecked[key] !== null &&
-			typeof this.state.variantChecked[key] !== 'undefined' &&
-			Object.keys(this.state.variantChecked).length > 0){
+		if(s_variantsChecked[geneIndex] !== null &&
+			typeof s_variantsChecked[geneIndex] !== 'undefined' &&
+			Object.keys(s_variantsChecked).length > 0){
 
 			/* TODO: See why it is not working
 			var keyArraysToUnshift = [];
 			keyArraysToUnshift.push(key);
 			// Used to change immutable data : https://facebook.github.io/react/docs/update.html
-			new_VariantChecked_State = React.addons.update(this.state.variantChecked, {
+			new_VariantsChecked_State = React.addons.update(this.state.variantsChecked, {
 				$unshift: keyArraysToUnshift
 			});
 			*/
-
-			var tempVariantChecked = this.state.variantChecked;
-			delete tempVariantChecked[key];
-			this.setState({variantChecked: tempVariantChecked});
+			// We check if there are already variants or not
+			if(s_variantsChecked[geneIndex].variants !== null &&
+				typeof s_variantsChecked[geneIndex].variants !== 'undefined' &&
+				(s_variantsChecked[geneIndex].variants.length) > 0){
+				// We check if the variants is already in the structure => Delete
+				// Or if it is not => Add
+				var s_variantsCheckedGene_variant = s_variantsChecked[geneIndex].variants[variantIndex];
+				if(s_variantsCheckedGene_variant !== null &&
+					typeof s_variantsCheckedGene_variant !== 'undefined'){
+					var tempVariantsCheckedGene_variant = s_variantsChecked[geneIndex].variants;
+					delete tempVariantsCheckedGene_variant[variantIndex];
+					this.setState({variantsChecked: tempVariantsCheckedGene_variant}, function(){
+						// if there is no more variants checked in this gene, we delete the gene structure
+						if(s_variantsChecked[geneIndex].variants.length === 0){
+							var tempVariantsChecked = s_variantsChecked;
+							delete tempVariantsChecked[geneIndex];
+							this.setState({variantsChecked: tempVariantsChecked});
+						}
+					});
+				}
+				else{
+					var variant = [gene.variants[variantIndex]];
+					var objVariantsCheckedGene_ToAdd = {
+						variants: {
+							$push: variant
+						}
+					};
+					var new_VariantsCheckedGene_State = React.addons.update(s_variantsChecked[geneIndex].variants, objVariantsCheckedGene_ToAdd);
+					this.setState({variantsChecked: {[geneIndex]: new_VariantsCheckedGene_State}});
+				}
+			}
+			else{
+				// Should never happen as we delete the s_variantsChecked[geneIndex] if there is no
+				// more variants inside
+				console.log("Something gone wrong => Else s_variantsChecked[geneIndex].variants");
+			}
 		}
 		else{
+			// If there is no variants yet for this gene, we add the gene in the tab + the variant
 			// Used to change immutable data : https://facebook.github.io/react/docs/update.html
-			var objVariantChecked_ToAdd = {
-				[key]: {
-					$set: gene
-				}
+			var variants = [gene.variants[variantIndex]];
+			var objVariantsChecked_Gene_ToAdd = {
+				gene: gene,
+				variants
 			};
-			new_VariantChecked_State = React.addons.update(this.state.variantChecked, objVariantChecked_ToAdd);
-			this.setState({variantChecked: new_VariantChecked_State});
+			var objVariantsChecked_ToAdd = {
+					[geneIndex]: {
+						$set: objVariantsChecked_Gene_ToAdd
+					}
+				};
+			new_VariantsChecked_State = React.addons.update(s_variantsChecked,
+				objVariantsChecked_ToAdd);
+			this.setState({variantsChecked: new_VariantsChecked_State});
 		}
 	}
 });
