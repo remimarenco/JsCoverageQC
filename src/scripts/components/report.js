@@ -120,16 +120,19 @@ var QcRules = React.createClass({
 	writeInterpretationContent: function(geneVariantsObj){
 		var interpretationContent = [];
 		var boldClass = classNames('fontWeightBold');
-		geneVariantsObj.variants.forEach(function(variant){
-			interpretationContent.push(
-				<p className={boldClass}>
-					POSITIVE for detection of {variant.gene} sequence variant by 
-					next generation sequencing: 
-					{variant.gene} {variant.hgvsc} / {variant.hgvsp} in
-					exon {geneVariantsObj.gene.name}
-				</p>
-			);
-		});
+		for(var key in geneVariantsObj.variants){
+			var variant = geneVariantsObj.variants[key];
+			if (geneVariantsObj.variants.hasOwnProperty(key)){
+				interpretationContent.push(
+					<p className={boldClass}>
+						POSITIVE for detection of {variant.gene} sequence variant by 
+						next generation sequencing: 
+						{variant.gene} {variant.hgvsc} / {variant.hgvsp} in
+						exon {geneVariantsObj.gene.name}
+					</p>
+				);
+			}
+		}
 		return interpretationContent;
 	}
 });
@@ -247,9 +250,10 @@ var Report = React.createClass({
 				if(s_variantsCheckedGene_variant !== null &&
 					typeof s_variantsCheckedGene_variant !== 'undefined'){
 
-					var tempVariantsCheckedGene_variant = s_variantsChecked[geneIndex].variants;
-					delete tempVariantsCheckedGene_variant[variantIndex];
-					this.setState({variantsChecked: tempVariantsCheckedGene_variant}, function(){
+					var tempVariantsChecked = s_variantsChecked;
+					delete tempVariantsChecked[geneIndex].variants[variantIndex];
+					this.setState({variantsChecked: tempVariantsChecked}, function(){
+						debugger;
 						// if there is no more variants checked in this gene, we delete the gene structure
 						if(s_variantsChecked[geneIndex].variants.length === 0){
 							var tempVariantsChecked = s_variantsChecked;
@@ -278,7 +282,8 @@ var Report = React.createClass({
 		else{
 			// If there is no variants yet for this gene, we add the gene in the tab + the variant
 			// Used to change immutable data : https://facebook.github.io/react/docs/update.html
-			var variants = [gene.variants[variantIndex]];
+			var variants = {};
+			variants = {[variantIndex]: gene.variants[variantIndex]};
 			var objVariantsChecked_Gene_ToAdd = {
 				gene: gene,
 				variants
