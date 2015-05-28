@@ -243,7 +243,7 @@ var Report = React.createClass({
 			// We check if there are already variants or not
 			if(s_variantsChecked[geneIndex].variants !== null &&
 				typeof s_variantsChecked[geneIndex].variants !== 'undefined' &&
-				(s_variantsChecked[geneIndex].variants.length) > 0){
+				Object.keys(s_variantsChecked[geneIndex].variants).length > 0){
 				// We check if the variants is already in the structure => Delete
 				// Or if it is not => Add
 				var s_variantsCheckedGene_variant = s_variantsChecked[geneIndex].variants[variantIndex];
@@ -253,9 +253,8 @@ var Report = React.createClass({
 					var tempVariantsChecked = s_variantsChecked;
 					delete tempVariantsChecked[geneIndex].variants[variantIndex];
 					this.setState({variantsChecked: tempVariantsChecked}, function(){
-						debugger;
 						// if there is no more variants checked in this gene, we delete the gene structure
-						if(s_variantsChecked[geneIndex].variants.length === 0){
+						if(Object.keys(s_variantsChecked[geneIndex].variants).length === 0){
 							var tempVariantsChecked = s_variantsChecked;
 							delete tempVariantsChecked[geneIndex];
 							this.setState({variantsChecked: tempVariantsChecked});
