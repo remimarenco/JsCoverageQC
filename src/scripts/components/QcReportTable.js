@@ -1,6 +1,8 @@
 'use strict';
 
 var React = require('react/addons');
+var ExpandCollapseButton = require('./ExpandCollapseButton');
+var DrawingChart = require('./DrawingChart');
 
 var classNames = require('classnames');
 
@@ -18,7 +20,6 @@ var FirstHeadRow = React.createClass({
 
 var SecondHeadRow = React.createClass({
 	render: function(){
-		var ExpandCollapseButton = require('./ExpandCollapseButton');
 
 		var allReadsTh = [];
 		this.props.bins.forEach(function(bin, index){
@@ -79,8 +80,6 @@ var GeneExonParent = React.createClass({
 	},
 	// TODO: The link to collapse or show should be on the entire TD and not only on the '+'' or '-' text for UX
 	render: function(){
-		var ExpandCollapseButton = require('./ExpandCollapseButton');
-
 		var geneExonProps = this.props.geneExon;
 
 		var geneExonPosition = 'geneExon'+this.props.position;
@@ -286,7 +285,6 @@ var FilteredAndAnnotatedVariants = React.createClass({
 
 var GeneExonChild = React.createClass({
 	componentWillMount: function(){
-		var DrawingChart = require('./DrawingChart');
 		this.drawingChart = <DrawingChart geneExon={this.props.geneExon} position={this.props.position}/>;
 	},
 	render: function(){

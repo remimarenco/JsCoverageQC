@@ -33,7 +33,6 @@ var QcRules = React.createClass({
 	// TODO: Add the exportLink + content
 	render: function(){
 		var self = this;
-		var Modal = require('react-modal');
 
 		var propVariantsChecked = this.props.variantsChecked;
 		var variantsChecked = [];
