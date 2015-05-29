@@ -17,9 +17,6 @@ var FirstHeadRow = React.createClass({
 });
 
 var SecondHeadRow = React.createClass({
-	showOrHideButtonAllClicked: function(){
-		this.props.showOrHideButtonAllClicked();
-	},
 	render: function(){
 		var ExpandCollapseButton = require('./ExpandCollapseButton');
 
@@ -30,7 +27,7 @@ var SecondHeadRow = React.createClass({
 		return(
 			<tr>
 				<th>
-					<ExpandCollapseButton onClickShowOrHideButton={this.showOrHideButtonAllClicked} elementKey={this.props.key}/>
+					<ExpandCollapseButton onClickShowOrHideButton={this.props.showOrHideButtonAllClicked} elementKey={this.props.key}/>
 				</th>
 				<th>QC</th>
 				<th>name</th>
@@ -111,7 +108,6 @@ var GeneExonParent = React.createClass({
 		var self = this;
 
 		geneExonProps.bins.forEach(function(bin, index){
-			//console.log("Dans geneExonParent: "+bin.pct);
 			var refReadHistogram = 'readHistogram_' + self.props.geneExon.name + index;
 			readHistogram.push(<ReadHistogram bin={bin} identifier={refReadHistogram} key={index}/>);
 		});
@@ -385,7 +381,7 @@ var BodyReportTable = React.createClass({
 			var __childKey = self.generateChildKey(index);
 
 			self.allGeneExonRows.push(
-				<GeneExonParent ref={__parentKey} 
+				<GeneExonParent ref={__parentKey}
 					key={__parentKey}
 					elementKey={__parentKey}
 					geneExon={geneExon}
