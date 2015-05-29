@@ -54,6 +54,7 @@ var QcRules = React.createClass({
 				exportTitle += "s";
 			}
 
+			// For each variantChecked Object, we look into it to push the interpretation Content
 			for(var key in propVariantsChecked){
 				if (propVariantsChecked.hasOwnProperty(key)){
 					var geneVariantsObj = propVariantsChecked[key];
@@ -123,11 +124,16 @@ var QcRules = React.createClass({
 		for(var key in geneVariantsObj.variants){
 			var variant = geneVariantsObj.variants[key];
 			if (geneVariantsObj.variants.hasOwnProperty(key)){
+				var aminoAcid;
+				if(variant.hgvsp !== null && typeof variant.hgvsp !== 'undefined' &&
+					variant.hgvsp !== ''){
+					aminoAcid = "/ " + variant.hgvsp;
+				}
+
 				interpretationContent.push(
 					<p className={boldClass}>
 						POSITIVE for detection of {variant.gene} sequence variant by 
-						next generation sequencing: 
-						{variant.gene} {variant.hgvsc} / {variant.hgvsp} in
+						next generation sequencing: {variant.gene} {variant.hgvsc} {aminoAcid} in
 						exon {geneVariantsObj.gene.name}
 					</p>
 				);
