@@ -37,7 +37,7 @@ var QcRules = React.createClass({
 
 		var interpretationContent = [];
 		var interpretation;
-		var resultsContent;
+		var resultsContent = [];
 		var results;
 		var referenceAssembly;
 		var failedExonsContent;
@@ -58,7 +58,9 @@ var QcRules = React.createClass({
 			for(var key in propVariantsChecked){
 				if (propVariantsChecked.hasOwnProperty(key)){
 					var geneVariantsObj = propVariantsChecked[key];
-					interpretationContent.push(this.writeInterpretationContent(geneVariantsObj));
+					var content = this.writeContent(geneVariantsObj);
+					interpretationContent.push(content.interpretationContent);
+					resultsContent.push(content.resultsContent);
 				}
 			}
 		}
@@ -82,6 +84,7 @@ var QcRules = React.createClass({
 		referenceAssembly = <p id="referenceAssembly">The reference assembly is hg19, GRCh37.</p>;
 
 		// TODO: The failedExons loop
+		// TODO: Do not display this if there is no failed
 		failedExons = 
 			<div>
 				<h2>Portions of the following captured regions were not sequenced 
@@ -95,6 +98,7 @@ var QcRules = React.createClass({
           onRequestClose={this.closeModal}>
           	<h1>{exportTitle}</h1>
           	{interpretation}
+          	<p>- See comment.</p>
           	{results}
           	{referenceAssembly}
           	{failedExons}
@@ -118,12 +122,16 @@ var QcRules = React.createClass({
 		);
 	},
 
-	writeInterpretationContent: function(geneVariantsObj){
+	writeContent: function(geneVariantsObj){
 		var interpretationContent = [];
+		var resultsContent = [];
 		var boldClass = classNames('fontWeightBold');
 		for(var key in geneVariantsObj.variants){
 			var variant = geneVariantsObj.variants[key];
 			if (geneVariantsObj.variants.hasOwnProperty(key)){
+				///////////////////////
+				// Interpreation //
+				///////////////////////
 				var aminoAcid;
 				if(variant.hgvsp !== null && typeof variant.hgvsp !== 'undefined' &&
 					variant.hgvsp !== ''){
@@ -131,15 +139,34 @@ var QcRules = React.createClass({
 				}
 
 				interpretationContent.push(
+					<div>
+						<p className={boldClass}>
+							POSITIVE for detection of {variant.gene} sequence variant by 
+							next generation sequencing: {variant.gene} {variant.hgvsc} {aminoAcid} in
+							exon {geneVariantsObj.gene.name}
+						</p>
+					</div>
+				);
+
+				/////////////////
+				// Results //
+				/////////////////
+				resultsContent.push(
+					<div>
 					<p className={boldClass}>
-						POSITIVE for detection of {variant.gene} sequence variant by 
-						next generation sequencing: {variant.gene} {variant.hgvsc} {aminoAcid} in
-						exon {geneVariantsObj.gene.name}
+						{geneVariantsObj.gene.name} (EnsemblID: {geneVariantsObj.gene.ensemblExonId}
+						; RefSeq accession no: {geneVariantsObj.gene.refSeqAccNo}; {geneVariantsObj.gene.chr}: 
+						{geneVariantsObj.gene.startPos}-{geneVariantsObj.gene.endPos}
 					</p>
+					<p>
+						gene: {geneVariantsObj.gene.name}; coordinate: {variant.coordinate}; genotype: {variant.genotype}; 
+						alt-variant-freq: {variant.altVariantFreq}; cDna: {variant.hgvsc}; amino-acid: {variant.hgvsp}
+					</p>
+					</div>
 				);
 			}
 		}
-		return interpretationContent;
+		return {interpretationContent: interpretationContent, resultsContent: resultsContent};
 	}
 });
 
@@ -180,6 +207,11 @@ var Report = React.createClass({
 				onCheckedVariant={this.onCheckedVariant}/>;
 		}
 
+		/////////////////////////
+		// Failed Gene Exons //
+		/////////////////////////
+		var failedExons = this.processFailedExons(this.props.vcf.geneExons);
+
 		return(
 			<div>
 				{this.Blocker}
@@ -188,7 +220,8 @@ var Report = React.createClass({
 				<QcRules pass={pass}
 					warn={warn}
 					fail={fail}
-					variantsChecked={this.state.variantsChecked}/>
+					variantsChecked={this.state.variantsChecked}
+					failedExons={failedExons}/>
 				{qcReportTable}
 			</div>
 		);
@@ -303,6 +336,21 @@ var Report = React.createClass({
 				objVariantsChecked_ToAdd);
 			this.setState({variantsChecked: new_VariantsChecked_State});
 		}
+	},
+	processFailedExons: function(geneExons){
+		var failedExons = [];
+		var failedGeneAndPct = {};
+
+		geneExons.forEach(function(geneExon){
+			debugger;
+			if(geneExon.bins[0].pct > 0 || geneExon.bins[1].pct > 0){
+				failedGeneAndPct.exon = geneExon;
+				failedGeneAndPct.pct = geneExon.bins[0].pct + geneExon.bins[1].pct;
+				failedExons.push(failedGeneAndPct);
+			}
+		});
+
+		return failedExons;
 	}
 });
 
