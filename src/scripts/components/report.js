@@ -27,6 +27,7 @@ var QcRules = React.createClass({
 	},
 	// TODO: Add the exportLink + content
 	render: function(){
+		var self = this;
 		var Modal = require('react-modal');
 
 		var propVariantsChecked = this.props.variantsChecked;
@@ -40,9 +41,28 @@ var QcRules = React.createClass({
 		var resultsContent = [];
 		var results;
 		var referenceAssembly;
-		var failedExonsContent;
-		var failedExons;
+		var failedExonsContent = [];
+		var failedExonsText;
 		var notes;
+
+		/////////////////////
+		// FailedContent //
+		/////////////////////
+		var failedExons = this.props.failedExons;
+
+		failedExonsContent = failedExons.map(function(failedExonAndPct){
+			var failedExonContentHtml =
+				<p>
+					gene/exon: {failedExonAndPct.exon.name}; 
+					{failedExonAndPct.exon.chr}: {failedExonAndPct.exon.startPos}-{failedExonAndPct.exon.endPos}; 
+					pct-of-locus-failing-QC: {failedExonAndPct.pct}
+				</p>;
+			return failedExonContentHtml;
+		});
+
+		/////////////////////////////////
+		// Interpretation and Result //
+		/////////////////////////////////
 		if(toObjectVariantsChecked.length !== null &&
 			typeof toObjectVariantsChecked.length !== 'undefined' &&
 			toObjectVariantsChecked.length > 0){
@@ -85,7 +105,7 @@ var QcRules = React.createClass({
 
 		// TODO: The failedExons loop
 		// TODO: Do not display this if there is no failed
-		failedExons = 
+		failedExonsText = 
 			<div>
 				<h2>Portions of the following captured regions were not sequenced 
 					sufficiently for clinical interpretation (at least one base in the sequenced portion 
@@ -101,7 +121,7 @@ var QcRules = React.createClass({
           	<p>- See comment.</p>
           	{results}
           	{referenceAssembly}
-          	{failedExons}
+          	{failedExonsText}
           	{notes}
           	<button onClick={this.closeModal}>Close</button>
           </Modal>;
@@ -167,6 +187,12 @@ var QcRules = React.createClass({
 			}
 		}
 		return {interpretationContent: interpretationContent, resultsContent: resultsContent};
+	},
+
+	pushFailedExons: function(failedExonsContent, failedExonsContentHtml){
+		return function(){
+			return failedExonsContentHtml;
+		};
 	}
 });
 
@@ -341,14 +367,17 @@ var Report = React.createClass({
 		var failedExons = [];
 		var failedGeneAndPct = {};
 
-		geneExons.forEach(function(geneExon){
-			debugger;
-			if(geneExon.bins[0].pct > 0 || geneExon.bins[1].pct > 0){
-				failedGeneAndPct.exon = geneExon;
-				failedGeneAndPct.pct = geneExon.bins[0].pct + geneExon.bins[1].pct;
-				failedExons.push(failedGeneAndPct);
-			}
-		});
+		// TODO: Sort by order, using a collectionjs
+		failedExons = geneExons
+		    .filter(function(geneExon){
+		        return geneExon.bins[0].pct > 0 || geneExon.bins[1].pct > 0;
+		    })
+		    .map(function(geneExon){
+		        return {
+		            exon: geneExon,
+		            pct: geneExon.bins[0].pct + geneExon.bins[1].pct
+		        };
+		    });
 
 		return failedExons;
 	}
