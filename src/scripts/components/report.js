@@ -268,13 +268,14 @@ var Report = React.createClass({
 					});
 				}
 				else{
-					var variant = [gene.variants[variantIndex]];
+					var variant = s_variantsChecked[geneIndex].variants;
+					variant[variantIndex] = gene.variants[variantIndex];
 					var objVariantsCheckedGene_ToAdd = {
 						variants: {
-							$push: variant
+							$merge: variant
 						}
 					};
-					var new_VariantsCheckedGene_State = React.addons.update(s_variantsChecked[geneIndex].variants, objVariantsCheckedGene_ToAdd);
+					var new_VariantsCheckedGene_State = React.addons.update(s_variantsChecked[geneIndex], objVariantsCheckedGene_ToAdd);
 					this.setState({variantsChecked: {[geneIndex]: new_VariantsCheckedGene_State}});
 				}
 			}
