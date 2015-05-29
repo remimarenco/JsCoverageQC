@@ -41,6 +41,7 @@ var SecondHeadRow = React.createClass({
 });
 
 var HeadReportTable = React.createClass({
+	//TODO: Delete
 	showOrHideButtonAllClicked: function(){
 		this.props.showOrHideButtonAllClicked();
 	},
@@ -429,14 +430,21 @@ var BodyReportTable = React.createClass({
 
 var QcReportTable = React.createClass({
 	showOrHideButtonAllClicked: function(){
-		this.props.showOrHideButtonAllClicked();
+		// If it is open, then ask to close all
+		// Else, then ask to open all
+		if(this.allOpen === false){
+			this.props.showButtonAllClicked();
+		}
 
-		this.refs.bodyReportTable.showOrHideButtonAllClicked();
+		//this.refs.bodyReportTable.showOrHideButtonAllClicked();
 	},
 	showAllEnded: function(){
 		this.props.showAllEnded();
 	},
 	componentDidMount: function(){
+		// To keep tracking if all child opened or all child closed
+		this.allOpen = false;
+
 		/* jshint ignore:start */
 		$("#qcReportTable").tablesorter();
 		/* jshint ignore:end */

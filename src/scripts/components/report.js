@@ -2,6 +2,11 @@
 
 var React = require('react/addons');
 
+var Blocker = require('./Blocker');
+// Load the InformationsTable Component
+var InformationsTable = require('./InformationsTable');
+var QcReportTable = require('./QcReportTable');
+
 //require('../../styles/tablesorter.theme.default.css');
 require('../../styles/report.css');
 
@@ -205,8 +210,6 @@ var Report = React.createClass({
 	},
 	componentWillMount: function(){
 		// TODO: Warning about the componentWillMount called only once? The blocker would not be update...
-		this.initBlocker();
-
 		this.initInformationsTable();
 	},
 	render: function(){
@@ -226,9 +229,8 @@ var Report = React.createClass({
 		// Only show the bodyReportTable once the googleLibChar has been loaded
 		var qcReportTable;
 		if(this.props.googleChartLibLoaded){
-			var QcReportTable = require('./QcReportTable');
 			qcReportTable = <QcReportTable geneExons={this.props.vcf.geneExons}
-				showOrHideButtonAllClicked={this.showOrHideButtonAllClicked}
+				showButtonAllClicked={this.showButtonAllClicked}
 				showAllEnded={this.showAllEnded}
 				onCheckedVariant={this.onCheckedVariant}/>;
 		}
@@ -240,7 +242,7 @@ var Report = React.createClass({
 
 		return(
 			<div>
-				{this.Blocker}
+				{this.state.showBlocker && <Blocker/>}
 				<h2>Coverage QC Report</h2>
 				{this.InformationsTable}
 				<QcRules pass={pass}
@@ -254,21 +256,13 @@ var Report = React.createClass({
 	},
 
 	// Custom functions
-	showOrHideButtonAllClicked: function(){
+	showButtonAllClicked: function(){
 		this.setState({showBlocker: true});
 	},
 	showAllEnded: function(){
 		this.setState({showBlocker: false});
 	},
-
-	initBlocker: function(){
-		// Load the Blocker Component
-		var Blocker = require('./Blocker');
-		this.Blocker = <Blocker displayMe={this.state.showBlocker}/>;
-	},
 	initInformationsTable: function(){
-		// Load the InformationsTable Component
-		var InformationsTable = require('./InformationsTable');
 
 		var propsVcf = this.props.vcf;
 		var filteredAnnotatedVariantCount;
