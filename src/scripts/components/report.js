@@ -228,7 +228,9 @@ var Report = React.createClass({
 		// Only show the bodyReportTable once the googleLibChar has been loaded
 		var qcReportTable;
 		if(this.props.googleChartLibLoaded){
-			qcReportTable = <QcReportTable geneExons={this.props.vcf.geneExons}
+			qcReportTable = <QcReportTable
+				ref="qcReportTable"
+				geneExons={this.props.vcf.geneExons}
 				showButtonAllClicked={this.showButtonAllClicked}
 				showAllEnded={this.showAllEnded}
 				onCheckedVariant={this.onCheckedVariant}/>;
@@ -255,8 +257,15 @@ var Report = React.createClass({
 	},
 
 	// Custom functions
-	showButtonAllClicked: function(){
-		this.setState({showBlocker: true});
+	showButtonAllClicked: function(display){
+		this.setState({showBlocker: true}, function(){
+			//debugger;
+			var self = this;
+			// TODO: Find a better way to let the Blocker time to show
+			setTimeout(function(){
+				self.refs.qcReportTable.reportShowOrHideEnded(display);
+			}, 200);
+		});
 	},
 	showAllEnded: function(){
 		this.setState({showBlocker: false});

@@ -43,8 +43,8 @@ var SecondHeadRow = React.createClass({
 
 var HeadReportTable = React.createClass({
 	//TODO: Delete
-	showOrHideButtonAllClicked: function(){
-		this.props.showOrHideButtonAllClicked();
+	showOrHideButtonAllClicked: function(display){
+		this.props.showOrHideButtonAllClicked(display);
 	},
 	render: function(){
 		return(
@@ -146,8 +146,8 @@ var GeneExonParent = React.createClass({
 		);
 	},
 
-	clickShowOrUpdate: function(){
-		this.refs.expandCollapseButton.showOrHide();
+	clickShowOrUpdate: function(display){
+		this.refs.expandCollapseButton.showOrHide(display);
 	}
 });
 
@@ -346,6 +346,9 @@ var BodyReportTable = React.createClass({
 	componentDidMount: function(){
 		// We keep the number of child to display
 		this.numberOfChildToDisplay = this.props.geneExons.length;
+
+		this.opening = false;
+		this.v_showOrHideButtonAllClicked = false;
 		/** @type {Number} The number of child currently displayed */
 		this.numberOfChildCurrentlyDisplayed = 0;
 
@@ -369,6 +372,7 @@ var BodyReportTable = React.createClass({
 		else{
 			tempDict[parentKey] = forceState;
 		}
+
 		this.setState({shouldDisplayChild: tempDict}, this.geneExonShown);
 	},
 	render: function(){
@@ -403,8 +407,11 @@ var BodyReportTable = React.createClass({
 	},
 
 	// Functions made for external access
-	showOrHideButtonAllClicked: function(){
+	showOrHideButtonAllClicked: function(display){
 		var self = this;
+
+		this.opening = display;
+		this.v_showOrHideButtonAllClicked = true;
 
 		this.props.geneExons.forEach(function(geneExon, index){
 			var __parentKey = self.generateParentKey(index);
@@ -412,36 +419,41 @@ var BodyReportTable = React.createClass({
 		});
 	},
 	geneExonShown: function(){
-		//debugger;
 		this.numberOfChildCurrentlyDisplayed++;
 
 		// If we shown every child, update the UI
 		if(this.numberOfChildCurrentlyDisplayed === this.numberOfChildToDisplay){
-			this.geneExonAllShown();
+			if(this.showOrHideButtonAllClicked){
+				this.geneExonAllShown();
+			}
+			this.numberOfChildCurrentlyDisplayed = 0;
 		}
 	},
 	geneExonAllShown: function(){
+		this.opening = false;
 		// Once it is finished, we send an event to notify the end
 		this.props.showAllEnded();
 	}
 });
 
 var QcReportTable = React.createClass({
-	showOrHideButtonAllClicked: function(){
+	showOrHideButtonAllClicked: function(display){
 		// If it is open, then ask to close all
 		// Else, then ask to open all
-		if(this.allOpen === false){
-			this.props.showButtonAllClicked();
+		if(display === true){
+			this.props.showButtonAllClicked(display);
 		}
-
-		//this.refs.bodyReportTable.showOrHideButtonAllClicked();
+		else{
+			this.refs.bodyReportTable.showOrHideButtonAllClicked(display);
+		}
+	},
+	reportShowOrHideEnded: function(display){
+		this.refs.bodyReportTable.showOrHideButtonAllClicked(display);
 	},
 	showAllEnded: function(){
 		this.props.showAllEnded();
 	},
 	componentDidMount: function(){
-		// To keep tracking if all child opened or all child closed
-		this.allOpen = false;
 
 		/* jshint ignore:start */
 		$("#qcReportTable").tablesorter();
