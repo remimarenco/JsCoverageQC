@@ -16,6 +16,8 @@ var Report = require('components/report');
 var Amplicon = require('models/Amplicon');
 var Bin = require('models/Bin');
 var Vcf = require('models/Vcf');
+
+var Blocker = require('components/Blocker');
 //TODO: Is XLSX still needed ?
 //var XLSX = require('xlsx');
 var saveAs = require('browser-filesaver');
@@ -166,8 +168,9 @@ var JsCoverageQcApp = React.createClass({
 	getInitialState: function(){
 		return{
 			vcf: {},
-			report: React.addons.createFragment({}),
-			googleChartLibLoaded: false
+			showReport: false,
+			googleChartLibLoaded: false,
+			showBlocker: false
 		};
 	},
 	googleChartLibLoaded: function(){
@@ -180,19 +183,37 @@ var JsCoverageQcApp = React.createClass({
 		/* jshint ignore:end */
 	},
 	setStateVcfEnded: function(){
-		var report = React.addons.createFragment({
-			report: <Report vcf={this.state.vcf} googleChartLibLoaded={this.state.googleChartLibLoaded}/>
+		this.setState({showReport: true});
+	},
+	showButtonAllClicked: function(display){
+		var self = this;
+		this.setState({showBlocker: true}, function(){
+			//debugger;
+
+			// TODO: Find a better way to let the Blocker time to show
+			setTimeout(function(){
+				self.refs.report.reportShowOrHideEnded(display);
+			}, 200);
 		});
-		this.setState({report: report});
+	},
+	showAllEnded: function(){
+		this.setState({showBlocker: false});
 	},
 	handleChange: function(newVcf){
 		this.setState({vcf: newVcf}, this.setStateVcfEnded);
 	},
 	render: function() {
+		var report = <Report ref='report'
+				vcf={this.state.vcf}
+				googleChartLibLoaded={this.state.googleChartLibLoaded}
+				showButtonAllClicked={this.showButtonAllClicked}
+				showAllEnded={this.showAllEnded}/>;
+
 		return (
 		  <div className='main'>
+		  	{this.state.showBlocker && <Blocker/>}
 		    <InputFilesForm vcfUpdated={this.handleChange}/>
-			{this.state.report}
+			{this.state.showReport && report}
 		  	<p>Licensed under the Academic Free License version 3.0</p>
 		  </div>
 		);

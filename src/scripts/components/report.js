@@ -2,7 +2,6 @@
 
 var React = require('react/addons');
 
-var Blocker = require('components/Blocker');
 // Load the InformationsTable Component
 var InformationsTable = require('components/InformationsTable');
 var QcReportTable = require('components/QcReportTable');
@@ -203,7 +202,6 @@ var QcRules = React.createClass({
 var Report = React.createClass({
 	getInitialState: function(){
 		return{
-			showBlocker: false,
 			variantsChecked: {}
 		};
 	},
@@ -231,8 +229,8 @@ var Report = React.createClass({
 			qcReportTable = <QcReportTable
 				ref="qcReportTable"
 				geneExons={this.props.vcf.geneExons}
-				showButtonAllClicked={this.showButtonAllClicked}
-				showAllEnded={this.showAllEnded}
+				showButtonAllClicked={this.props.showButtonAllClicked}
+				showAllEnded={this.props.showAllEnded}
 				onCheckedVariant={this.onCheckedVariant}/>;
 		}
 
@@ -243,7 +241,6 @@ var Report = React.createClass({
 
 		return(
 			<div>
-				{this.state.showBlocker && <Blocker/>}
 				<h2>Coverage QC Report</h2>
 				{this.InformationsTable}
 				<QcRules pass={pass}
@@ -257,19 +254,6 @@ var Report = React.createClass({
 	},
 
 	// Custom functions
-	showButtonAllClicked: function(display){
-		this.setState({showBlocker: true}, function(){
-			//debugger;
-			var self = this;
-			// TODO: Find a better way to let the Blocker time to show
-			setTimeout(function(){
-				self.refs.qcReportTable.reportShowOrHideEnded(display);
-			}, 200);
-		});
-	},
-	showAllEnded: function(){
-		this.setState({showBlocker: false});
-	},
 	initInformationsTable: function(){
 
 		var propsVcf = this.props.vcf;
@@ -289,7 +273,9 @@ var Report = React.createClass({
 					doNotCallFileName={propsVcf.doNotCallFileName}
 					/>;
 	},
-
+	reportShowOrHideEnded: function(display){
+		this.refs.qcReportTable.reportShowOrHideEnded(display);
+	},
 	onCheckedVariant: function(gene, geneIndex, variantIndex){
 		var s_variantsChecked = this.state.variantsChecked;
 		var new_VariantsChecked_State;
