@@ -105,31 +105,38 @@ var InputFilesForm = React.createClass({
 	handleSubmit: function(e){
 		e.preventDefault();
 
-		// We can set a boolean to true when ok for processing files
-		var parameters = this.state.parametersFileReader;
+		// We notify that the vcf object is under construction
+		this.props.vcfUnderConstruction();
 
-		// To process, we first need to check we have all the files
-		if((parameters.vcfFile.reader && parameters.exonFile.reader && parameters.ampliconFile.reader && parameters.variantTsv.reader) &&
-		 (parameters.vcfFile.reader.readyState === 2 &&
-		 	parameters.exonFile.reader.readyState === 2 &&
-		 	parameters.ampliconFile.reader.readyState === 2 &&
-		 	parameters.variantTsv.reader.readyState === 2))
-		{
-			var vcf = new Vcf(parameters.vcfFile.name, parameters.vcfFile.reader.result,
-				parameters.exonFile.name, parameters.exonFile.reader.result,
-				parameters.ampliconFile.name, parameters.ampliconFile.reader.result,
-				parameters.variantTsv.name, parameters.variantTsv.reader.result.split("\n").length,
-				parameters.variantTsv.reader.result);
+		var self = this;
+		// TODO: Find another way to tempo the UI block (do not let the time to show Blocker)
+		setTimeout(function(){
+			// We can set a boolean to true when ok for processing files
+			var parameters = self.state.parametersFileReader;
 
-			// We notify we have our vcf object updated
-			this.props.vcfUpdated(vcf);
-		}
-		else
-		{
-			// TODO: Find a better way to show messages to the user
-			// to deactivate devel: true in jshintrc
-			alert("One of the necessaries files (VCF, Exon, Amplicon or TSV) is not yet loaded. Please load them first before process.");
-		}
+			// To process, we first need to check we have all the files
+			if((parameters.vcfFile.reader && parameters.exonFile.reader && parameters.ampliconFile.reader && parameters.variantTsv.reader) &&
+			 (parameters.vcfFile.reader.readyState === 2 &&
+			 	parameters.exonFile.reader.readyState === 2 &&
+			 	parameters.ampliconFile.reader.readyState === 2 &&
+			 	parameters.variantTsv.reader.readyState === 2))
+			{
+				var vcf = new Vcf(parameters.vcfFile.name, parameters.vcfFile.reader.result,
+					parameters.exonFile.name, parameters.exonFile.reader.result,
+					parameters.ampliconFile.name, parameters.ampliconFile.reader.result,
+					parameters.variantTsv.name, parameters.variantTsv.reader.result.split("\n").length,
+					parameters.variantTsv.reader.result);
+
+				// We notify we have our vcf object updated
+				self.props.vcfUpdated(vcf);
+			}
+			else
+			{
+				// TODO: Find a better way to show messages to the user
+				// to deactivate devel: true in jshintrc
+				alert("One of the necessaries files (VCF, Exon, Amplicon or TSV) is not yet loaded. Please load them first before process.");
+			}
+		}, 50);
 	},
 	render: function(){
 		return (
@@ -183,7 +190,10 @@ var JsCoverageQcApp = React.createClass({
 		/* jshint ignore:end */
 	},
 	setStateVcfEnded: function(){
-		this.setState({showReport: true});
+		var self = this;
+		this.setState({showReport: true}, function(){
+			self.setState({showBlocker: false});
+		});
 	},
 	showButtonAllClicked: function(display){
 		var self = this;
@@ -193,13 +203,13 @@ var JsCoverageQcApp = React.createClass({
 			// TODO: Find a better way to let the Blocker time to show
 			setTimeout(function(){
 				self.refs.report.reportShowOrHideEnded(display);
-			}, 200);
+			}, 50);
 		});
 	},
 	showAllEnded: function(){
 		this.setState({showBlocker: false});
 	},
-	handleChange: function(newVcf){
+	vcfUpdated: function(newVcf){
 		this.setState({vcf: newVcf}, this.setStateVcfEnded);
 	},
 	render: function() {
@@ -212,11 +222,15 @@ var JsCoverageQcApp = React.createClass({
 		return (
 		  <div className='main'>
 		  	{this.state.showBlocker && <Blocker/>}
-		    <InputFilesForm vcfUpdated={this.handleChange}/>
+		    <InputFilesForm vcfUnderConstruction={this.vcfUnderConstruction}
+		    	vcfUpdated={this.vcfUpdated}/>
 			{this.state.showReport && report}
 		  	<p>Licensed under the Academic Free License version 3.0</p>
 		  </div>
 		);
+	},
+	vcfUnderConstruction: function(){
+		this.setState({showBlocker: true});
 	}
 });
 
