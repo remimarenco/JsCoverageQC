@@ -152,7 +152,6 @@ var GeneExonParent = React.createClass({
 
 	clickShowOrUpdate: function(orderDisplay){
 		var expandCollapseButton = this.refs.expandCollapseButton;
-		debugger;
 		if((!expandCollapseButton.isDisplaying() && orderDisplay) ||
 			(expandCollapseButton.isDisplaying() && !orderDisplay)){
 			this.refs.expandCollapseButton.showOrHide();
@@ -381,7 +380,7 @@ var BodyReportTable = React.createClass({
 		else{
 			tempDict[parentKey] = forceState;
 		}
-		debugger;
+
 		if(tempDict[parentKey] === true)
 		{
 			this.numberOfChildCurrentlyDisplayed++;

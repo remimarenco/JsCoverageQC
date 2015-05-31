@@ -1,6 +1,6 @@
 'use strict';
 
-var JsCoverageQcApp = require('./JsCoverageQcApp');
+var JsCoverageQcApp = require('components/JsCoverageQcApp');
 var React = require('react');
 var Router = require('react-router');
 var Route = Router.Route;

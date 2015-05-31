@@ -2,13 +2,13 @@
 
 var React = require('react/addons');
 
-var Blocker = require('./Blocker');
+var Blocker = require('components/Blocker');
 // Load the InformationsTable Component
-var InformationsTable = require('./InformationsTable');
-var QcReportTable = require('./QcReportTable');
+var InformationsTable = require('components/InformationsTable');
+var QcReportTable = require('components/QcReportTable');
 
 //require('../../styles/tablesorter.theme.default.css');
-require('../../styles/report.css');
+require('styles/report.css');
 
 var classNames = require('classnames');
 
