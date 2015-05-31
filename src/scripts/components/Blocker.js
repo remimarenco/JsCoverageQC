@@ -9,7 +9,7 @@ var Blocker = React.createClass({
 		};
 		return(
 			<div id="blocker" style={displayStyle}>
-				<div>wait...</div>
+				<div>Please wait...</div>
 			</div>
 		);
 	}
