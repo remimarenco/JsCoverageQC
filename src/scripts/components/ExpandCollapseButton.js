@@ -23,17 +23,16 @@ var ExpandCollapseButton = React.createClass({
 
 	// Functions made for external access
 	showOrHide: function(){
-		var display = false;
 		if(this.state.showOrHideButton === '+')
 		{
-			display = true;
-			this.setState({showOrHideButton: '-'});
+			this.setState({showOrHideButton: '-'}, this.props.onClickShowOrHideButton);
 		}
 		else{
-			this.setState({showOrHideButton: '+'});
+			this.setState({showOrHideButton: '+'}, this.props.onClickShowOrHideButton);
 		}
-
-		this.props.onClickShowOrHideButton(display);
+	},
+	isDisplaying: function(){
+		return this.state.showOrHideButton === '+' ? false : true;
 	}
 });
 

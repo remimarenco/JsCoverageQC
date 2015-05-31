@@ -19,6 +19,10 @@ var FirstHeadRow = React.createClass({
 });
 
 var SecondHeadRow = React.createClass({
+	showOrHideButtonAllClicked: function(){
+		var orderDisplay = this.refs.expandCollapseButton.isDisplaying();
+		this.props.showOrHideButtonAllClicked(orderDisplay);
+	},
 	render: function(){
 
 		var allReadsTh = [];
@@ -28,7 +32,7 @@ var SecondHeadRow = React.createClass({
 		return(
 			<tr>
 				<th>
-					<ExpandCollapseButton onClickShowOrHideButton={this.props.showOrHideButtonAllClicked} elementKey={this.props.key}/>
+					<ExpandCollapseButton ref='expandCollapseButton' onClickShowOrHideButton={this.showOrHideButtonAllClicked} elementKey={this.props.key}/>
 				</th>
 				<th>QC</th>
 				<th>name</th>
@@ -146,8 +150,13 @@ var GeneExonParent = React.createClass({
 		);
 	},
 
-	clickShowOrUpdate: function(display){
-		this.refs.expandCollapseButton.showOrHide(display);
+	clickShowOrUpdate: function(orderDisplay){
+		var expandCollapseButton = this.refs.expandCollapseButton;
+		debugger;
+		if((!expandCollapseButton.isDisplaying() && orderDisplay) ||
+			(expandCollapseButton.isDisplaying() && !orderDisplay)){
+			this.refs.expandCollapseButton.showOrHide();
+		}
 	}
 });
 
@@ -372,6 +381,14 @@ var BodyReportTable = React.createClass({
 		else{
 			tempDict[parentKey] = forceState;
 		}
+		debugger;
+		if(tempDict[parentKey] === true)
+		{
+			this.numberOfChildCurrentlyDisplayed++;
+		}
+		else{
+			this.numberOfChildCurrentlyDisplayed--;
+		}
 
 		this.setState({shouldDisplayChild: tempDict}, this.geneExonShown);
 	},
@@ -407,23 +424,22 @@ var BodyReportTable = React.createClass({
 	},
 
 	// Functions made for external access
-	showOrHideButtonAllClicked: function(display){
+	showOrHideButtonAllClicked: function(orderDisplay){
 		var self = this;
 
-		this.opening = display;
+		this.opening = orderDisplay;
 		this.v_showOrHideButtonAllClicked = true;
 
 		this.props.geneExons.forEach(function(geneExon, index){
 			var __parentKey = self.generateParentKey(index);
-			self.refs[__parentKey].clickShowOrUpdate();
+
+			self.refs[__parentKey].clickShowOrUpdate(orderDisplay);
 		});
 	},
 	geneExonShown: function(){
-		this.numberOfChildCurrentlyDisplayed++;
-
 		// If we shown every child, update the UI
 		if(this.numberOfChildCurrentlyDisplayed === this.numberOfChildToDisplay){
-			if(this.showOrHideButtonAllClicked){
+			if(this.v_showOrHideButtonAllClicked){
 				this.geneExonAllShown();
 			}
 			this.numberOfChildCurrentlyDisplayed = 0;
