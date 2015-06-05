@@ -293,7 +293,7 @@ var FilteredAndAnnotatedVariants = React.createClass({
 
 var GeneExonChild = React.createClass({
 	componentWillMount: function(){
-		this.drawingChart = <DrawingChart geneExon={this.props.geneExon} position={this.props.position}/>;
+		console.log("Monté!");
 	},
 	render: function(){
 		var geneExonPositionId = 'geneExon'+ this.props.position;
@@ -313,27 +313,31 @@ var GeneExonChild = React.createClass({
 					geneIndex={this.props.position}
 					onCheckedVariant={this.onCheckedVariant}/>;
 		}
-
 		var trDisplayStyle = {display: 'none'};
-		var drawingChart;
-		if(this.props.display){
-			trDisplayStyle = {display: 'table-row'};
-			drawingChart = this.drawingChart;
-		}
-		else{
-			drawingChart = null;
-		}
 
 		return(
-				<tr style={trDisplayStyle} className={trClasses}>
+				<tr ref='tableRow' style={trDisplayStyle} className={trClasses}>
 					<td colSpan={nbBinsPlusSixColumns}>
-						{drawingChart}
+						{this.drawingChart}
 						{filteredAndAnnotatedVariants}
 					</td>
 				</tr>
 		);
 	},
-
+	invertDisplay: function(display){
+		console.log("InvertDisplay!");
+		if(display){
+			this.refs.tableRow.style = {display: 'table-row'};
+			if(this.chartAlreadyDrawn === null || typeof this.chartAlreadyDrawn === 'undefined'){
+				this.drawingChart = <DrawingChart geneExon={this.props.geneExon} 
+									position={this.props.position}/>;
+				this.chartAlreadyDrawn = true;
+			}
+		}
+		else{
+			this.refs.tableRow.style = {display: 'none'};
+		}
+	},
 	onCheckedVariant: function(geneKey, variantKey){
 		this.props.onCheckedVariant(this.props.geneExon, geneKey, variantKey);
 	}
@@ -389,7 +393,7 @@ var BodyReportTable = React.createClass({
 			this.numberOfChildCurrentlyDisplayed--;
 		}
 
-		this.setState({shouldDisplayChild: tempDict}, this.geneExonShown);
+		//this.setState({shouldDisplayChild: tempDict}, this.geneExonShown);
 	},
 	render: function(){
 		this.allGeneExonRows = [];
