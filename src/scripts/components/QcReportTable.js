@@ -292,21 +292,6 @@ var FilteredAndAnnotatedVariants = React.createClass({
 });
 
 var GeneExonChild = React.createClass({
-	componentWillMount: function(){
-		console.log("Monté!");
-	},
-	componentWillUpdate: function(){
-		console.log("Updated!");
-	},
-	getDefaultProps: function(){
-		//
-	},
-	componentDidMount: function(){
-		
-	},
-	componentWillUnmount: function(){
-		console.log('Démonté!');
-	},
 	shouldComponentUpdate: function(nextProps, nextState){
 		return nextProps.display !== this.props.display;
 	},
