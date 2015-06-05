@@ -302,7 +302,7 @@ var GeneExonChild = React.createClass({
 		//
 	},
 	componentDidMount: function(){
-		this.drawingChart = <DrawingChart geneExon={this.props.geneExon} position={this.props.position}/>;
+		
 	},
 	componentWillUnmount: function(){
 		console.log('Démonté!');
@@ -332,12 +332,13 @@ var GeneExonChild = React.createClass({
 
 		if(this.props.display){
 			trDisplayStyle = {display: 'table-row'};
+			this.drawingChart = <DrawingChart geneExon={this.props.geneExon} position={this.props.position}/>;
 		}
 
 		return(
 				<tr ref='tableRow' style={trDisplayStyle} className={trClasses}>
 					<td colSpan={nbBinsPlusSixColumns}>
-						{this.props.drawingChart}
+						{this.drawingChart}
 						{filteredAndAnnotatedVariants}
 					</td>
 				</tr>
