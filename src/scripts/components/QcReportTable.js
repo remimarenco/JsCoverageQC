@@ -295,6 +295,21 @@ var GeneExonChild = React.createClass({
 	componentWillMount: function(){
 		console.log("Monté!");
 	},
+	componentWillUpdate: function(){
+		console.log("Updated!");
+	},
+	getDefaultProps: function(){
+		//
+	},
+	componentDidMount: function(){
+		this.drawingChart = <DrawingChart geneExon={this.props.geneExon} position={this.props.position}/>;
+	},
+	componentWillUnmount: function(){
+		console.log('Démonté!');
+	},
+	shouldComponentUpdate: function(nextProps, nextState){
+		return nextProps.display !== this.props.display;
+	},
 	render: function(){
 		var geneExonPositionId = 'geneExon'+ this.props.position;
 		var geneExonPositionIdDiv = geneExonPositionId + '_div';
@@ -315,28 +330,18 @@ var GeneExonChild = React.createClass({
 		}
 		var trDisplayStyle = {display: 'none'};
 
+		if(this.props.display){
+			trDisplayStyle = {display: 'table-row'};
+		}
+
 		return(
 				<tr ref='tableRow' style={trDisplayStyle} className={trClasses}>
 					<td colSpan={nbBinsPlusSixColumns}>
-						{this.drawingChart}
+						{this.props.drawingChart}
 						{filteredAndAnnotatedVariants}
 					</td>
 				</tr>
 		);
-	},
-	invertDisplay: function(display){
-		console.log("InvertDisplay!");
-		if(display){
-			this.refs.tableRow.style = {display: 'table-row'};
-			if(this.chartAlreadyDrawn === null || typeof this.chartAlreadyDrawn === 'undefined'){
-				this.drawingChart = <DrawingChart geneExon={this.props.geneExon} 
-									position={this.props.position}/>;
-				this.chartAlreadyDrawn = true;
-			}
-		}
-		else{
-			this.refs.tableRow.style = {display: 'none'};
-		}
 	},
 	onCheckedVariant: function(geneKey, variantKey){
 		this.props.onCheckedVariant(this.props.geneExon, geneKey, variantKey);
@@ -393,7 +398,7 @@ var BodyReportTable = React.createClass({
 			this.numberOfChildCurrentlyDisplayed--;
 		}
 
-		//this.setState({shouldDisplayChild: tempDict}, this.geneExonShown);
+		this.setState({shouldDisplayChild: tempDict}, this.geneExonShown);
 	},
 	render: function(){
 		this.allGeneExonRows = [];
@@ -411,6 +416,7 @@ var BodyReportTable = React.createClass({
 					position={position}
 					onClickShowOrHideButton={self.showOrHideButtonClicked}/>
 			);
+			var geneExonChild = 
 			self.allGeneExonRows.push(
 				<GeneExonChild key={__childKey}
 					geneExon={geneExon}

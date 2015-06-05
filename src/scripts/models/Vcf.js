@@ -204,7 +204,9 @@ function Vcf(vcfFileName, vcfNotCutLines, exonBedFileName, exonBedNotCutLines, a
 	//////////////////////
 	// Base population //
 	//////////////////////
+	console.time("Vcf Base Population");
 	basePopulation(this);
+	console.timeEnd("Vcf Base Population");
 
 	/////////////////////////
 	// Variant population //
