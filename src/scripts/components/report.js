@@ -4,9 +4,10 @@ var React = require('react/addons');
 
 // Load the InformationsTable Component
 var InformationsTable = require('components/InformationsTable');
+
+// Load the table containing all the exons report
 var QcReportTable = require('components/QcReportTable');
 
-//require('../../styles/tablesorter.theme.default.css');
 require('styles/report.css');
 
 var classNames = require('classnames');

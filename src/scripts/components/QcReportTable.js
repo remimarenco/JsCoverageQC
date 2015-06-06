@@ -1,6 +1,10 @@
 'use strict';
 
 var React = require('react/addons');
+
+var $ = require('jquery');
+//var tableSorter = require('tablesorter');
+
 var ExpandCollapseButton = require('./ExpandCollapseButton');
 var DrawingChart = require('./DrawingChart');
 
@@ -64,10 +68,8 @@ var ReadHistogram = React.createClass({
 	componentDidMount: function(){
 		var domNodeReadHistogram = '#'+this.props.identifier;
 
-		/* jshint ignore:start */
 		$(domNodeReadHistogram).css("background-position", '0px ' +
 		(((1.0 * (100 - this.props.bin.pct)) / 100) * $(domNodeReadHistogram).outerHeight()) + 'px');
-		/* jshint ignore:end */
 	},
 	render: function(){
 		return(
@@ -465,10 +467,7 @@ var QcReportTable = React.createClass({
 		this.props.showAllEnded();
 	},
 	componentDidMount: function(){
-
-		/* jshint ignore:start */
-		$("#qcReportTable").tablesorter();
-		/* jshint ignore:end */
+		//tableSorter.tablesorter();
 	},
 	render: function(){
 		return(

@@ -1,6 +1,7 @@
 'use strict';
 
 var React = require('react/addons');
+var $ = require('jquery');
 
 var DrawingChart = React.createClass({
     componentWillMount: function(){
@@ -35,12 +36,10 @@ var DrawingChart = React.createClass({
         ],
         rows: rows};
 
-        /* jshint ignore:start */
         var dataTable = new google.visualization.DataTable(data);
         var dataView = new google.visualization.DataView(dataTable);
         var chart = new google.visualization.LineChart(React.findDOMNode(this.refs[this.geneExonPositionIdDiv]));
         chart.draw(dataView, { colors: ['blue', 'red'], annotations: { style: 'line' } });
-        /* jshint ignore:end */
 
         // add the amplicon guides to chart (custom SVG)
         var amplicons = [];
@@ -54,23 +53,22 @@ var DrawingChart = React.createClass({
         });
 
         // Find a better solution than using jQuery
-        /* jshint ignore:start */
         var svg = $('#' + this.geneExonPositionIdDiv + ' svg');
         var svgHeight = parseInt(svg.css('height')) + (30 * amplicons.length);
         var chartBoundingBox = chart.getChartLayoutInterface().getChartAreaBoundingBox();
         var xScale =  (1.0 * chartBoundingBox.width) / (1.0 *
-            (geneExonBases.values()[geneExonBases.length - 1].pos - geneExonBases.values()[0].pos))
+            (geneExonBases.values()[geneExonBases.length - 1].pos - geneExonBases.values()[0].pos));
         $('#' + this.geneExonPositionIdDiv +  '>:first-child').css({ height:svgHeight + 'px' });
         $('#' + this.geneExonPositionIdDiv + ' svg').css({ height:svgHeight + 'px' });
         var g = this.a(svg, 'g', { class:'amplicons', transform:'translate(' + chartBoundingBox.left + ' ' + (svgHeight - (30 * amplicons.length) - 10) + ') scale(' + xScale + ' 1)' });
         for(var x = 0; x < amplicons.length; x++) {
             var y = 30 * x;
             var color;
-            if(amplicons[x].name.match(/^.*_coding$/) != null) {
+            if(amplicons[x].name.match(/^.*_coding$/) !== null) {
                 color = 'green';
             }
-            else if(amplicons[x].name.match(/^.*_Lung$/) != null){
-                color = 'red'
+            else if(amplicons[x].name.match(/^.*_Lung$/) !== null){
+                color = 'red';
             }
             else {
                 color = 'gray';
@@ -105,7 +103,6 @@ var DrawingChart = React.createClass({
                 this.a(g, 'text', { x:'5', y:(y + 15), transform:'scale(' + (1 / xScale) + ' 1)', style:'font-size: small;' }).context.textContent = amplicons[x].name;
             }
         }
-        /* jshint ignore:end */
     },
     componentWillUnmount: function(){
     },
@@ -121,11 +118,9 @@ var DrawingChart = React.createClass({
 
     a: function(parentElement, element, eldict){
         // TODO: Find a better way of adding an element in the DOM (React way)
-        /* jshint ignore:start */
         var el = $(document.createElementNS('http://www.w3.org/2000/svg', element));
         el.attr(eldict).appendTo(parentElement);
         return el;
-        /* jshint ignore:end */
     }
 });
 
