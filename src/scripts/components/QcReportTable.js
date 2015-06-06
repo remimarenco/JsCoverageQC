@@ -2,8 +2,7 @@
 
 var React = require('react/addons');
 
-var $ = require('jquery');
-//var tableSorter = require('tablesorter');
+require('tablesorter');
 
 var ExpandCollapseButton = require('./ExpandCollapseButton');
 var DrawingChart = require('./DrawingChart');
@@ -467,7 +466,7 @@ var QcReportTable = React.createClass({
 		this.props.showAllEnded();
 	},
 	componentDidMount: function(){
-		//tableSorter.tablesorter();
+		$("#qcReportTable").tablesorter();
 	},
 	render: function(){
 		return(

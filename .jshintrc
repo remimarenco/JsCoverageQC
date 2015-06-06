@@ -22,7 +22,8 @@
   "newcap": false,
   "devel": true,
   "globals": {
-    "React": true
+    "React": true,
+    "$": false
   }
 }
 
