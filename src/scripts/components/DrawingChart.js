@@ -1,7 +1,9 @@
 'use strict';
 
 var React = require('react/addons');
-var $ = require('jquery');
+
+// Contains google
+require('../libs/jsapi.js');
 
 var DrawingChart = React.createClass({
     componentWillMount: function(){
@@ -9,6 +11,27 @@ var DrawingChart = React.createClass({
         this.geneExonPositionIdDiv = this.geneExonPositionId + '_div';
     },
     componentDidMount: function(){
+        this.drawChart();
+    },
+    componentWillUnmount: function(){
+    },
+    shouldComponentUpdate: function(){
+        return false; // Avoid updating the component if new props or states are passed
+    },
+    render: function(){
+        return(
+            <div id={this.geneExonPositionIdDiv} ref={this.geneExonPositionIdDiv}>
+            </div>
+        );
+    },
+
+    a: function(parentElement, element, eldict){
+        // TODO: Find a better way of adding an element in the DOM (React way)
+        var el = $(document.createElementNS('http://www.w3.org/2000/svg', element));
+        el.attr(eldict).appendTo(parentElement);
+        return el;
+    },
+    drawChart: function(){
         var self = this;
         var geneExonBases = this.props.geneExon.bases;
         var geneExonBins = this.props.geneExon.bins;
@@ -103,24 +126,6 @@ var DrawingChart = React.createClass({
                 this.a(g, 'text', { x:'5', y:(y + 15), transform:'scale(' + (1 / xScale) + ' 1)', style:'font-size: small;' }).context.textContent = amplicons[x].name;
             }
         }
-    },
-    componentWillUnmount: function(){
-    },
-    shouldComponentUpdate: function(){
-        return false; // Avoid updating the component if new props or states are passed
-    },
-    render: function(){
-        return(
-            <div id={this.geneExonPositionIdDiv} ref={this.geneExonPositionIdDiv}>
-            </div>
-        );
-    },
-
-    a: function(parentElement, element, eldict){
-        // TODO: Find a better way of adding an element in the DOM (React way)
-        var el = $(document.createElementNS('http://www.w3.org/2000/svg', element));
-        el.attr(eldict).appendTo(parentElement);
-        return el;
     }
 });
 

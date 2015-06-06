@@ -64,6 +64,7 @@ module.exports = {
   plugins: [
     new webpack.HotModuleReplacementPlugin(),
     new webpack.NoErrorsPlugin(),
+    //TODO: Find a solution to avoid jquery in all modules
     new webpack.ProvidePlugin({
         $: "jquery",
         jQuery: "jquery",

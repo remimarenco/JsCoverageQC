@@ -23,7 +23,8 @@
   "devel": true,
   "globals": {
     "React": true,
-    "$": false
+    "$": false,
+    "google": false
   }
 }
 
