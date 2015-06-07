@@ -12,6 +12,8 @@ require('styles/report.css');
 
 var classNames = require('classnames');
 
+require('jquery-ui');
+
 var Modal = require('react-modal');
 
 var appElement = document.getElementById('content');
@@ -19,10 +21,26 @@ var appElement = document.getElementById('content');
 Modal.setAppElement(appElement);
 Modal.injectCSS();
 
+var Dialog = React.createClass({
+	componentDidMount: function(){
+		$( React.findDOMNode(this.refs.dialog) ).dialog();
+	},
+	render: function(){
+		return(
+			<div id="dialog" ref="dialog" title="Basic dialog">
+			  <p>This is the default dialog which is useful for displaying information. The dialog window can be moved, resized and closed with the 'x' icon.</p>
+			</div>
+		);
+	}
+});
+
 var QcRules = React.createClass({
 	// TODO: Separate the modal from the QCRules
 	getInitialState: function() {
 	    return { modalIsOpen: false };
+	},
+	componentDidMount: function(){
+
 	},
 	openModal: function() {
 	    this.setState({modalIsOpen: true});
@@ -32,6 +50,7 @@ var QcRules = React.createClass({
 	},
 	// TODO: Add the exportLink + content
 	render: function(){
+		/*
 		var self = this;
 
 		var propVariantsChecked = this.props.variantsChecked;
@@ -57,7 +76,7 @@ var QcRules = React.createClass({
 		failedExonsContent = failedExons.map(function(failedExonAndPct){
 			var failedExonContentHtml =
 				<p>
-					gene/exon: {failedExonAndPct.exon.name}; 
+					gene/exon: {failedExonAndPct.exon.name};
 					{failedExonAndPct.exon.chr}: {failedExonAndPct.exon.startPos}-{failedExonAndPct.exon.endPos}; 
 					pct-of-locus-failing-QC: {failedExonAndPct.pct}
 				</p>;
@@ -117,8 +136,9 @@ var QcRules = React.createClass({
 				</h2>
 				{failedExonsContent}
 			</div>;
+		*/
 
-		var modal = <Modal isOpen={this.state.modalIsOpen}
+		/*var modal = <Modal isOpen={this.state.modalIsOpen}
           onRequestClose={this.closeModal}>
           	<h1>{exportTitle}</h1>
           	{interpretation}
@@ -129,6 +149,8 @@ var QcRules = React.createClass({
           	{notes}
           	<button onClick={this.closeModal}>Close</button>
           </Modal>;
+          */
+        // TODO: Put the Dialog in a better place
 		return(
 			<ul>
 			    <li>QC rules are applied to bases <i>in the coding region</i> of each locus:
@@ -141,7 +163,7 @@ var QcRules = React.createClass({
 			    <li>Coding regions and amplicons are specified by vendor.</li>
 			    <li>If the gVCF file contains multiple entries for the same position (e.g., indels), the maximum read depth value is reported here.</li>
 			    <li>After selecting variants for export, <a id="exportLink" href="#" onClick={this.openModal}>click here</a> to see them as a text document suitable for cut-and-paste operations.</li>
-				{modal}
+				<Dialog/>
 			</ul>
 		);
 	},
@@ -154,7 +176,7 @@ var QcRules = React.createClass({
 			var variant = geneVariantsObj.variants[key];
 			if (geneVariantsObj.variants.hasOwnProperty(key)){
 				///////////////////////
-				// Interpreation //
+				// Interpretation //
 				///////////////////////
 				var aminoAcid;
 				if(variant.hgvsp !== null && typeof variant.hgvsp !== 'undefined' &&
@@ -191,12 +213,6 @@ var QcRules = React.createClass({
 			}
 		}
 		return {interpretationContent: interpretationContent, resultsContent: resultsContent};
-	},
-
-	pushFailedExons: function(failedExonsContent, failedExonsContentHtml){
-		return function(){
-			return failedExonsContentHtml;
-		};
 	}
 });
 
