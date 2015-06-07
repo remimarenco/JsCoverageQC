@@ -21,32 +21,36 @@ var appElement = document.getElementById('content');
 Modal.setAppElement(appElement);
 Modal.injectCSS();
 
-var Dialog = React.createClass({
-	componentDidMount: function(){
-		$( React.findDOMNode(this.refs.dialog) ).dialog();
-	},
-	render: function(){
-		return(
-			<div id="dialog" ref="dialog" title="Basic dialog">
-			  <p>This is the default dialog which is useful for displaying information. The dialog window can be moved, resized and closed with the 'x' icon.</p>
-			</div>
-		);
-	}
+var DialogContent = React.createClass({
+  render: function(){
+    return(
+	    <div>
+	    	<p>This is the default dialog which is useful for displaying information.
+	    		The dialog window can be moved, resized and closed with the 'x' icon.</p>
+	    </div>
+    );
+  }
 });
 
 var QcRules = React.createClass({
-	// TODO: Separate the modal from the QCRules
-	getInitialState: function() {
-	    return { modalIsOpen: false };
-	},
-	componentDidMount: function(){
+	openModal: function(e) {
+		e.preventDefault();
 
-	},
-	openModal: function() {
-	    this.setState({modalIsOpen: true});
-	},
-	closeModal: function() {
-	    this.setState({modalIsOpen: false});
+		var $dialog = $('<div>').dialog({
+	        title: 'Example Dialog Title',
+	        width: 400,
+	        close: function(e){
+	          React.unmountComponentAtNode(this);
+	          $( this ).remove();
+	        }
+      	});
+
+		var closeDialog = function(e){
+			e.preventDefault();
+			$dialog.dialog('close');
+		};
+
+		React.render(<DialogContent closeDialog={closeDialog} />, $dialog[0]);
 	},
 	// TODO: Add the exportLink + content
 	render: function(){
@@ -163,7 +167,6 @@ var QcRules = React.createClass({
 			    <li>Coding regions and amplicons are specified by vendor.</li>
 			    <li>If the gVCF file contains multiple entries for the same position (e.g., indels), the maximum read depth value is reported here.</li>
 			    <li>After selecting variants for export, <a id="exportLink" href="#" onClick={this.openModal}>click here</a> to see them as a text document suitable for cut-and-paste operations.</li>
-				<Dialog/>
 			</ul>
 		);
 	},
