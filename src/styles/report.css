@@ -139,3 +139,9 @@ table.footNoteTable td {
 #referenceAssembly{
 	text-decoration: underline;
 }
+
+#exportDialog{
+	display: none;
+	font-family: Arial;
+	font-size: 9pt;
+}

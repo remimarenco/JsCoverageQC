@@ -23,12 +23,140 @@ Modal.injectCSS();
 
 var DialogContent = React.createClass({
   render: function(){
+  	// TODO: Use CSS to manage the style of the content (not hX => X a number)
+  	var self = this;
+
+  	var propVariantsChecked = this.props.variantsChecked;
+  	var variantsChecked = [];
+  	var toObjectVariantsChecked = Object.keys(propVariantsChecked);
+
+  	var interpretationContent = [];
+  	var interpretation;
+  	var resultsContent = [];
+  	var results;
+  	var referenceAssembly;
+  	var failedExonsContent = [];
+  	var failedExonsText;
+  	var notes;
+
+  	/////////////////////
+  	// FailedContent //
+  	/////////////////////
+  	var failedExons = this.props.failedExons;
+
+  	failedExonsContent = failedExons.map(function(failedExonAndPct){
+  		var failedExonContentHtml =
+  			<p>
+  				gene/exon: {failedExonAndPct.exon.name};
+  				{failedExonAndPct.exon.chr}: {failedExonAndPct.exon.startPos}-{failedExonAndPct.exon.endPos}; 
+  				pct-of-locus-failing-QC: {failedExonAndPct.pct}
+  			</p>;
+  		return failedExonContentHtml;
+  	});
+
+  	/////////////////////////////////
+  	// Interpretation and Result //
+  	/////////////////////////////////
+  	if(toObjectVariantsChecked.length !== null &&
+  		typeof toObjectVariantsChecked.length !== 'undefined' &&
+  		toObjectVariantsChecked.length > 0){
+
+  		// For each variantChecked Object, we look into it to push the interpretation Content
+  		for(var key in propVariantsChecked){
+  			if (propVariantsChecked.hasOwnProperty(key)){
+  				var geneVariantsObj = propVariantsChecked[key];
+  				var content = this.writeContent(geneVariantsObj);
+  				interpretationContent.push(content.interpretationContent);
+  				resultsContent.push(content.resultsContent);
+  			}
+  		}
+  	}
+  	else{
+  		interpretationContent = <p>No variants detected by next-generation sequencing.</p>;
+  		resultsContent = <p>No variants detected by next-generation sequencing.</p>;
+  	}
+
+  	interpretation =
+  		<div>
+  			<h2>Interpretation</h2>
+  			{interpretationContent}
+  		</div>;
+
+  	results =
+  		<div>
+  			<h2>Results</h2>
+  			{resultsContent}
+  		</div>;
+
+  	referenceAssembly = <p id="referenceAssembly">The reference assembly is hg19, GRCh37.</p>;
+
+  	// TODO: The failedExons loop
+  	// TODO: Do not display this if there is no failed
+  	failedExonsText = 
+  		<div>
+  			<h2>Portions of the following captured regions were not sequenced 
+  				sufficiently for clinical interpretation (at least one base in the sequenced portion 
+  				of the coding region was read less than 500 times):
+  			</h2>
+  			{failedExonsContent}
+  		</div>;
     return(
 	    <div>
-	    	<p>This is the default dialog which is useful for displaying information.
-	    		The dialog window can be moved, resized and closed with the 'x' icon.</p>
+          	{interpretation}
+          	<p>- See comment.</p>
+          	{results}
+          	{referenceAssembly}
+          	{failedExonsText}
+          	{notes}
 	    </div>
     );
+  },
+
+  writeContent: function(geneVariantsObj){
+  	var interpretationContent = [];
+  	var resultsContent = [];
+  	var boldClass = classNames('fontWeightBold');
+  	for(var key in geneVariantsObj.variants){
+  		var variant = geneVariantsObj.variants[key];
+  		if (geneVariantsObj.variants.hasOwnProperty(key)){
+  			///////////////////////
+  			// Interpretation //
+  			///////////////////////
+  			var aminoAcid;
+  			if(variant.hgvsp !== null && typeof variant.hgvsp !== 'undefined' &&
+  				variant.hgvsp !== ''){
+  				aminoAcid = "/ " + variant.hgvsp;
+  			}
+
+  			interpretationContent.push(
+  				<div>
+  					<p className={boldClass}>
+  						POSITIVE for detection of {variant.gene} sequence variant by 
+  						next generation sequencing: {variant.gene} {variant.hgvsc} {aminoAcid} in
+  						exon {geneVariantsObj.gene.name}
+  					</p>
+  				</div>
+  			);
+
+  			/////////////////
+  			// Results //
+  			/////////////////
+  			resultsContent.push(
+  				<div>
+  				<p className={boldClass}>
+  					{geneVariantsObj.gene.name} (EnsemblID: {geneVariantsObj.gene.ensemblExonId}
+  					; RefSeq accession no: {geneVariantsObj.gene.refSeqAccNo}; {geneVariantsObj.gene.chr}: 
+  					{geneVariantsObj.gene.startPos}-{geneVariantsObj.gene.endPos}
+  				</p>
+  				<p>
+  					gene: {geneVariantsObj.gene.name}; coordinate: {variant.coordinate}; genotype: {variant.genotype}; 
+  					alt-variant-freq: {variant.altVariantFreq}; cDna: {variant.hgvsc}; amino-acid: {variant.hgvsp}
+  				</p>
+  				</div>
+  			);
+  		}
+  	}
+  	return {interpretationContent: interpretationContent, resultsContent: resultsContent};
   }
 });
 
@@ -36,9 +164,27 @@ var QcRules = React.createClass({
 	openModal: function(e) {
 		e.preventDefault();
 
-		var $dialog = $('<div>').dialog({
-	        title: 'Example Dialog Title',
-	        width: 400,
+		// TODO: Check if there is already a dialog open, if yes => Do nothing
+
+		var propVariantsChecked = this.props.variantsChecked;
+		var toObjectVariantsChecked = Object.keys(propVariantsChecked);
+
+		// TODO: Create a function to put this code outside of "openModal"
+		var exportTitle = "Export selected variant";
+		if(toObjectVariantsChecked.length !== null &&
+			typeof toObjectVariantsChecked.length !== 'undefined' &&
+			toObjectVariantsChecked.length > 0){
+
+			if(toObjectVariantsChecked.length > 1)
+			{
+				exportTitle += "s";
+			}
+		}
+
+		var $dialog = $('<div id="exportDialog">').dialog({
+	        title: exportTitle,
+	        width:$(window).width() * 0.6,
+	        height:$(window).height() * 0.8,
 	        close: function(e){
 	          React.unmountComponentAtNode(this);
 	          $( this ).remove();
@@ -50,98 +196,15 @@ var QcRules = React.createClass({
 			$dialog.dialog('close');
 		};
 
-		React.render(<DialogContent closeDialog={closeDialog} />, $dialog[0]);
+		React.render(
+			<DialogContent closeDialog={closeDialog}
+				variantsChecked={this.props.variantsChecked}
+				failedExons={this.props.failedExons}/>,
+			$dialog[0]
+		);
 	},
 	// TODO: Add the exportLink + content
 	render: function(){
-		/*
-		var self = this;
-
-		var propVariantsChecked = this.props.variantsChecked;
-		var variantsChecked = [];
-		var toObjectVariantsChecked = Object.keys(propVariantsChecked);
-
-		var exportTitle = "Export selected variant";
-
-		var interpretationContent = [];
-		var interpretation;
-		var resultsContent = [];
-		var results;
-		var referenceAssembly;
-		var failedExonsContent = [];
-		var failedExonsText;
-		var notes;
-
-		/////////////////////
-		// FailedContent //
-		/////////////////////
-		var failedExons = this.props.failedExons;
-
-		failedExonsContent = failedExons.map(function(failedExonAndPct){
-			var failedExonContentHtml =
-				<p>
-					gene/exon: {failedExonAndPct.exon.name};
-					{failedExonAndPct.exon.chr}: {failedExonAndPct.exon.startPos}-{failedExonAndPct.exon.endPos}; 
-					pct-of-locus-failing-QC: {failedExonAndPct.pct}
-				</p>;
-			return failedExonContentHtml;
-		});
-
-		/////////////////////////////////
-		// Interpretation and Result //
-		/////////////////////////////////
-		if(toObjectVariantsChecked.length !== null &&
-			typeof toObjectVariantsChecked.length !== 'undefined' &&
-			toObjectVariantsChecked.length > 0){
-
-			// TODO: Delete this repetition
-			exportTitle = "Export selected variant";
-			if(toObjectVariantsChecked.length > 1)
-			{
-				exportTitle += "s";
-			}
-
-			// For each variantChecked Object, we look into it to push the interpretation Content
-			for(var key in propVariantsChecked){
-				if (propVariantsChecked.hasOwnProperty(key)){
-					var geneVariantsObj = propVariantsChecked[key];
-					var content = this.writeContent(geneVariantsObj);
-					interpretationContent.push(content.interpretationContent);
-					resultsContent.push(content.resultsContent);
-				}
-			}
-		}
-		else{
-			interpretationContent = <p>No variants detected by next-generation sequencing.</p>;
-			resultsContent = <p>No variants detected by next-generation sequencing.</p>;
-		}
-
-		interpretation =
-			<div>
-				<h2>Interpretation</h2>
-				{interpretationContent}
-			</div>;
-
-		results =
-			<div>
-				<h2>Results</h2>
-				{resultsContent}
-			</div>;
-
-		referenceAssembly = <p id="referenceAssembly">The reference assembly is hg19, GRCh37.</p>;
-
-		// TODO: The failedExons loop
-		// TODO: Do not display this if there is no failed
-		failedExonsText = 
-			<div>
-				<h2>Portions of the following captured regions were not sequenced 
-					sufficiently for clinical interpretation (at least one base in the sequenced portion 
-					of the coding region was read less than 500 times):
-				</h2>
-				{failedExonsContent}
-			</div>;
-		*/
-
 		/*var modal = <Modal isOpen={this.state.modalIsOpen}
           onRequestClose={this.closeModal}>
           	<h1>{exportTitle}</h1>
@@ -169,53 +232,6 @@ var QcRules = React.createClass({
 			    <li>After selecting variants for export, <a id="exportLink" href="#" onClick={this.openModal}>click here</a> to see them as a text document suitable for cut-and-paste operations.</li>
 			</ul>
 		);
-	},
-
-	writeContent: function(geneVariantsObj){
-		var interpretationContent = [];
-		var resultsContent = [];
-		var boldClass = classNames('fontWeightBold');
-		for(var key in geneVariantsObj.variants){
-			var variant = geneVariantsObj.variants[key];
-			if (geneVariantsObj.variants.hasOwnProperty(key)){
-				///////////////////////
-				// Interpretation //
-				///////////////////////
-				var aminoAcid;
-				if(variant.hgvsp !== null && typeof variant.hgvsp !== 'undefined' &&
-					variant.hgvsp !== ''){
-					aminoAcid = "/ " + variant.hgvsp;
-				}
-
-				interpretationContent.push(
-					<div>
-						<p className={boldClass}>
-							POSITIVE for detection of {variant.gene} sequence variant by 
-							next generation sequencing: {variant.gene} {variant.hgvsc} {aminoAcid} in
-							exon {geneVariantsObj.gene.name}
-						</p>
-					</div>
-				);
-
-				/////////////////
-				// Results //
-				/////////////////
-				resultsContent.push(
-					<div>
-					<p className={boldClass}>
-						{geneVariantsObj.gene.name} (EnsemblID: {geneVariantsObj.gene.ensemblExonId}
-						; RefSeq accession no: {geneVariantsObj.gene.refSeqAccNo}; {geneVariantsObj.gene.chr}: 
-						{geneVariantsObj.gene.startPos}-{geneVariantsObj.gene.endPos}
-					</p>
-					<p>
-						gene: {geneVariantsObj.gene.name}; coordinate: {variant.coordinate}; genotype: {variant.genotype}; 
-						alt-variant-freq: {variant.altVariantFreq}; cDna: {variant.hgvsc}; amino-acid: {variant.hgvsp}
-					</p>
-					</div>
-				);
-			}
-		}
-		return {interpretationContent: interpretationContent, resultsContent: resultsContent};
 	}
 });
 
