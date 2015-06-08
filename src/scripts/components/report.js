@@ -129,7 +129,7 @@ var DialogContent = React.createClass({
   			}
 
   			interpretationContent.push(
-  				<div key={'interpreation_'+key}>
+  				<div key={'interpretation_'+key}>
   					<p className={boldClass}>
   						POSITIVE for detection of {variant.gene} sequence variant by 
   						next generation sequencing: {variant.gene} {variant.hgvsc} {aminoAcid} in
