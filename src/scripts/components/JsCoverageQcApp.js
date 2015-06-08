@@ -72,8 +72,8 @@ var InputFile = React.createClass({
 	render: function(){
 		return(
 			<input type="file"
-				id="{this.props.identifier}"
-				ref="{this.props.identifier}"
+				id={this.props.identifier}
+				ref={this.props.identifier}
 				onChange={this.handleFile}/>
 		);
 	}
