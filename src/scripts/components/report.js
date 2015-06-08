@@ -44,9 +44,9 @@ var DialogContent = React.createClass({
   	/////////////////////
   	var failedExons = this.props.failedExons;
 
-  	failedExonsContent = failedExons.map(function(failedExonAndPct){
+  	failedExonsContent = failedExons.map(function(failedExonAndPct, index){
   		var failedExonContentHtml =
-  			<p>
+  			<p key={index}>
   				gene/exon: {failedExonAndPct.exon.name};
   				{failedExonAndPct.exon.chr}: {failedExonAndPct.exon.startPos}-{failedExonAndPct.exon.endPos}; 
   				pct-of-locus-failing-QC: {failedExonAndPct.pct}
@@ -129,7 +129,7 @@ var DialogContent = React.createClass({
   			}
 
   			interpretationContent.push(
-  				<div>
+  				<div key={'interpreation_'+key}>
   					<p className={boldClass}>
   						POSITIVE for detection of {variant.gene} sequence variant by 
   						next generation sequencing: {variant.gene} {variant.hgvsc} {aminoAcid} in
@@ -142,16 +142,16 @@ var DialogContent = React.createClass({
   			// Results //
   			/////////////////
   			resultsContent.push(
-  				<div>
-  				<p className={boldClass}>
-  					{geneVariantsObj.gene.name} (EnsemblID: {geneVariantsObj.gene.ensemblExonId}
-  					; RefSeq accession no: {geneVariantsObj.gene.refSeqAccNo}; {geneVariantsObj.gene.chr}: 
-  					{geneVariantsObj.gene.startPos}-{geneVariantsObj.gene.endPos}
-  				</p>
-  				<p>
-  					gene: {geneVariantsObj.gene.name}; coordinate: {variant.coordinate}; genotype: {variant.genotype}; 
-  					alt-variant-freq: {variant.altVariantFreq}; cDna: {variant.hgvsc}; amino-acid: {variant.hgvsp}
-  				</p>
+  				<div key={'result_'+key}>
+      				<p className={boldClass}>
+      					{geneVariantsObj.gene.name} (EnsemblID: {geneVariantsObj.gene.ensemblExonId}
+      					; RefSeq accession no: {geneVariantsObj.gene.refSeqAccNo}; {geneVariantsObj.gene.chr}: 
+      					{geneVariantsObj.gene.startPos}-{geneVariantsObj.gene.endPos}
+      				</p>
+      				<p>
+      					gene: {geneVariantsObj.gene.name}; coordinate: {variant.coordinate}; genotype: {variant.genotype}; 
+      					alt-variant-freq: {variant.altVariantFreq}; cDna: {variant.hgvsc}; amino-acid: {variant.hgvsp}
+      				</p>
   				</div>
   			);
   		}
