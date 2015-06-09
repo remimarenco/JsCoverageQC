@@ -20,7 +20,8 @@
     "react-modal": "~0.2.0",
     "jquery": "~2.1.4",
     "jquery-ui": "~1.10.5",
-    "tablesorter": "~2.22.1"
+    "tablesorter": "~2.22.1",
+    "requirejs": "2.1.18"
   },
   "devDependencies": {
     "grunt": "~0.4.5",

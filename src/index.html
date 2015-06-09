@@ -16,16 +16,21 @@
   <div id="content">
     <h1>If you can see this, something is broken (or JS is not enabled)!!.</h1>
   </div>
+  <div id="content2">
+    <h1>If you can see this, something is broken (or JS is not enabled)!!.</h1>
+  </div>
   <script>
   /* jshint ignore:start */
     __REACT_DEVTOOLS_GLOBAL_HOOK__ = parent.__REACT_DEVTOOLS_GLOBAL_HOOK__;
   /* jshint ignore:end */
   </script>
-  <script type="text/javascript" src="assets/main.js">
-  </script>
+  <script type="text/javascript" src="assets/main.js"></script>
   <script type="text/javascript">
+    //var requirejs = require('requirejs');
     /* jshint ignore:start */
-    launchApp();
+    window.onload = function(){
+      launchApp();
+    }
     /* jshint ignore:end */
   </script>
 </body>
