@@ -223,7 +223,6 @@ var JsCoverageQcApp = React.createClass({
 
 		return (
 		  <div className='main'>
-		  	<p>Recu depuis l'extérieur : {this.props.test}</p>
 		  	{this.state.showBlocker && <Blocker/>}
 		    <InputFilesForm vcfUnderConstruction={this.vcfUnderConstruction}
 		    	vcfUpdated={this.vcfUpdated}/>

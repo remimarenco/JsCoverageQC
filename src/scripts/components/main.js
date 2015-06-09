@@ -19,5 +19,6 @@ var launchApp = function(myParameter){
     });
 };
 
+// TODO: Put the React app available in a more secure manner
 window.launchApp = launchApp;
 
