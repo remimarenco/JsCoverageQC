@@ -109,6 +109,7 @@ var InputFilesForm = React.createClass({
 		this.props.vcfUnderConstruction();
 
 		var self = this;
+		// TODO: Move setTimeout only around var vcf = ... => The creation of the vcf
 		// TODO: Find another way to tempo the UI block (do not let the time to show Blocker)
 		setTimeout(function(){
 			// We can set a boolean to true when ok for processing files
@@ -145,6 +146,7 @@ var InputFilesForm = React.createClass({
 				<form className="formElem" onSubmit={this.handleSubmit}>
 					<div>
 						Select a vcf file:
+						{ /* If there is a component to handleThat, use it instead of InputFile */}
 						<InputFile identifier="vcfFile" onLoadEnd={this.fileUploaded}/>
 					</div>
 					<div>
@@ -221,6 +223,7 @@ var JsCoverageQcApp = React.createClass({
 
 		return (
 		  <div className='main'>
+		  	<p>Recu depuis l'extérieur : {this.props.test}</p>
 		  	{this.state.showBlocker && <Blocker/>}
 		    <InputFilesForm vcfUnderConstruction={this.vcfUnderConstruction}
 		    	vcfUpdated={this.vcfUpdated}/>
@@ -232,6 +235,8 @@ var JsCoverageQcApp = React.createClass({
 	vcfUnderConstruction: function(){
 		this.setState({showBlocker: true});
 	}
+
+	// For external access
 });
 
 module.exports = JsCoverageQcApp;
