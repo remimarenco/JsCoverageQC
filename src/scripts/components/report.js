@@ -260,15 +260,12 @@ var Report = React.createClass({
 		}
 
 		// Only show the bodyReportTable once the googleLibChar has been loaded
-		var qcReportTable;
-		if(this.props.googleChartLibLoaded){
-			qcReportTable = <QcReportTable
+		var qcReportTable = <QcReportTable
 				ref="qcReportTable"
 				geneExons={this.props.vcf.geneExons}
 				showButtonAllClicked={this.props.showButtonAllClicked}
 				showAllEnded={this.props.showAllEnded}
 				onCheckedVariant={this.onCheckedVariant}/>;
-		}
 
 		/////////////////////////
 		// Failed Gene Exons //

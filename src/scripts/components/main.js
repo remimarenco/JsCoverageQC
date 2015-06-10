@@ -5,10 +5,10 @@ var launchApp = function(myParameter){
     var React = require('react');
     var Router = require('react-router');
     var Route = Router.Route;
-    console.log( JsCoverageQcApp.render );
+
     var content = document.getElementById('content');
 
-    React.render(<JsCoverageQcApp test={myParameter}/>, content);
+    React.render(<JsCoverageQcApp/>, content);
 };
 
 // TODO: Put the React app available in a more secure manner

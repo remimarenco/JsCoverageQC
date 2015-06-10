@@ -187,8 +187,8 @@ var JsCoverageQcApp = React.createClass({
 	},
 	componentDidMount: function(){
 		/* jshint ignore:start */
-		google.load("visualization", "1", {packages: ["corechart"]});
-		google.setOnLoadCallback(this.googleChartLibLoaded);
+		//google.load("visualization", "1", {packages: ["corechart"]});
+		//google.setOnLoadCallback(this.googleChartLibLoaded);
 		/* jshint ignore:end */
 	},
 	setStateVcfEnded: function(){
