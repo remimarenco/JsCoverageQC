@@ -218,6 +218,7 @@ function Vcf(vcfFileName, vcfNotCutLines, exonBedFileName, exonBedNotCutLines, a
 		var doNotCalls = doNotCallFile;
 
 		variantTsvDataLines.forEach(function(variantTsvDataLine){
+			if(variantTsvDataLine === ''){console.log("La ligne est vide!");return;}
 			var variant = new Variant(variantTsvHeadingLine, variantTsvDataLine, doNotCalls);
 
 			var foundGeneExon = false;
