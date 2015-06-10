@@ -182,14 +182,56 @@ var JsCoverageQcApp = React.createClass({
 			showBlocker: false
 		};
 	},
+	getDefaultProps: function(){
+		return {
+			needHtml5Upload: true,
+			vcfGalaxyResult: null,
+			exonGalaxyResult: null,
+			ampliconGalaxyResult: null,
+			variantGalaxyResult: null
+		};
+	},
 	googleChartLibLoaded: function(){
 		this.setState({googleChartLibLoaded: true});
+	},
+	componentWillMount: function(){
 	},
 	componentDidMount: function(){
 		/* jshint ignore:start */
 		//google.load("visualization", "1", {packages: ["corechart"]});
 		//google.setOnLoadCallback(this.googleChartLibLoaded);
 		/* jshint ignore:end */
+		if(this.props.needHtml5Upload){
+			console.log("You need the html5 upload form?");
+			return;
+		}
+
+		var vcfGalaxyResult = this.props.vcfGalaxyResult;
+		var exonGalaxyResult = this.props.exonGalaxyResult;
+		var ampliconGalaxyResult = this.props.ampliconGalaxyResult;
+		var variantGalaxyResult = this.props.variantGalaxyResult;
+
+		if(vcfGalaxyResult && exonGalaxyResult && ampliconGalaxyResult && variantGalaxyResult){
+			// We notify that the vcf object is under construction
+			this.props.vcfUnderConstruction();
+
+			var self = this;
+
+			setTimeout(function(){
+				// TODO: Pass the name in parameter (use a vcf object etc...)
+				var vcf = new Vcf("Name VCF Missing", vcfGalaxyResult,
+					"Name Exon Missing", exonGalaxyResult,
+					"Name Amplicon Missing", ampliconGalaxyResult,
+					"Name Variant Missing", variantGalaxyResult.split("\n").length,
+					variantGalaxyResult);
+
+				// We notify we have our vcf object updated
+				self.props.vcfUpdated(vcf);
+			}, 50);
+		}
+		else{
+			console.log("Problem with the data passed in parameter");
+		}
 	},
 	setStateVcfEnded: function(){
 		var self = this;
@@ -224,8 +266,10 @@ var JsCoverageQcApp = React.createClass({
 		return (
 		  <div className='main'>
 		  	{this.state.showBlocker && <Blocker/>}
-		    <InputFilesForm vcfUnderConstruction={this.vcfUnderConstruction}
-		    	vcfUpdated={this.vcfUpdated}/>
+		    {this.props.needHtml5Upload &&
+		    	<InputFilesForm
+		    	vcfUnderConstruction={this.vcfUnderConstruction}
+		    	vcfUpdated={this.vcfUpdated}/>}
 			{this.state.showReport && report}
 		  	<p>Licensed under the Academic Free License version 3.0</p>
 		  </div>
