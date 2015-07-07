@@ -9,7 +9,7 @@ var launchApp = function( oArg ){
 
     var content = document.getElementById('content');
 
-    if(oArg !== null || oArg !== 'undefined'){
+    if(oArg === null || typeof oArg === 'undefined'){
         React.render(<JsCoverageQcApp />, content);
     }
     else{

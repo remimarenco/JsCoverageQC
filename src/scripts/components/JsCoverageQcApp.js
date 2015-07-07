@@ -213,7 +213,7 @@ var JsCoverageQcApp = React.createClass({
 
 		if(vcfGalaxyResult && exonGalaxyResult && ampliconGalaxyResult && variantGalaxyResult){
 			// We notify that the vcf object is under construction
-			this.props.vcfUnderConstruction();
+			this.vcfUnderConstruction();
 
 			var self = this;
 
@@ -226,7 +226,7 @@ var JsCoverageQcApp = React.createClass({
 					variantGalaxyResult);
 
 				// We notify we have our vcf object updated
-				self.props.vcfUpdated(vcf);
+				self.vcfUpdated(vcf);
 			}, 50);
 		}
 		else{
