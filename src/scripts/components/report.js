@@ -14,12 +14,7 @@ var classNames = require('classnames');
 
 require('jquery-ui');
 
-var Modal = require('react-modal');
-
 var appElement = document.getElementById('content');
-
-Modal.setAppElement(appElement);
-Modal.injectCSS();
 
 var DialogContent = React.createClass({
   render: function(){
@@ -205,18 +200,6 @@ var QcRules = React.createClass({
 	},
 	// TODO: Add the exportLink + content
 	render: function(){
-		/*var modal = <Modal isOpen={this.state.modalIsOpen}
-          onRequestClose={this.closeModal}>
-          	<h1>{exportTitle}</h1>
-          	{interpretation}
-          	<p>- See comment.</p>
-          	{results}
-          	{referenceAssembly}
-          	{failedExonsText}
-          	{notes}
-          	<button onClick={this.closeModal}>Close</button>
-          </Modal>;
-          */
         // TODO: Put the Dialog in a better place
 		return(
 			<ul>

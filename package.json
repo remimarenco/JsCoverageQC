@@ -17,7 +17,6 @@
     "browser-filesaver": "~1.0.0",
     "classnames": "~2.1.0",
     "griddle-react": "~0.2.13",
-    "react-modal": "~0.2.0",
     "jquery": "~2.1.4",
     "jquery-ui": "~1.10.5",
     "tablesorter": "~2.22.1",
